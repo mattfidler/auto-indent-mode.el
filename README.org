@@ -1,0 +1,115 @@
+#+TITLE: Auto-Indent-Mode
+#+AUTHOR: Matthew L. Fidler
+* About auto-indent-mode
+ Provides auto-indentation minor mode for Emacs.  This allows the
+  following:
+
+  - Return automatically indents the code appropriately (if enabled)
+
+  - Pasting/Yanking indents the appropriately
+
+  - Killing line will take off unneeded spaces (if enabled)
+
+  - On visit file, indent appropriately, but DONT SAVE. (Pretend like
+    nothing happened, if enabled)
+
+  - On save, optionally unttabify, remove trailing white-spaces, and
+    definitely indent the file (if enabled).
+
+  - TextMate behavior of keys if desired (see below)
+
+  - Deleting the end of a line will shrink the whitespace to just one
+    (if desired and enabled)
+
+  - Automatically indent balanced parenthetical expression, or sexp, if desired
+     `=auto-indent-after-begin-or-finish-sexp='
+
+  All of these options can be customized. (customize auto-indent)
+* Installing auto-indent-mode
+  To use put this in your load path and then put the following in your emacs
+  file:
+#+BEGIN_SRC emacs-lisp :results silent
+  (setq auto-indent-on-visit-file t) ;; If you want auto-indent on for files
+  (require 'auto-indent-mode)
+#+END_SRC
+
+  If you (almost) always want this on, add the following to ~/.emacs:
+
+#+BEGIN_SRC emacs-lisp :results silent
+   (auto-indent-global-mode)
+#+END_SRC
+ 
+
+  Excluded modes are defined in `=auto-indent-disabled-modes-list='
+
+  If you only want this on for a single mode, you would add the following to
+  ~/.emacs
+
+#+BEGIN_SRC emacs-lisp :results silent
+  (add-hook 'emacs-lisp-mode-hook 'auto-indent-minor-mode)
+#+END_SRC
+
+
+  You could always turn on the minor mode with the command
+  `=auto-indent-minor-mode='
+* TextMate Meta-Return behavior
+  If you would like TextMate behavior of Meta-RETURN going to the
+  end of the line and then inserting a newline, as well as
+  Meta-shift return going to the end of the line, inserting a
+  semi-colon then inserting a newline, use the following:
+
+#+BEGIN_SRC emacs-lisp :results silent
+  (setq auto-indent-key-for-end-of-line-then-newline "<M-return>")
+  (setq auto-indent-key-for-end-of-line-insert-char-then-newline "<M-S-return>")
+  (require 'auto-indent-mode)
+  (auto-indent-global-mode)
+#+END_SRC
+
+  This may or may not work on your system.  Many times emacs cannot
+  distinguish between M-RET and M-S-RET, so if you don't mind a
+  slight redefinition use:
+
+#+BEGIN_SRC emacs-lisp :results silent
+  (setq auto-indent-key-for-end-of-line-then-newline "<M-return>")
+  (setq auto-indent-key-for-end-of-line-insert-char-then-newline "<C-M-return>")
+  (require 'auto-indent-mode)
+  (auto-indent-global-mode)
+#+END_SRC
+
+  If you want to insert something other than a semi-colon (like a
+  colon) in a specific mode, say colon-mode, do the following:
+
+#+BEGIN_SRC emacs-lisp :results silent
+  (add-hook 'colon-mode-hook (lambda () (setq auto-indent-eol-char ":")))
+#+END_SRC
+* Notes about autopair-mode and yasnippet compatibility
+  If you wish to use this with autopairs and yasnippet, please load
+  this library first.
+
+* Using specific functions from auto-indent-mode
+
+  Also if you wish to just use specific functions from this library
+  that is possible as well.
+
+  To have the auto-indentation-paste use:
+
+#+BEGIN_SRC emacs-lisp :results silent
+ (autoload 'auto-indent-yank "auto-indent-mode" "" t)
+  (autoload 'auto-indent-yank-pop "auto-indent-mode" "" t)
+
+  (define-key global-map [remap yank] 'auto-indent-yank)
+  (define-key global-map [remap yank-pop] 'auto-indent-yank-pop)
+
+  (autoload 'auto-indent-delete-char "auto-indent-mode" "" t)
+  (define-key global-map [remap delete-char] 'auto-indent-delete-char)
+
+  (autoload 'auto-indent-kill-line "auto-indent-mode" "" t)
+  (define-key global-map [remap kill-line] 'auto-indent-kill-line)
+
+#+END_SRC
+
+ 
+  However, this does not honor the excluded modes in
+  `=auto-indent-disabled-modes-list='
+
+#  LocalWords:  yasnippet autopair TextMate sexp
