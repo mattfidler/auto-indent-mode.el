@@ -5,10 +5,10 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.36
-;; Last-Updated: Fri Nov 18 15:36:43 2011 (-0600)
+;; Version: 0.37
+;; Last-Updated: Mon Nov 21 10:26:19 2011 (-0600)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1074
+;;     Update #: 1087
 ;; URL: http://www.emacswiki.org/emacs/auto-indent-mode.el
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -116,6 +116,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 21-Nov-2011    Matthew L. Fidler  
+;;    Last-Updated: Mon Nov 21 10:22:28 2011 (-0600) #1085 (Matthew L. Fidler)
+;;    Changed `auto-indent-after-begin-or-finish-sexp' to be called
+;;    after every other hook has been run.  That way autopair-mode
+;;    should be indented correctly.
 ;; 18-Nov-2011    Matthew L. Fidler  
 ;;    Last-Updated: Fri Nov 18 15:28:10 2011 (-0600) #1063 (Matthew L. Fidler)
 ;;    Added `auto-indent-after-begin-or-finish-sexp'
@@ -651,7 +656,6 @@ http://www.emacswiki.org/emacs/AutoIndentation
   (auto-indent-setup-map)
   (cond (auto-indent-minor-mode
          ;; Setup
-	 
 	 (cond
 	  ((eq auto-indent-engine 'keys) ;; Auto-indent engine
 	   (local-set-key [remap yank] 'auto-indent-yank)
@@ -670,24 +674,26 @@ http://www.emacswiki.org/emacs/AutoIndentation
              (add-hook 'write-contents-hooks 'auto-indent-file-when-save))
            (add-hook 'after-save-hook 'auto-indent-mode-post-command-hook nil 't)
            (add-hook 'post-command-hook 'auto-indent-mode-post-command-hook nil 't)
+           (add-hook 'post-command-hook 'auto-indent-mode-post-command-hook-last t t)
+           
            (add-hook 'pre-command-hook 'auto-indent-mode-pre-command-hook nil 't)
-	   (mapc
-	    (lambda(ad)
-	      (when (fboundp ad)
-		(condition-case error
-		    (progn
-		      (ad-enable-advice ad 'after 'auto-indent-minor-mode-advice)
-		      (ad-activate ad))
-		  (error
-		   (message "[auto-indent-mode]: Error enabling after-advices for `auto-indent-mode': %s" (error-message-string error))))))
-	    '(yank yank-pop))
-	   (mapc
-	    (lambda(ad)
-	      (ad-enable-advice ad 'around 'auto-indent-minor-mode-advice)
-	      (ad-activate ad))
+           (mapc
+            (lambda(ad)
+              (when (fboundp ad)
+                (condition-case error
+                    (progn
+                      (ad-enable-advice ad 'after 'auto-indent-minor-mode-advice)
+                      (ad-activate ad))
+                  (error
+                   (message "[auto-indent-mode]: Error enabling after-advices for `auto-indent-mode': %s" (error-message-string error))))))
+            '(yank yank-pop))
+           (mapc
+            (lambda(ad)
+              (ad-enable-advice ad 'around 'auto-indent-minor-mode-advice)
+              (ad-activate ad))
             '(delete-char kill-line kill-region kill-ring-save cua-copy-region
-			  backward-delete-char-untabify backward-delete-char
-			  delete-backward-char)))))
+                          backward-delete-char-untabify backward-delete-char
+                          delete-backward-char)))))
         (t
          ;; Kill
 	 (cond
@@ -1161,15 +1167,48 @@ Allows the kill ring save to delete the beginning white-space if desired."
   (condition-case error
       (progn
 	(setq auto-indent-last-pre-command-hook-minibufferp (minibufferp))
-	(unless (eq (nth 0 post-command-hook) 'auto-indent-mode-post-command-hook)
-	  (when (memq 'auto-indent-mode-post-command-hook post-command-hook)
-	    (remove-hook 'post-command-hook 'auto-indent-mode-post-command-hook t))
-	  (add-hook 'post-command-hook 'auto-indent-mode-post-command-hook nil t))
-	(when (and (not (minibufferp)))
-	  (setq auto-indent-mode-pre-command-hook-line (line-number-at-pos))
-	  (setq auto-indent-last-pre-command-hook-point (point))))
+        (unless (eq (nth 0 (reverse post-command-hook)) 'auto-indent-mode-post-command-hook-last)
+          (when (memq 'post-command-hook 'auto-indent-mode-post-command-hook-last)
+            (remove-hook 'post-command-hook 'auto-indent-mode-post-command-hook-last))
+          (add-hook 'post-command-hook 'auto-indent-mode-post-command-hook-last t t))
+        (unless (eq (nth 0 post-command-hook) 'auto-indent-mode-post-command-hook)
+          (when (memq 'auto-indent-mode-post-command-hook post-command-hook)
+            (remove-hook 'post-command-hook 'auto-indent-mode-post-command-hook t))
+          (add-hook 'post-command-hook 'auto-indent-mode-post-command-hook nil t))
+        (when (and (not (minibufferp)))
+          (setq auto-indent-mode-pre-command-hook-line (line-number-at-pos))
+          (setq auto-indent-last-pre-command-hook-point (point))))
     (error
      (message "[Auto-Indent Mode] Ignoring Error in `auto-indent-mode-pre-command-hook': %s" (error-message-string error)))))
+
+(defun auto-indent-mode-post-command-hook-last ()
+  "Last hook run to take care of auto-indenting that needs to be performed after all other post-command hooks have run (like sexp auto-indenting)"
+  (condition-case err
+      (when (and (not auto-indent-last-pre-command-hook-minibufferp)
+                 (not (minibufferp))
+                 (not (memq indent-line-function auto-indent-disabled-indent-functions)))
+          
+        (unless (memq 'auto-indent-mode-pre-command-hook pre-command-hook)
+          (setq auto-indent-mode-pre-command-hook-line -1)
+          (add-hook 'pre-command-hook 'auto-indent-mode-pre-command-hook nil t))
+        (when auto-indent-minor-mode
+          (cond
+           ((and last-command-event
+                 (fboundp 'indent-sexp)
+                 auto-indent-after-begin-or-finish-sexp
+                 (condition-case err2 
+                     (memq (char-syntax last-command-event) '(40 41))
+                   (error nil)))
+            (when (looking-back "\\s(")
+              (save-excursion
+                (backward-char)
+                (indent-sexp)))
+            (when (looking-back "\\s)")
+              (save-excursion
+                (let (pt (point))
+                  (backward-sexp)
+                  (indent-sexp pt))))))))
+    (error (message "[Auto-Indent-Mode]: Ignored indentation error in `auto-indent-mode-post-command-hook-last' %s" (error-message-string err)))))
 
 (defun auto-indent-mode-post-command-hook ()
   "Hook for auto-indent-mode to go to the right place when moving
@@ -1183,21 +1222,6 @@ around and the whitespace was deleted from the line."
 	  (add-hook 'pre-command-hook 'auto-indent-mode-pre-command-hook nil t))
 	(when auto-indent-minor-mode
 	  (cond
-           ((and last-command-event
-                 (fboundp 'indent-sexp)
-                 auto-indent-after-begin-or-finish-sexp
-                 (condition-case err2 
-                     (memq (char-syntax last-command-event) '(40 41))
-                   (error nil)))
-             (when (looking-back "\\s(")
-               (save-excursion
-                 (backward-char)
-                 (indent-sexp)))
-             (when (looking-back "\\s)")
-               (save-excursion
-                 (let (pt (point))
-                   (backward-sexp)
-                   (indent-sexp pt)))))
 	   ((and last-command-event (memq last-command-event '(10 13 return)))
 	    (when (or (not (fboundp 'yas/snippets-at-point))
 		      (and (boundp 'yas/minor-mode) (not yas/minor-mode))
