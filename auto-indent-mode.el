@@ -5,10 +5,10 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.37
-;; Last-Updated: Mon Nov 21 10:26:19 2011 (-0600)
+;; Version: 0.38
+;; Last-Updated: Mon Nov 28 12:52:49 2011 (-0600)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1087
+;;     Update #: 1092
 ;; URL: http://www.emacswiki.org/emacs/auto-indent-mode.el
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -116,6 +116,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 28-Nov-2011    Matthew L. Fidler  
+;;    Last-Updated: Mon Nov 28 12:52:30 2011 (-0600) #1089 (Matthew L. Fidler)
+;;    Bugfix for auto-indent-mode
 ;; 21-Nov-2011    Matthew L. Fidler  
 ;;    Last-Updated: Mon Nov 21 10:22:28 2011 (-0600) #1085 (Matthew L. Fidler)
 ;;    Changed `auto-indent-after-begin-or-finish-sexp' to be called
@@ -370,7 +373,7 @@
   "* Auto Indent Mode Customizations"
   :group 'editing)
 
-(defcustom auto-indent-after-begin-or-finish-sexp 't
+(defcustom auto-indent-after-begin-or-finish-sexp nil
   "* Indent parenthetical region after beginning or ending a sexp
 using `indent-sexp'"
   :type 'boolean
@@ -1169,7 +1172,7 @@ Allows the kill ring save to delete the beginning white-space if desired."
 	(setq auto-indent-last-pre-command-hook-minibufferp (minibufferp))
         (unless (eq (nth 0 (reverse post-command-hook)) 'auto-indent-mode-post-command-hook-last)
           (when (memq 'post-command-hook 'auto-indent-mode-post-command-hook-last)
-            (remove-hook 'post-command-hook 'auto-indent-mode-post-command-hook-last))
+            (remove-hook 'post-command-hook 'auto-indent-mode-post-command-hook-last t))
           (add-hook 'post-command-hook 'auto-indent-mode-post-command-hook-last t t))
         (unless (eq (nth 0 post-command-hook) 'auto-indent-mode-post-command-hook)
           (when (memq 'auto-indent-mode-post-command-hook post-command-hook)
