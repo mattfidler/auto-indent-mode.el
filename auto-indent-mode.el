@@ -5,10 +5,10 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.38
-;; Last-Updated: Mon Nov 28 12:52:49 2011 (-0600)
+;; Version: 0.39
+;; Last-Updated: Tue Nov 29 14:05:58 2011 (-0600)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1092
+;;     Update #: 1094
 ;; URL: http://www.emacswiki.org/emacs/auto-indent-mode.el
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -116,6 +116,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 29-Nov-2011    Matthew L. Fidler  
+;;    Last-Updated: Tue Nov 29 14:05:04 2011 (-0600) #1093 (Matthew L. Fidler)
+;;    Bug Fix in `auto-indent-mode-pre-command-hook'
 ;; 28-Nov-2011    Matthew L. Fidler  
 ;;    Last-Updated: Mon Nov 28 12:52:30 2011 (-0600) #1089 (Matthew L. Fidler)
 ;;    Bugfix for auto-indent-mode
@@ -1171,7 +1174,7 @@ Allows the kill ring save to delete the beginning white-space if desired."
       (progn
 	(setq auto-indent-last-pre-command-hook-minibufferp (minibufferp))
         (unless (eq (nth 0 (reverse post-command-hook)) 'auto-indent-mode-post-command-hook-last)
-          (when (memq 'post-command-hook 'auto-indent-mode-post-command-hook-last)
+          (when (memq 'auto-indent-mode-post-command-hook-last post-command-hook)
             (remove-hook 'post-command-hook 'auto-indent-mode-post-command-hook-last t))
           (add-hook 'post-command-hook 'auto-indent-mode-post-command-hook-last t t))
         (unless (eq (nth 0 post-command-hook) 'auto-indent-mode-post-command-hook)
