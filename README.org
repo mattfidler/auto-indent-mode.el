@@ -1,6 +1,7 @@
 #+TITLE: Auto-Indent-Mode
 #+AUTHOR: Matthew L. Fidler
 * About auto-indent-mode
+CLOSED: [2011-12-08 Thu 15:30]
  Provides auto-indentation minor mode for Emacs.  This allows the
   following:
 
