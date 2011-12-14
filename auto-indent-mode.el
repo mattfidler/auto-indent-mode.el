@@ -5,10 +5,10 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.50
-;; Last-Updated: Tue Dec 13 13:43:46 2011 (-0600)
-;;           By: us041375
-;;     Update #: 1199
+;; Version: 0.51
+;; Last-Updated: Wed Dec 14 08:16:23 2011 (-0600)
+;;           By: Matthew L. Fidler
+;;     Update #: 1201
 ;; URL: http://www.emacswiki.org/emacs/auto-indent-mode.el
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -116,6 +116,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 14-Dec-2011    Matthew L. Fidler  
+;;    Last-Updated: Tue Dec 13 13:43:46 2011 (-0600) #1199 (us041375)
+;;    Changed the `auto-indent-kill-remove-extra-spaces' default to
+;;    nil so that you copy-paste what you expect.
 ;; 10-Dec-2011    Matthew L. Fidler  
 ;;    Last-Updated: Sat Dec 10 20:53:28 2011 (-0600) #1192 (Matthew L. Fidler)
 ;;    Bug fix for annoying old debugging macros.
@@ -594,7 +598,7 @@ expressions defined in
   :group 'auto-indent)
 
 
-(defcustom auto-indent-kill-remove-extra-spaces t
+(defcustom auto-indent-kill-remove-extra-spaces nil
   "* Remove indentation before killing the line or region."
   :type 'boolean
   :group 'auto-indent)
