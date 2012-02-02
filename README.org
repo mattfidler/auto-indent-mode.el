@@ -114,3 +114,7 @@ CLOSED: [2011-12-08 Thu 15:30]
   `=auto-indent-disabled-modes-list='
 
 #  LocalWords:  yasnippet autopair TextMate sexp
+* Auto Indent Tasks
+** TODO Make Sure Auto-indent-mode doesn't modify the mark.  Currently, I think it does...
+[2011-12-21 Wed 09:23]
+[[file:p:/PK0068/S04/R00/5_PD_Analysis/pd-monkey-formulations/WORK/Control.111110-143241.txt::$PROBLEM%20Monkey%20PD,%20IDR%20I,%20Adjusted%20Ratio,%20ICB][file:p:/PK0068/S04/R00/5_PD_Analysis/pd-monkey-formulations/WORK/Control.111110-143241.txt::$PROBLEM Monkey PD, IDR I, Adjusted Ratio, ICB]]
