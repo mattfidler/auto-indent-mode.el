@@ -6,10 +6,10 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
 ;; Version: 0.56
-;; Last-Updated: Tue Feb 14 19:20:14 2012 (-0600)
+;; Last-Updated: Tue Feb 14 19:22:52 2012 (-0600)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1232
-;; URL: http://www.emacswiki.org/emacs/auto-indent-mode.el
+;;     Update #: 1233
+;; URL: https://github.com/mlf176f2/auto-indent-mode.el/
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
 ;;
