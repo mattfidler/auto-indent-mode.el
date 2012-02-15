@@ -5,10 +5,10 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.55
-;; Last-Updated: Wed Feb  1 21:52:52 2012 (-0600)
+;; Version: 0.56
+;; Last-Updated: Tue Feb 14 19:20:14 2012 (-0600)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1216
+;;     Update #: 1232
 ;; URL: http://www.emacswiki.org/emacs/auto-indent-mode.el
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -116,6 +116,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 14-Feb-2012    Matthew L. Fidler  
+;;    Last-Updated: Tue Feb 14 19:16:10 2012 (-0600) #1230 (Matthew L. Fidler)
+;;    Fixing issue #2
 ;; 01-Feb-2012    Matthew L. Fidler  
 ;;    Last-Updated: Wed Feb  1 21:50:32 2012 (-0600) #1215 (Matthew L. Fidler)
 ;;    Added makefile-gmake-mode to the excluded auto-indent modes.
@@ -613,7 +616,7 @@ expressions defined in
   :type 'boolean
   :group 'auto-indent)
 
-(defcustom auto-indent-kill-line-at-eol 'blanks
+(defcustom auto-indent-kill-line-at-eol nil
   "* When killing lines, if at the end of a line,
 
 nil - join next line to the current line. Deletes white-space at
@@ -1168,6 +1171,38 @@ standards for Viper, ErgoEmacs and standard emacs"
 	  (key-binding (kbd "<deletechar>"))
 	  (key-binding (kbd "C-d"))))))
 
+(defun auto-indent-handle-end-of-line (lst &optional add)
+  "Handle end of line operations
+
+LST is the list of regular expressions to consider.
+ADD lets auto-indent-mode know that it should add a space instead 
+"
+  (save-match-data
+    (if (or (not add)
+	    (and add (looking-back "\\S-")
+		 (looking-at "\\S-")))
+	(let (done)
+	  (unless add
+	    (save-excursion
+	      (skip-chars-backward "\\s-")
+	      (when (looking-at "\\s-+")
+		(replace-match " "))))
+	  (when auto-indent-delete-line-char-remove-last-space
+	    (when lst
+	      (setq done nil)
+	      (mapc (lambda(i)
+		      (when (and (not done) (looking-back (nth 0 i))
+                                 (looking-at (concat (if add "" " ") (nth 1 i))))
+			(if add
+			    (save-excursion
+			      (insert " "))
+			  (delete-char 1))
+			(setq done t)))
+		    lst))))
+      (unless add 
+	(when (and (eolp) (looking-back "[ \t]+" nil t))
+	  (replace-match ""))))))
+
 
 (defmacro auto-indent-def-del-forward-char (&optional function)
   "Defines advices and commands for `delete-char'"
@@ -1193,42 +1228,17 @@ standards for Viper, ErgoEmacs and standard emacs"
               (when (and del-eol
                          auto-indent-minor-mode (not (minibufferp))
                          auto-indent-delete-line-char-remove-extra-spaces)
-                (save-excursion
-                  (skip-chars-backward " \t")
-                  (when (looking-at "[ \t]+")
-                    (replace-match " ")))
-                (let (done lst)
-                  (when auto-indent-delete-line-char-remove-last-space
-                    (if prog-mode
-                        (setq lst auto-indent-delete-line-char-remove-last-space-prog-mode-regs)
-                      (setq lst auto-indent-delete-line-char-remove-last-space-text-mode-regs))
-
-                    (when lst
-                      (setq done nil)
-                      (mapc (lambda(i)
-                              (when (and (not done) (looking-back (nth 0 i))
-                                         (looking-at (concat " " (nth 1 i))))
-                                (delete-char 1)
-                                (setq done t)))
-                            lst))))
-                (when (and (eolp) (looking-back "[ \t]+" nil t))
-                  (replace-match "")))
+                (auto-indent-handle-end-of-line
+		 (if prog-mode
+                     auto-indent-delete-line-char-remove-last-space-prog-mode-regs
+                   auto-indent-delete-line-char-remove-last-space-text-mode-regs)))
               (when (and del-eol
                          auto-indent-minor-mode (not (minibufferp))
                          auto-indent-delete-line-char-add-extra-spaces)
-                (let (done lst)
-                  (if prog-mode
-                      (setq lst auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs)
-                    (setq lst auto-indent-delete-line-char-add-extra-spaces-text-mode-regs))
-                  (when lst
-                    (mapc (lambda(i)
-                            (when (and (not done)
-                                       (looking-back (nth 0 i))
-                                       (looking-at (nth 1 i)))
-                              (save-excursion
-                                (insert " ")
-                                (setq done t))))
-                          lst)))))
+                (auto-indent-handle-end-of-line
+                 (if prog-mode
+                     auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs
+                   auto-indent-delete-line-char-add-extra-spaces-text-mode-regs)  t)))
           ,do-it)))))
 
 
@@ -1272,7 +1282,10 @@ If at end of line, obey `auto-indent-kill-line-at-eol'
 			  (or (not auto-indent-force-interactive-advices)
 			     (called-interactively-p 'any)
 			     (auto-indent-is-kill-line-p))))
-	(let ((can-do-it t))
+	(let ((can-do-it t)
+              (prog-mode (auto-indent-is-prog-mode-p))
+              (eolp (auto-indent-eolp))
+	      (bolp (auto-indent-bolp)))
 	  (if (and auto-indent-minor-mode
 		   (not (minibufferp)))
 	      (if (and auto-indent-kill-line-kill-region-when-active
@@ -1280,13 +1293,12 @@ If at end of line, obey `auto-indent-kill-line-at-eol'
 		  (progn
 		    (auto-indent-kill-region (region-beginning) (region-end))
 		    (setq can-do-it nil))
-		(when (auto-indent-bolp)
+		(when bolp
 		  (move-beginning-of-line 1))
-		(when (auto-indent-eolp)
+		(when eolp
 		  (cond
 		   ((eq auto-indent-kill-line-at-eol nil)
-		    (when (> (prefix-numeric-value current-prefix-arg) 0)
-		      (delete-indentation 't)
+ 		    (when (> (prefix-numeric-value current-prefix-arg) 0)
 		      (if (not kill-whole-line)
 			  (save-excursion
 			    (beginning-of-line)
@@ -1306,7 +1318,22 @@ If at end of line, obey `auto-indent-kill-line-at-eol'
 			   auto-indent-kill-line-at-eol))))))
 	  (when can-do-it
 	    ,do-it)
-	  (indent-according-to-mode))
+	  (indent-according-to-mode )
+          (when (and eolp (eq auto-indent-kill-line-at-eol nil))
+            (when (and eolp
+                       auto-indent-minor-mode (not (minibufferp))
+                       auto-indent-delete-line-char-remove-extra-spaces)
+              (auto-indent-handle-end-of-line
+               (if prog-mode
+                   auto-indent-delete-line-char-remove-last-space-prog-mode-regs
+                 auto-indent-delete-line-char-remove-last-space-text-mode-regs)))
+            (when (and eolp
+                       auto-indent-minor-mode (not (minibufferp))
+                       auto-indent-delete-line-char-add-extra-spaces)
+              (auto-indent-handle-end-of-line
+               (if prog-mode
+                   auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs
+                 auto-indent-delete-line-char-add-extra-spaces-text-mode-regs)  t))))
       ,do-it))))
 
 (auto-indent-def-kill-line t)
