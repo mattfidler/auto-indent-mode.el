@@ -6,9 +6,9 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
 ;; Version: 0.56
-;; Last-Updated: Tue Feb 14 19:22:52 2012 (-0600)
+;; Last-Updated: Tue Feb 28 14:38:30 2012 (-0600)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1233
+;;     Update #: 1238
 ;; URL: https://github.com/mlf176f2/auto-indent-mode.el/
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -116,6 +116,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 28-Feb-2012    Matthew L. Fidler  
+;;    Last-Updated: Tue Feb 28 14:36:30 2012 (-0600) #1236 (Matthew L. Fidler)
+;;    Added subsequent-whole-line from Le Wang's fork.
 ;; 14-Feb-2012    Matthew L. Fidler  
 ;;    Last-Updated: Tue Feb 14 19:16:10 2012 (-0600) #1230 (Matthew L. Fidler)
 ;;    Fixing issue #2
@@ -616,13 +619,15 @@ expressions defined in
   :type 'boolean
   :group 'auto-indent)
 
-(defcustom auto-indent-kill-line-at-eol nil
+(defcustom auto-indent-kill-line-at-eol 'subsequent-whole-lines
   "* When killing lines, if at the end of a line,
 
 nil - join next line to the current line. Deletes white-space at
-      join.
+      join. [this essentially duplicated delete-char]
+
       See also `auto-indent-kill-remove-extra-spaces'
 whole-line - kill next lines
+subsequent-whole-lines - merge lines on first call, subsequent kill whole lines
 blanks - kill all empty lines after the current line, and then
          any lines specified.
 
@@ -631,6 +636,7 @@ You should also set `kill-whole-line' to do what you want.
 "
   :type '(choice (const :tag "Default" nil)
                  (const :tag "Next whole line" whole-line)
+                 (const :tag "merge lines on first call, subsequent kill whole lines" subsequent-whole-line)
                  (const :tag "Next whole line after any blank lines" blanks))
   :group 'auto-indent)
 
@@ -639,7 +645,7 @@ You should also set `kill-whole-line' to do what you want.
   :type 'boolean
   :group 'auto-indent)
 
-(defcustom auto-indent-use-text-boundaries nil
+(defcustom auto-indent-use-text-boundaries t
   "* When killing lines, if point is before any text, act as if
   point is at BOL.  And if point is after text, act as if point
   is at EOL"
@@ -658,10 +664,23 @@ You should also set `kill-whole-line' to do what you want.
   :group 'auto-indent)
 
 (defcustom auto-indent-disabled-modes-list
-  '(eshell-mode wl-summary-mode compilation-mode org-mode
-                makefile-gmake-mode
-		text-mode dired-mode snippet-mode fundamental-mode
-		diff-mode texinfo-mode conf-windows-mode)
+  `(
+    compilation-mode
+    conf-windows-mode
+    diff-mode
+    dired-mode
+    eshell-mode
+    fundamental-mode
+    log-edit-mode
+    makefile-gmake-mode
+    org-mode
+    snippet-mode
+    texinfo-mode
+    text-mode
+    wl-summary-mode
+    yaml-mode
+    ,(if (boundp 'mmm-mode) 'mmm-mode)
+    )
   "* List of modes disabled when global auto-indent-mode is on."
   :type '(repeat (sexp :tag "Major mode"))
   :tag " Major modes where auto-indent is disabled: "
@@ -967,8 +986,7 @@ http://www.emacswiki.org/emacs/AutoIndentation
 
 ;;;###autoload
 (define-globalized-minor-mode auto-indent-global-mode auto-indent-minor-mode auto-indent-minor-mode-on
-                                          :group 'auto-indent
-					  
+  :group 'auto-indent
   :require 'auto-indent-mode)
 
 (defun auto-indent-remove-advice-p (&optional command)
@@ -1303,7 +1321,15 @@ If at end of line, obey `auto-indent-kill-line-at-eol'
 			  (save-excursion
 			    (beginning-of-line)
 			    (insert " ")))))
-		   ((memq auto-indent-kill-line-at-eol '(whole-line blanks))
+                   ((eq auto-indent-kill-line-at-eol 'subsequent-whole-line)
+                    (let (auto-indent-kill-line-at-eol)
+                      (if (memq last-command (list 'kill-region this-command))
+                          (progn
+                            (setq auto-indent-kill-line-at-eol 'whole-line)
+                            (kill-line (ad-get-arg 0)))
+                        (setq auto-indent-kill-line-at-eol nil)
+                        (kill-line (ad-get-arg 0)))))
+                   ((memq auto-indent-kill-line-at-eol '(whole-line blanks))
 		    (if (> (prefix-numeric-value current-prefix-arg) 0)
 			(save-excursion
 			  (delete-region (point) (point-at-eol))
