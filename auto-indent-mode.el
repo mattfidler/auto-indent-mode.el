@@ -6,9 +6,9 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
 ;; Version: 0.56
-;; Last-Updated: Wed Feb 29 13:20:27 2012 (-0600)
+;; Last-Updated: Wed Feb 29 13:55:11 2012 (-0600)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1263
+;;     Update #: 1277
 ;; URL: https://github.com/mlf176f2/auto-indent-mode.el/
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -117,6 +117,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 29-Feb-2012    Matthew L. Fidler  
+;;    Last-Updated: Wed Feb 29 13:52:33 2012 (-0600) #1276 (Matthew L. Fidler)
+;;    Made the handling of pairs a timer-based function so it doesn't
+;;    interfere with work flow.
 ;; 29-Feb-2012    Matthew L. Fidler  
 ;;    Last-Updated: Wed Feb 29 13:20:17 2012 (-0600) #1262 (Matthew L. Fidler)
 ;;    Better handling of pairs.
@@ -1505,7 +1509,7 @@ Allows the kill ring save to delete the beginning white-space if desired."
 (defvar auto-indent-pairs-end nil
   "Defines where the pair region ends")
 
-(defun auto-indent-mode-pre-command-hook()
+(defun auto-indent-mode-pre-command-hook ()
   "Hook for auto-indent-mode to tell if the point has been moved"
   (condition-case error
       (progn
@@ -1527,13 +1531,20 @@ Allows the kill ring save to delete the beginning white-space if desired."
               (unless auto-indent-pairs-begin
                 (setq auto-indent-pairs-begin (point))
                 (setq auto-indent-pairs-end (point)))
-              (setq auto-indent-pairs-begin (min auto-indent-pairs-begin (nth 1 (syntax-ppss))))
-              (setq auto-indent-pairs-end (max auto-indent-pairs-end
-                                               (save-excursion
-                                                 (goto-char auto-indent-pairs-begin)
-                                                 (condition-case err
-                                                     (forward-list)
-                                                   (error nil)))))))))
+              
+              (set (make-local-variable 'auto-indent-pairs-begin)
+                   (min auto-indent-pairs-begin
+                        (save-excursion
+                          (goto-char (nth 1 (syntax-ppss)))
+                          (point))))
+              (set (make-local-variable 'auto-indent-pairs-end)
+                   (max auto-indent-pairs-end
+                        (save-excursion
+                          (goto-char auto-indent-pairs-begin)
+                          (condition-case err
+                              (forward-list)
+                            (error nil))
+                          (point))))))))
     (error
      (message "[Auto-Indent Mode] Ignoring Error in `auto-indent-mode-pre-command-hook': %s" (error-message-string error)))))
 
@@ -1542,6 +1553,17 @@ Allows the kill ring save to delete the beginning white-space if desired."
   (condition-case err
       (> (car (syntax-ppss)) 0)
     (error nil)))
+
+(defvar auto-indent-par-region-timer nil)
+
+(defun auto-indent-par-region ()
+  "Indents a parenthetical region (based on a timer)"
+  (let ((mark-active mark-active))
+    (when (not (minibufferp))
+      (indent-region auto-indent-pairs-begin auto-indent-pairs-end)
+      (when (or (> (point) auto-indent-pairs-end)
+                (< (point) auto-indent-pairs-begin))
+        (set (make-local-variable 'auto-indent-pairs-begin) nil)))))
 
 (defun auto-indent-mode-post-command-hook-last ()
   "Last hook run to take care of auto-indenting that needs to be performed after all other post-command hooks have run (like sexp auto-indenting)"
@@ -1558,18 +1580,23 @@ Allows the kill ring save to delete the beginning white-space if desired."
            ((and auto-indent-after-begin-or-finish-pairs
                  (auto-indent-point-inside-pairs-p))
             (let* ((mark-active mark-active)
-                   (p1 (nth 1 (syntax-ppss)))
+                   (p1 (save-excursion
+                         (nth 1 (syntax-ppss))
+                         (point)))
                    (p2 (save-excursion
                          (goto-char p1)
                          (condition-case err
                              (forward-list)
                            (error nil))
                          (point))))
-              (indent-region (min p1 auto-indent-pairs-begin)
-                             (max p2 auto-indent-pairs-end))
-              (when (or (> (point) auto-indent-pairs-end)
-                        (< (point) auto-indent-pairs-begin))
-                (setq auto-indent-pairs-begin nil)))))))
+              (set (make-local-variable 'auto-indent-pairs-begin)
+                   (min p1 auto-indent-pairs-begin))
+              (set (make-local-variable 'auto-indent-pairs-end)
+                   (min p2 auto-indent-pairs-end))
+              (if auto-indent-par-region-timer
+                  (cancel-timer auto-indent-par-region-timer))
+              (set (make-local-variable 'auto-indent-par-region-timer)
+                   (run-with-timer 0.25 nil 'auto-indent-par-region)))))))
     (error (message "[Auto-Indent-Mode]: Ignored indentation error in `auto-indent-mode-post-command-hook-last' %s" (error-message-string err)))))
 
 (defun auto-indent-mode-post-command-hook ()
