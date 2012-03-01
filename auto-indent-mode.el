@@ -6,9 +6,9 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
 ;; Version: 0.56
-;; Last-Updated: Wed Feb 29 13:55:11 2012 (-0600)
+;; Last-Updated: Wed Feb 29 22:13:18 2012 (-0600)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1277
+;;     Update #: 1281
 ;; URL: https://github.com/mlf176f2/auto-indent-mode.el/
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -117,6 +117,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 29-Feb-2012    Matthew L. Fidler  
+;;    Last-Updated: Wed Feb 29 15:39:01 2012 (-0600) #1278 (Matthew L. Fidler)
+;;    Bug fix for paren handling. 
 ;; 29-Feb-2012    Matthew L. Fidler  
 ;;    Last-Updated: Wed Feb 29 13:52:33 2012 (-0600) #1276 (Matthew L. Fidler)
 ;;    Made the handling of pairs a timer-based function so it doesn't
@@ -472,9 +475,24 @@ Another home-key will chang to cursor
   :type 'boolean
   :group 'auto-indent)
 
-(defalias 'auto-indent-after-begin-or-finish-sexp 'auto-indent-after-begin-or-finish-pairs)
-(defcustom auto-indent-after-begin-or-finish-pairs t
-  "* Indent parenthetical region after adding a parenthetical character."
+(defalias 'auto-indent-after-begin-or-finish-sexp 'auto-indent-current-pairs)
+(defcustom auto-indent-current-pairs t
+  "* Automatically indent the current parenthetical statement"
+  :type 'boolean
+  :group 'auto-indent)
+
+(defcustom auto-indent-next-pair t
+  "Automatically indent the next parenthetical statement. For example in R:
+
+d| <- read.csv(\"dat.csv\",
+               na.strings=c(\".\",\"NA\"))
+
+When typing .old, the indentation will be updated as follows:
+
+d.old <- read.csv(\"dat.csv\",
+                  na.strings=c(\".\",\"NA\"))
+
+"
   :type 'boolean
   :group 'auto-indent)
 
@@ -1526,7 +1544,7 @@ Allows the kill ring save to delete the beginning white-space if desired."
           (setq auto-indent-mode-pre-command-hook-line (line-number-at-pos))
           (setq auto-indent-last-pre-command-hook-point (point))
           (let ((mark-active mark-active))
-            (when (and auto-indent-after-begin-or-finish-pairs
+            (when (and auto-indent-current-pairs
                        (auto-indent-point-inside-pairs-p))
               (unless auto-indent-pairs-begin
                 (setq auto-indent-pairs-begin (point))
@@ -1576,9 +1594,29 @@ Allows the kill ring save to delete the beginning white-space if desired."
           (setq auto-indent-mode-pre-command-hook-line -1)
           (add-hook 'pre-command-hook 'auto-indent-mode-pre-command-hook nil t))
         (when auto-indent-minor-mode
-          (cond
-           ((and auto-indent-after-begin-or-finish-pairs
-                 (auto-indent-point-inside-pairs-p))
+          (when auto-indent-next-pair
+            (unless auto-indent-pairs-begin
+              (setq auto-indent-pairs-begin (point))
+              (setq auto-indent-pairs-end (point)))
+            (set (make-local-variable 'auto-indent-pairs-begin)
+                 (min auto-indent-pairs-begin (point)))
+            (set (make-local-variable 'auto-indent-pairs-end)
+                 (max auto-indent-pairs-end
+                      (save-excursion
+                        (if (not (re-search-forward "\\s(" nil t))
+                            (point)
+                          (backward-char 1)
+                          (condition-case err
+                              (progn
+                                (foward-list)
+                                (point))
+                            (error (point)))))))
+            (if auto-indent-par-region-timer
+                (cancel-timer auto-indent-par-region-timer))
+            (set (make-local-variable 'auto-indent-par-region-timer)
+                 (run-with-timer 0.25 nil 'auto-indent-par-region)))
+          (when (and auto-indent-current-pairs
+                     (auto-indent-point-inside-pairs-p))
             (let* ((mark-active mark-active)
                    (p1 (save-excursion
                          (nth 1 (syntax-ppss))
@@ -1590,13 +1628,13 @@ Allows the kill ring save to delete the beginning white-space if desired."
                            (error nil))
                          (point))))
               (set (make-local-variable 'auto-indent-pairs-begin)
-                   (min p1 auto-indent-pairs-begin))
+                   (min p1 (or auto-indent-pairs-begin (point))))
               (set (make-local-variable 'auto-indent-pairs-end)
-                   (min p2 auto-indent-pairs-end))
+                   (min p2 (or auto-indent-pairs-end (point))))
               (if auto-indent-par-region-timer
                   (cancel-timer auto-indent-par-region-timer))
               (set (make-local-variable 'auto-indent-par-region-timer)
-                   (run-with-timer 0.25 nil 'auto-indent-par-region)))))))
+                   (run-with-timer 0.25 nil 'auto-indent-par-region))))))
     (error (message "[Auto-Indent-Mode]: Ignored indentation error in `auto-indent-mode-post-command-hook-last' %s" (error-message-string err)))))
 
 (defun auto-indent-mode-post-command-hook ()
