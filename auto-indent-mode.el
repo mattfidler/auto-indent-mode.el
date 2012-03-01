@@ -5,10 +5,10 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.56
-;; Last-Updated: Wed Feb 29 22:13:18 2012 (-0600)
+;; Version: 0.57
+;; Last-Updated: Wed Feb 29 22:24:14 2012 (-0600)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1281
+;;     Update #: 1282
 ;; URL: https://github.com/mlf176f2/auto-indent-mode.el/
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
