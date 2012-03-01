@@ -23,7 +23,9 @@ CLOSED: [2011-12-08 Thu 15:30]
     (if desired and enabled)
 
   - Automatically indent balanced parenthetical expression, or sexp, if desired
-     `=auto-indent-after-begin-or-finish-sexp='
+     `=auto-indent-current-pairs=' or `=auto-indent-next-pair=' is set
+    to be true (enabled by default).  This is not immediate but occurs
+    after 1/4 a second to allow better responsiveness in emacs.
 
   All of these options can be customized. (customize auto-indent)
 * Installing auto-indent-mode
@@ -86,7 +88,6 @@ CLOSED: [2011-12-08 Thu 15:30]
 * Notes about autopair-mode and yasnippet compatibility
   If you wish to use this with autopairs and yasnippet, please load
   this library first.
-
 * Using specific functions from auto-indent-mode
 
   Also if you wish to just use specific functions from this library
@@ -95,18 +96,18 @@ CLOSED: [2011-12-08 Thu 15:30]
   To have the auto-indentation-paste use:
 
 #+BEGIN_SRC emacs-lisp :results silent
- (autoload 'auto-indent-yank "auto-indent-mode" "" t)
+  (autoload 'auto-indent-yank "auto-indent-mode" "" t)
   (autoload 'auto-indent-yank-pop "auto-indent-mode" "" t)
-
+  
   (define-key global-map [remap yank] 'auto-indent-yank)
   (define-key global-map [remap yank-pop] 'auto-indent-yank-pop)
-
+  
   (autoload 'auto-indent-delete-char "auto-indent-mode" "" t)
   (define-key global-map [remap delete-char] 'auto-indent-delete-char)
-
+  
   (autoload 'auto-indent-kill-line "auto-indent-mode" "" t)
   (define-key global-map [remap kill-line] 'auto-indent-kill-line)
-
+  
 #+END_SRC
 
  
