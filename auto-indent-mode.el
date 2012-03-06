@@ -6,9 +6,9 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
 ;; Version: 0.58
-;; Last-Updated: Mon Mar  5 23:08:48 2012 (-0600)
+;; Last-Updated: Mon Mar  5 23:13:03 2012 (-0600)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1295
+;;     Update #: 1296
 ;; URL: https://github.com/mlf176f2/auto-indent-mode.el/
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -1183,7 +1183,6 @@ http://www.emacswiki.org/emacs/AutoIndentation
       ,(if function '(n &optional killflag) '(around auto-indent-minor-mode-advice))
       "If at the end of the line, take out whitespace after deleting character"
       ,(if function '(interactive "p") nil)
-      (message "%s:%s" this-command (auto-indent-is-bs-key-p))
       (if (not ,(if function t '(and
                                  (not (auto-indent-remove-advice-p))
                                  (or (not auto-indent-force-interactive-advices)
