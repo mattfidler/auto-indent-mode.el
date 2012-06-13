@@ -115,7 +115,32 @@ CLOSED: [2011-12-08 Thu 15:30]
   `=auto-indent-disabled-modes-list='
 
 #  LocalWords:  yasnippet autopair TextMate sexp
+* Making certain modes perform tasks on paste/yank.
+Sometimes, like in R, it is convenient to paste c:\ and change it to
+c:/.  This can be accomplished by modifying the
+auto-indent-after-yank-hook.  
+
+#+BEGIN_SRC emacs-lisp
+(defun kicker-ess-fix-path (beg end)
+    "Fixes ess path"
+    (message "%s,%s" beg end)
+    (save-restriction
+      (save-excursion
+        (narrow-to-region beg end)
+        (goto-char (point-min))
+        (when (looking-at "[A-Z]:\\\\")
+          (while (search-forward "\\" nil t)
+            (replace-match "/"))))))
+  
+  (defun kicker-ess-turn-on-fix-path ()
+    (interactive)
+    (when (string= "S" ess-language)
+      (add-hook 'auto-indent-after-yank-hook 'kicker-ess-fix-path t t)))
+  (add-hook 'ess-mode-hook 'kicker-ess-turn-on-fix-path)
+#+END_SRC
+
 * Auto Indent Tasks
 ** TODO Make Sure Auto-indent-mode doesn't modify the mark.  Currently, I think it does...
 [2011-12-21 Wed 09:23]
 [[file:p:/PK0068/S04/R00/5_PD_Analysis/pd-monkey-formulations/WORK/Control.111110-143241.txt::$PROBLEM%20Monkey%20PD,%20IDR%20I,%20Adjusted%20Ratio,%20ICB][file:p:/PK0068/S04/R00/5_PD_Analysis/pd-monkey-formulations/WORK/Control.111110-143241.txt::$PROBLEM Monkey PD, IDR I, Adjusted Ratio, ICB]]
+** TODO Make sure the timer only runs in the buffer that it originally was called in.
