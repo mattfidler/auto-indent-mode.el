@@ -5,10 +5,10 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.61
-;; Last-Updated: Wed Jun 13 10:55:34 2012 (-0500)
+;; Version: 0.62
+;; Last-Updated: Tue Jun 26 09:14:51 2012 (-0500)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1314
+;;     Update #: 1322
 ;; URL: https://github.com/mlf176f2/auto-indent-mode.el/
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -117,6 +117,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 26-Jun-2012    Matthew L. Fidler  
+;;    Last-Updated: Tue Jun 26 09:14:02 2012 (-0500) #1320 (Matthew L. Fidler)
+;;    Bug fix for point-shift involved in `auto-indent-after-yank-hook'
 ;; 13-Jun-2012    Matthew L. Fidler  
 ;;    Last-Updated: Wed Jun 13 10:34:07 2012 (-0500) #1307 (Matthew L. Fidler)
 ;;    Added `auto-indent-after-yank-hook'
@@ -1088,18 +1091,23 @@ http://www.emacswiki.org/emacs/AutoIndentation
 	  (skip-chars-backward " \t")
 	  (when (looking-at "[ \t]+")
 	    (replace-match " ")))
-	(if auto-indent-on-yank-or-paste
-	    (save-excursion
-	      (indent-region (progn (goto-char (mark t)) (point-at-bol))
-			     (progn (goto-char pt) (point-at-eol)))))
-        (if auto-indent-mode-untabify-on-yank-or-paste
-	    (save-excursion
-	      (untabify (progn (goto-char (mark t)) (point-at-bol))
-			(progn (goto-char pt) (point-at-eol)))))
-        (condition-case err
-            (run-hook-with-args 'auto-indent-after-yank-hook (mark t) pt)
-          (error
-           (message "[Auto-Indent Mode] Ignoring error when running hook `auto-indent-after-yank-hook': %s" (error-message-string err))))))))
+	(let (p1 p2)
+          (save-excursion
+            (save-restriction
+              (narrow-to-region (progn (goto-char (mark t)) (point-at-bol))
+                                (progn (goto-char pt) (point-at-eol)))
+              (condition-case err
+                  (run-hook-with-args 'auto-indent-after-yank-hook (point-min) (point-max))
+                (error
+                 (message "[Auto-Indent Mode] Ignoring error when running hook `auto-indent-after-yank-hook': %s" (error-message-string err))))
+              (setq p1 (point-min))
+              (setq p2 (point-max)))
+            (if auto-indent-on-yank-or-paste
+                (indent-region p1 p2))
+            (save-restriction
+              (narrow-to-region p1 p2)
+              (if auto-indent-mode-untabify-on-yank-or-paste
+                  (untabify (point-min) (point-max))))))))))
 
 (defadvice move-beginning-of-line (around auto-indent-minor-mode-advice)
   (let (at-beginning)

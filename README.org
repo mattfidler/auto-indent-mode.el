@@ -123,7 +123,6 @@ auto-indent-after-yank-hook.
 #+BEGIN_SRC emacs-lisp
 (defun kicker-ess-fix-path (beg end)
     "Fixes ess path"
-    (message "%s,%s" beg end)
     (save-restriction
       (save-excursion
         (narrow-to-region beg end)
@@ -137,6 +136,44 @@ auto-indent-after-yank-hook.
     (when (string= "S" ess-language)
       (add-hook 'auto-indent-after-yank-hook 'kicker-ess-fix-path t t)))
   (add-hook 'ess-mode-hook 'kicker-ess-turn-on-fix-path)
+#+END_SRC
+
+Another R-hack is to take of the ">" and "+" of a command line
+copy. For example copying:
+
+: > ## set up
+: > availDists <- c(Normal="rnorm", Exponential="rexp")
+: > availKernels <- c("gaussian", "epanechnikov", "rectangular",
+: + "triangular", "biweight", "cosine", "optcosine")
+
+
+Should give the following code on paste:
+: ## set up
+: availDists <- c(Normal="rnorm", Exponential="rexp")
+: availKernels <- c("gaussian", "epanechnikov", "rectangular",
+: "triangular", "biweight", "cosine", "optcosine")
+
+#+BEGIN_SRC emacs-lisp
+  (defun kicker-ess-fix-code (beg end)
+    "Fixes ess path"
+    (save-restriction
+      (save-excursion
+        (save-match-data
+          (narrow-to-region beg end)
+          (goto-char (point-min))
+          (while (re-search-forward "^[ \t]*[>][ \t]+" nil t)
+            (replace-match "")
+            (goto-char (point-at-eol))
+            (while (looking-at "[ \t\n]*[+][ \t]+")
+              (replace-match "\n")
+              (goto-char (point-at-eol))))))))
+  
+  (defun kicker-ess-turn-on-fix-code ()
+    (interactive)
+    (when (string= "S" ess-language)
+      (add-hook 'auto-indent-after-yank-hook 'kicker-ess-fix-code t t)))
+  (add-hook 'ess-mode-hook 'kicker-ess-turn-on-fix-code)
+  
 #+END_SRC
 
 * Auto Indent Tasks
