@@ -5,10 +5,10 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.62
-;; Last-Updated: Mon Jul  2 16:14:01 2012 (-0500)
+;; Version: 0.63
+;; Last-Updated: Mon Jul 23 20:55:03 2012 (-0500)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1342
+;;     Update #: 1355
 ;; URL: https://github.com/mlf176f2/auto-indent-mode.el/
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -117,6 +117,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 23-Jul-2012    Matthew L. Fidler  
+;;    Last-Updated: Mon Jul 23 20:54:00 2012 (-0500) #1353 (Matthew L. Fidler)
+;;    Fix Issue #3.  Thanks harrylove for pointing it out.
 ;; 02-Jul-2012    Matthew L. Fidler  
 ;;    Last-Updated: Mon Jul  2 16:12:20 2012 (-0500) #1341 (Matthew L. Fidler)
 ;;    Have an mode-based timer normalized to the number of lines used
@@ -520,6 +523,8 @@ d.old <- read.csv(\"dat.csv\",
 This will slow down your computation, so if you use it make sure
 that the `auto-indent-next-pair-timer-interval' is appropriate
 for your needs.
+
+It is useful when using this option to have some sort of autopairing on.
 
 "
   :type 'boolean
@@ -1082,18 +1087,19 @@ http://www.emacswiki.org/emacs/AutoIndentation
                  backward-delete-char-untabify backward-delete-char
                  delete-backward-char move-beginning-of-line)))
 
+
+(defun auto-indent-turn-on-org-indent ()
+  (when auto-indent-start-org-indent
+    (org-indent-mode 1)))
+(add-hook 'org-mode-hook 'auto-indent-turn-on-org-indent)
 ;;;###autoload
 (defun auto-indent-minor-mode-on ()
   "* Turn on auto-indent minor mode."
-  (unless (or (minibufferp)
-              (memq major-mode auto-indent-disabled-modes-list))
-    (auto-indent-minor-mode 1))
-  (when (and
-         auto-indent-start-org-indent
-         (not (minibufferp))
-         (fboundp 'org-indent-mode)
-         (eq major-mode 'org-mode))
-    (org-indent-mode 1)))
+  (interactive)
+  (if (or (minibufferp)
+          (memq major-mode auto-indent-disabled-modes-list)) nil
+    (auto-indent-minor-mode 1)
+    t))
 
 ;;;###autoload
 (define-globalized-minor-mode auto-indent-global-mode auto-indent-minor-mode auto-indent-minor-mode-on
@@ -1212,8 +1218,7 @@ http://www.emacswiki.org/emacs/AutoIndentation
               (and save (memq major-mode auto-indent-disabled-modes-on-save)))
     (when (or
            (and save auto-indent-delete-trailing-whitespace-on-save-file)
-           (and (not save) auto-indent-delete-trailing-whitespace-on-visit-file)
-           )
+           (and (not save) auto-indent-delete-trailing-whitespace-on-visit-file))
       (delete-trailing-whitespace))
     (when (or
            (and save auto-indent-on-save-file)
@@ -1232,64 +1237,65 @@ http://www.emacswiki.org/emacs/AutoIndentation
 
 (defun auto-indent-file-when-visit ()
   "* auto-indent file when visit."
-  (when (buffer-file-name)
-    (auto-indent-whole-buffer)
-    (when auto-indent-on-visit-pretend-nothing-changed
-      (set-buffer-modified-p nil) ; Make the buffer appear "not modified"
-      )))
+  (save-excursion
+    (when (buffer-file-name)
+      (auto-indent-whole-buffer)
+      (when auto-indent-on-visit-pretend-nothing-changed
+	(set-buffer-modified-p nil) ; Make the buffer appear "not modified"
+	))))
 
 (defun auto-indent-is-bs-key-p (&optional command)
   "Determines if the backspace key was pressed."
   (or
    (and (boundp 'viper-mode) viper-mode (eq viper-current-state 'vi-state) ;; Viper VI state
-        nil)
+	nil)
    (and (boundp 'ergoemacs-mode) ergoemacs-mode ;; Ergoemacs
-        (memq (or command this-command)
-              (list
-               'autopair-backspace
-               'auto-indent-delete-backward-char
-               'delete-backward-char
-               'backward-delete-char
-               (key-binding (kbd "DEL"))
-               ergoemacs-delete-backward-char-key
-               (key-binding (kbd "<backspace>")))))
+	(memq (or command this-command)
+	      (list
+	       'autopair-backspace
+	       'auto-indent-delete-backward-char
+	       'delete-backward-char
+	       'backward-delete-char
+	       (key-binding (kbd "DEL"))
+	       ergoemacs-delete-backward-char-key
+	       (key-binding (kbd "<backspace>")))))
    (memq (or command this-command)
-         (list
-          'autopair-backspace
-          'auto-indent-delete-backward-char
-          'delete-backward-char
-          'backward-delete-char
-          (key-binding (kbd "DEL"))
-          (key-binding (kbd "<backspace>"))))))
+	 (list
+	  'autopair-backspace
+	  'auto-indent-delete-backward-char
+	  'delete-backward-char
+	  'backward-delete-char
+	  (key-binding (kbd "DEL"))
+	  (key-binding (kbd "<backspace>"))))))
 
 
 
 (defmacro auto-indent-def-del-char (command &optional function)
   "Defines advices and commands for `delete-char'"
   (let ((do-it (if function
-                   `(if (called-interactively-p 'any)
-                        (,command  n (if n t nil))
-                      (,command n killflag))
-                 'ad-do-it)))
+		   `(if (called-interactively-p 'any)
+			(,command  n (if n t nil))
+		      (,command n killflag))
+		 'ad-do-it)))
     `(,(if function 'defun 'defadvice)
       ,(if function (intern (concat "auto-indent-" (symbol-name command))) command)
       ,(if function '(n &optional killflag) '(around auto-indent-minor-mode-advice))
       "If at the end of the line, take out whitespace after deleting character"
       ,(if function '(interactive "p") nil)
       (if (not ,(if function t '(and
-                                 (not (auto-indent-remove-advice-p))
-                                 (or (not auto-indent-force-interactive-advices)
-                                     (called-interactively-p 'any)
-                                     (auto-indent-is-bs-key-p))))) ,do-it
-        (let ((backward-delete-char-untabify-method auto-indent-backward-delete-char-behavior))
-          (when auto-indent-par-region-timer
-            (cancel-timer auto-indent-par-region-timer))
-          (setq this-command 'auto-indent-delete-backward-char) ;; No recursive calls, please.
-          ,(if (eq command 'backward-delete-char-untabify)
-               do-it
-             `(backward-delete-char-untabify
-               ,@(if function '(n (if (called-interactively-p 'any) t killflag))
-                   '((ad-get-arg 0) t)))))))))
+				 (not (auto-indent-remove-advice-p))
+				 (or (not auto-indent-force-interactive-advices)
+				     (called-interactively-p 'any)
+				     (auto-indent-is-bs-key-p))))) ,do-it
+	(let ((backward-delete-char-untabify-method auto-indent-backward-delete-char-behavior))
+	  (when auto-indent-par-region-timer
+	    (cancel-timer auto-indent-par-region-timer))
+	  (setq this-command 'auto-indent-delete-backward-char) ;; No recursive calls, please.
+	  ,(if (eq command 'backward-delete-char-untabify)
+	       do-it
+	     `(backward-delete-char-untabify
+	       ,@(if function '(n (if (called-interactively-p 'any) t killflag))
+		   '((ad-get-arg 0) t)))))))))
 
 (auto-indent-def-del-char backward-delete-char-untabify)
 (auto-indent-def-del-char backward-delete-char-untabify t)
@@ -1305,22 +1311,22 @@ http://www.emacswiki.org/emacs/AutoIndentation
 standards for Viper, ErgoEmacs and standard emacs"
   (or
    (and (boundp 'viper-mode) viper-mode (eq viper-current-state 'vi-state) ;; Viper VI state
-        (memq (or command this-command)
-              (list
-               'delete-char
-               (key-binding (kbd "d")))))
+	(memq (or command this-command)
+	      (list
+	       'delete-char
+	       (key-binding (kbd "d")))))
    (and (boundp 'ergoemacs-mode) ergoemacs-mode ;; Ergoemacs
-        (memq (or command this-command)
-              (list
-               'delete-char
-               (key-binding (kbd "<delete>"))
-               ergoemacs-delete-char-key
-               (key-binding (kbd "<deletechar>")))))
+	(memq (or command this-command)
+	      (list
+	       'delete-char
+	       (key-binding (kbd "<delete>"))
+	       ergoemacs-delete-char-key
+	       (key-binding (kbd "<deletechar>")))))
    (memq (or command this-command)
-         (list
-          'delete-char
-          (key-binding (kbd "<deletechar>"))
-          (key-binding (kbd "C-d"))))))
+	 (list
+	  'delete-char
+	  (key-binding (kbd "<deletechar>"))
+	  (key-binding (kbd "C-d"))))))
 
 (defun auto-indent-handle-end-of-line (lst &optional add)
   "Handle end of line operations
@@ -1330,67 +1336,67 @@ ADD lets auto-indent-mode know that it should add a space instead
 "
   (save-match-data
     (if (or (not add)
-            (and add (looking-back "\\S-")
-                 (looking-at "\\S-")))
-        (let (done)
-          (unless add
-            (save-excursion
-              (skip-chars-backward "\\s-")
-              (when (looking-at "\\s-+")
-                (replace-match " "))))
-          (when auto-indent-delete-line-char-remove-last-space
-            (when lst
-              (setq done nil)
-              (mapc (lambda(i)
-                      (when (and (not done) (looking-back (nth 0 i))
-                                 (looking-at (concat (if add "" " ") (nth 1 i))))
-                        (if add
-                            (save-excursion
-                              (insert " "))
-                          (delete-char 1))
-                        (setq done t)))
-                    lst))))
+	    (and add (looking-back "\\S-")
+		 (looking-at "\\S-")))
+	(let (done)
+	  (unless add
+	    (save-excursion
+	      (skip-chars-backward "\\s-")
+	      (when (looking-at "\\s-+")
+		(replace-match " "))))
+	  (when auto-indent-delete-line-char-remove-last-space
+	    (when lst
+	      (setq done nil)
+	      (mapc (lambda(i)
+		      (when (and (not done) (looking-back (nth 0 i))
+				 (looking-at (concat (if add "" " ") (nth 1 i))))
+			(if add
+			    (save-excursion
+			      (insert " "))
+			  (delete-char 1))
+			(setq done t)))
+		    lst))))
       (unless add 
-        (when (and (eolp) (looking-back "[ \t]+" nil t))
-          (replace-match ""))))))
+	(when (and (eolp) (looking-back "[ \t]+" nil t))
+	  (replace-match ""))))))
 
 
 (defmacro auto-indent-def-del-forward-char (&optional function)
   "Defines advices and commands for `delete-char'"
   (let ((do-it (if function
-                   '(if (called-interactively-p 'any)
-                        (delete-char n (if n t nil))
-                      (delete-char n killflag))
-                 'ad-do-it)))
+		   '(if (called-interactively-p 'any)
+			(delete-char n (if n t nil))
+		      (delete-char n killflag))
+		 'ad-do-it)))
     `(,(if function 'defun 'defadvice)
       ,(if function 'auto-indent-delete-char 'delete-char)
       ,(if function '(n &optional killflag) '(around auto-indent-minor-mode-advice))
       "If at the end of the line, take out whitespace after deleting character"
       ,(if function '(interactive "p") nil)
       (save-match-data
-        (if ,(if function t '(and
-                              (not (auto-indent-remove-advice-p))
-                              (or (not auto-indent-force-interactive-advices)
-                                  (called-interactively-p 'any)
-                                  (auto-indent-is-del-key-p))))
-            (let ((del-eol (eolp))
-                  (prog-mode (auto-indent-is-prog-mode-p)))
-              ,do-it
-              (when (and del-eol
-                         auto-indent-minor-mode (not (minibufferp))
-                         auto-indent-delete-line-char-remove-extra-spaces)
-                (auto-indent-handle-end-of-line
-                 (if prog-mode
-                     auto-indent-delete-line-char-remove-last-space-prog-mode-regs
-                   auto-indent-delete-line-char-remove-last-space-text-mode-regs)))
-              (when (and del-eol
-                         auto-indent-minor-mode (not (minibufferp))
-                         auto-indent-delete-line-char-add-extra-spaces)
-                (auto-indent-handle-end-of-line
-                 (if prog-mode
-                     auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs
-                   auto-indent-delete-line-char-add-extra-spaces-text-mode-regs)  t)))
-          ,do-it)))))
+	(if ,(if function t '(and
+			      (not (auto-indent-remove-advice-p))
+			      (or (not auto-indent-force-interactive-advices)
+				  (called-interactively-p 'any)
+				  (auto-indent-is-del-key-p))))
+	    (let ((del-eol (eolp))
+		  (prog-mode (auto-indent-is-prog-mode-p)))
+	      ,do-it
+	      (when (and del-eol
+			 auto-indent-minor-mode (not (minibufferp))
+			 auto-indent-delete-line-char-remove-extra-spaces)
+		(auto-indent-handle-end-of-line
+		 (if prog-mode
+		     auto-indent-delete-line-char-remove-last-space-prog-mode-regs
+		   auto-indent-delete-line-char-remove-last-space-text-mode-regs)))
+	      (when (and del-eol
+			 auto-indent-minor-mode (not (minibufferp))
+			 auto-indent-delete-line-char-add-extra-spaces)
+		(auto-indent-handle-end-of-line
+		 (if prog-mode
+		     auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs
+		   auto-indent-delete-line-char-add-extra-spaces-text-mode-regs)  t)))
+	  ,do-it)))))
 
 
 
@@ -1404,16 +1410,16 @@ standards for Viper, ErgoEmacs and standard emacs"
   (or
    (and (boundp 'viper-mode) viper-mode (eq viper-current-state 'vi-state) nil)
    (and (boundp 'ergoemacs-mode) ergoemacs-mode
-        (memq (or command this-command)
-              (list
-               'kill-line
-               (key-binding (kbd "<deleteline>"))
-               (key-binding (kbd "M-g")))))
+	(memq (or command this-command)
+	      (list
+	       'kill-line
+	       (key-binding (kbd "<deleteline>"))
+	       (key-binding (kbd "M-g")))))
    (memq (or command this-command)
-         (list
-          'kill-line
-          (key-binding (kbd "C-k"))
-          (key-binding (kbd "<deleteline>"))))))
+	 (list
+	  'kill-line
+	  (key-binding (kbd "C-k"))
+	  (key-binding (kbd "<deleteline>"))))))
 
 (defmacro auto-indent-def-kill-line (&optional function)
   "Defines advices and functions for `kill-line'"
@@ -1727,26 +1733,26 @@ auto-indenting)"
                    (min auto-indent-pairs-begin (point)))
               (set (make-local-variable 'auto-indent-pairs-end)
                    (max auto-indent-pairs-end
-                          (save-excursion
-                            (condition-case err
-                                (progn
-                                  (foward-list)
-                                  (point))
-                              (error (point)))))))
-              (if auto-indent-par-region-timer
-                  (cancel-timer auto-indent-par-region-timer))
-              (set (make-local-variable 'auto-indent-par-region-timer)
-                   (run-with-timer (auto-indent-par-region-interval) nil
-                                   'auto-indent-par-region)))
-            (when (and auto-indent-current-pairs
-                       auto-indent-pairs-begin)
-              (setq auto-indent-pairs-begin (min (point)
-                                                 auto-indent-pairs-begin))
-              (setq auto-indent-pairs-end (max (point)
-                                               auto-indent-pairs-end))
-              (if auto-indent-par-region-timer
-                  (cancel-timer auto-indent-par-region-timer))
-              (set (make-local-variable 'auto-indent-par-region-timer)
+			(save-excursion
+			  (condition-case err
+			      (progn
+				(foward-list)
+				(point))
+			    (error (point)))))))
+	    (if auto-indent-par-region-timer
+		(cancel-timer auto-indent-par-region-timer))
+	    (set (make-local-variable 'auto-indent-par-region-timer)
+		 (run-with-timer (auto-indent-par-region-interval) nil
+				 'auto-indent-par-region)))
+	  (when (and auto-indent-current-pairs
+		     auto-indent-pairs-begin)
+	    (setq auto-indent-pairs-begin (min (point)
+					       auto-indent-pairs-begin))
+	    (setq auto-indent-pairs-end (max (point)
+					     auto-indent-pairs-end))
+	    (if auto-indent-par-region-timer
+		(cancel-timer auto-indent-par-region-timer))
+	    (set (make-local-variable 'auto-indent-par-region-timer)
                  (run-with-timer (auto-indent-par-region-interval) nil
                                  'auto-indent-par-region)))
           (when (and auto-indent-current-pairs
