@@ -6,9 +6,9 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
 ;; Version: 0.63
-;; Last-Updated: Mon Jul 23 20:55:03 2012 (-0500)
+;; Last-Updated: Mon Jul 30 10:11:50 2012 (-0500)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1355
+;;     Update #: 1356
 ;; URL: https://github.com/mlf176f2/auto-indent-mode.el/
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -1096,10 +1096,9 @@ http://www.emacswiki.org/emacs/AutoIndentation
 (defun auto-indent-minor-mode-on ()
   "* Turn on auto-indent minor mode."
   (interactive)
-  (if (or (minibufferp)
-          (memq major-mode auto-indent-disabled-modes-list)) nil
-    (auto-indent-minor-mode 1)
-    t))
+  (unless (or (minibufferp)
+              (memq major-mode auto-indent-disabled-modes-list))
+    (auto-indent-minor-mode 1)))
 
 ;;;###autoload
 (define-globalized-minor-mode auto-indent-global-mode auto-indent-minor-mode auto-indent-minor-mode-on
