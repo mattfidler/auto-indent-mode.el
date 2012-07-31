@@ -6,9 +6,9 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
 ;; Version: 0.64
-;; Last-Updated: Mon Jul 30 19:11:38 2012 (-0500)
+;; Last-Updated: Mon Jul 30 19:20:26 2012 (-0500)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1359
+;;     Update #: 1363
 ;; URL: https://github.com/mlf176f2/auto-indent-mode.el/
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -117,6 +117,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 30-Jul-2012    Matthew L. Fidler  
+;;    Last-Updated: Mon Jul 30 19:18:11 2012 (-0500) #1361 (Matthew L. Fidler)
+;;    Made the Fix for issue #3 more specific to org tables.
 ;; 30-Jul-2012    Matthew L. Fidler  
 ;;    Last-Updated: Mon Jul 30 19:07:02 2012 (-0500) #1357 (Matthew L. Fidler)
 ;;    Actual Fix for Issue #3.  Now the delete character may not work
@@ -1112,7 +1115,12 @@ http://www.emacswiki.org/emacs/AutoIndentation
 (defun auto-indent-remove-advice-p (&optional command)
   "Removes advice if the function called is actually an auto-indent function OR it should be disabled in this mode"
 					;  (and (not (memq major-mode auto-indent-disabled-modes-list))
-  (or (eq major-mode 'org-mode)
+  (or (and (or (eq major-mode 'org-mode)
+               (and (boundp 'orgtbl-mode)
+                    orgtbl-mode))
+           (save-excursion
+             (beginning-of-line)
+             (looking-at org-table-any-line-regexp)))
       (string-match "^auto-indent" (symbol-name (or command this-command)))))
                                         ;)
 
