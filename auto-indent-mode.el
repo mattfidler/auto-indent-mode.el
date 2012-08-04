@@ -6,15 +6,12 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
 ;; Version: 0.64
-;; Last-Updated: Fri Aug  3 22:48:09 2012 (-0500)
+;; Last-Updated: Fri Aug  3 23:53:26 2012 (-0500)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1382
+;;     Update #: 1388
 ;; URL: https://github.com/mlf176f2/auto-indent-mode.el/
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
-;;
-;;
-;;   None
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -238,12 +235,10 @@
 ;; 18-Nov-2011    Matthew L. Fidler
 ;;    Last-Updated: Fri Nov 18 15:28:10 2011 (-0600) #1063 (Matthew L. Fidler)
 ;;    Added `auto-indent-after-begin-or-finish-sexp'
-;; 08-Apr-2011
-;;    Last-Updated: Fri Apr  8 23:08:08 2011 (-0500) #1014 (US041375)
-
+;; 08-Apr-2011    Matthew L. Fidler
+;;    Last-Updated: Fri Apr  8 23:08:08 2011 (-0500) #1014 (MatthewL. Fidler)
 ;;    Bug fix for when Yasnippet is disabled. Now will work with it
-;;    disabled or enbaled.
-
+;;    disabled or enabled.
 ;; 08-Mar-2011    Matthew L. Fidler
 ;;    Last-Updated: Mon Feb  7 12:50:38 2011 (-0600) #1005 (Matthew L. Fidler)
 ;;    Changed `auto-indent-delete-line-char-remove-extra-spaces' to nil by default.
@@ -439,7 +434,7 @@
 ;; 09-Nov-2010    Matthew L. Fidler
 ;;    Last-Updated: Tue Nov  9 11:51:07 2010 (-0600) #246 (Matthew L. Fidler)
 ;;    When `auto-indent-pre-command-hook' is inactivated by some means, add it back.
-;; 09-Nov-2010
+;; 09-Nov-2010   Matthew L. Fidler
 ;;    Last-Updated: Tue Nov  9 11:13:09 2010 (-0600) #238 (Matthew L. Fidler)
 ;;    Added snippet-mode to excluded modes.  Also turned off the kill-line by default.
 ;; 07-Nov-2010    Matthew L. Fidler
@@ -606,8 +601,8 @@ multiply by the number of lines and then save the division."
           (auto-indent-add-to-alist 'auto-indent-next-pair-timer-interval `(,major-mode ,interval))))
       (symbol-value 'i))))
 
-(defcustom auto-indent-next-pair-timer-interval-multiplier 1.5
-  "If the indent operation for a file takes longer than the specified idle timer, grow that timer by this number for a particular mode.  (50% by default)."
+(defcustom auto-indent-next-pair-timer-interval-multiplier 1.005
+  "If the indent operation for a file takes longer than the specified idle timer, grow that timer by this number for a particular mode.  (0.5% by default)."
   :type 'number
   :group 'auto-indent)
 
