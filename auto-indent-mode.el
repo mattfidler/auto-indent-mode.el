@@ -6,9 +6,9 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
 ;; Version: 0.64
-;; Last-Updated: Fri Aug  3 22:27:48 2012 (-0500)
+;; Last-Updated: Fri Aug  3 22:48:09 2012 (-0500)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1377
+;;     Update #: 1382
 ;; URL: https://github.com/mlf176f2/auto-indent-mode.el/
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -117,6 +117,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 03-Aug-2012    Matthew L. Fidler  
+;;    Last-Updated: Fri Aug  3 22:47:15 2012 (-0500) #1381 (Matthew L. Fidler)
+;;    Save indentation settings on exit emacs.
 ;; 03-Aug-2012    Matthew L. Fidler  
 ;;    Last-Updated: Fri Aug  3 22:23:48 2012 (-0500) #1375 (Matthew L. Fidler)
 ;;    Fixed Documentation, and a few minor bugs caught by linting.
@@ -571,6 +574,12 @@ The test for presence of the car of ELT-CONS is done with `equal'."
             (rplacd existing-element (cdr elt-cons)))
       (set alist-var (cons elt-cons (symbol-value alist-var))))))
 
+(defun auto-indent-save-par-region-interval ()
+  "Saves `auto-indent-next-pair-timer-interval'."
+  (customize-save-variable 'auto-indent-next-pair-timer-interval auto-indent-next-pair-timer-interval))
+
+(add-hook 'kill-emacs-hook 'auto-indent-save-par-region-interval)
+
 (defun auto-indent-par-region-interval (&optional interval div)
   "Gets the interval based on `auto-indent-next-pair-timer-interval'.
 If INTERVAL is pre-specified, than don't look up the interval.  If
@@ -594,12 +603,11 @@ multiply by the number of lines and then save the division."
         (when (> interval i)
           (setq i (* auto-indent-next-pair-timer-interval-multiplier interval))
           (setq i (/ i nlines))
-          (auto-indent-add-to-alist 'auto-indent-next-pair-timer-interval `(,major-mode ,interval))
-          (customize-save-variable 'auto-indent-next-pair-timer-interval auto-indent-next-pair-timer-interval)))
+          (auto-indent-add-to-alist 'auto-indent-next-pair-timer-interval `(,major-mode ,interval))))
       (symbol-value 'i))))
 
-(defcustom auto-indent-next-pair-timer-interval-multiplier 1.005
-  "If the indent operation for a file takes longer than the specified idle timer, grow that timer by this number for a particular mode.  (0.5% by default)."
+(defcustom auto-indent-next-pair-timer-interval-multiplier 1.5
+  "If the indent operation for a file takes longer than the specified idle timer, grow that timer by this number for a particular mode.  (50% by default)."
   :type 'number
   :group 'auto-indent)
 
@@ -844,7 +852,7 @@ indentation is may not specified for the current mode."
 
 (defcustom auto-indent-blank-lines-on-move t
   "*Auto indentation on moving cursor to blank lines."
-  0  :type 'boolean
+  :type 'boolean
   :group 'auto-indent)
 
 (defcustom auto-indent-backward-delete-char-behavior 'all
