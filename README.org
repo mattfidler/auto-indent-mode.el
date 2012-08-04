@@ -183,7 +183,7 @@ Should give the following code on paste:
 ** TODO Make sure the timer only runs in the buffer that it originally was called in.
 * History
 
-  - 03-Aug-2012 ::  Save indentation settings on exit emacs. (Matthew L. Fidler)
+ - 03-Aug-2012 ::  Save indentation settings on exit emacs. (Matthew L. Fidler)
   - 03-Aug-2012 ::  Fixed Documentation, and a few minor bugs caught by linting. (Matthew L. Fidler)
   - 30-Jul-2012 ::  Made the Fix for issue #3 more specific to org tables. (Matthew L. Fidler)
   - 30-Jul-2012 ::  Actual Fix for Issue #3. Now the delete character may not work in org-mode. (Matthew L. Fidler)
@@ -254,7 +254,7 @@ Should give the following code on paste:
   - 18-Jan-2011 ::  Added support to turn on `org-indent-mode' when inside an org-file. (Matthew L. Fidler)
   - 12-Jan-2011 ::  Added fix for ortbl-minor-mode. Now it will work when orgtbl-minor mode is enabled. (Matthew L. Fidler)
   - 09-Dec-2010 ::  Bugfix. Now instead of indenting the region pasted, indent the region-pasted + beginning of line at region begin and end of line at region end. (Matthew L. Fidler)
-  - 02-Dec-2010 ::  Last-Updated: Fri Aug  3 23:56:21 2012 (-0500)
+  - 02-Dec-2010 ::  Last-Updated: Sat Aug  4 00:04:24 2012 (-0500)
   - 02-Dec-2010 ::  Removed auto-indent on paste/yank for modes with indent-relative and indent-relative-maybe. This has annoyed me forever. (Matthew L. Fidler)
   - 02-Dec-2010 ::  Added an advice to delete-char. When deleting a new-line character, shrink white-spaces afterward. (Matthew L. Fidler)
   - 02-Dec-2010 ::  Speed enhancement by checking for yasnippets only on indentation. (Matthew L. Fidler)
