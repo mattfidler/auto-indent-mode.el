@@ -6,9 +6,9 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
 ;; Version: 0.64
-;; Last-Updated: Fri Aug  3 23:53:26 2012 (-0500)
+;; Last-Updated: Sat Aug  4 01:34:23 2012 (-0500)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1388
+;;     Update #: 1391
 ;; URL: https://github.com/mlf176f2/auto-indent-mode.el/
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -114,6 +114,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 04-Aug-2012    Matthew L. Fidler  
+;;    Last-Updated: Sat Aug  4 01:25:56 2012 (-0500) #1390 (Matthew L. Fidler)
+;;    Fixed a bug introduced by cleaning typos.
+;;    Changing again.
 ;; 03-Aug-2012    Matthew L. Fidler  
 ;;    Last-Updated: Fri Aug  3 22:47:15 2012 (-0500) #1381 (Matthew L. Fidler)
 ;;    Save indentation settings on exit emacs.
@@ -584,7 +588,7 @@ multiply by the number of lines and then save the division."
              auto-indent-pairs-begin)
     (let ((ret 0)
           (i (if div nil interval))
-          (nlines (- (line-number-at-pos auto-indent-pairs-end)
+          (nlines (- (line-number-at-pos auto-indent-pairs-end) 
                      (line-number-at-pos auto-indent-pairs-begin))))
       (unless i
         (setq i (assoc major-mode auto-indent-next-pair-timer-interval))
@@ -600,6 +604,8 @@ multiply by the number of lines and then save the division."
           (setq i (/ i nlines))
           (auto-indent-add-to-alist 'auto-indent-next-pair-timer-interval `(,major-mode ,interval))))
       (symbol-value 'i))))
+
+
 
 (defcustom auto-indent-next-pair-timer-interval-multiplier 1.005
   "If the indent operation for a file takes longer than the specified idle timer, grow that timer by this number for a particular mode.  (0.5% by default)."
@@ -1798,15 +1804,9 @@ auto-indenting)"
               (setq auto-indent-pairs-begin (point))
               (setq auto-indent-pairs-end (point))
               (set (make-local-variable 'auto-indent-pairs-begin)
-                   (min auto-indent-pairs-begin (point)))
+                   (min auto-indent-pairs-begin (point))) 
               (set (make-local-variable 'auto-indent-pairs-end)
-                   (max auto-indent-pairs-end
-                        (save-excursion
-                          (condition-case err
-                              (progn
-                                (forward-list)
-                                (point))
-                            (error (point)))))))
+                   (max auto-indent-pairs-end (point))))
             (if auto-indent-par-region-timer
                 (cancel-timer auto-indent-par-region-timer))
             (set (make-local-variable 'auto-indent-par-region-timer)
@@ -1816,7 +1816,7 @@ auto-indenting)"
                      auto-indent-pairs-begin)
             (setq auto-indent-pairs-begin (min (point)
                                                auto-indent-pairs-begin))
-            (setq auto-indent-pairs-end (max (point)
+            (setq auto-indent-pairs-end (max (point) 
                                              auto-indent-pairs-end))
             (if auto-indent-par-region-timer
                 (cancel-timer auto-indent-par-region-timer))
