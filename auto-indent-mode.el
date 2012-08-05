@@ -6,9 +6,9 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
 ;; Version: 0.64
-;; Last-Updated: Sat Aug  4 01:34:23 2012 (-0500)
+;; Last-Updated: Sat Aug  4 21:34:20 2012 (-0500)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1391
+;;     Update #: 1406
 ;; URL: https://github.com/mlf176f2/auto-indent-mode.el/
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -16,105 +16,195 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Commentary:
-;;
-;;  Provides auto-indentation minor mode.  This allows the following:
-;;
-;;  (1) Return automatically indents the code appropriately (if enabled)
-;;
-;;  (2) Pasting/Yanking indents the appropriately
-;;
-;;  (3) Killing line will take off unneeded spaces (if enabled)
-;;
-;;  (4) On visit file, indent appropriately, but DONT SAVE.  (Pretend like
-;;  nothing happened, if enabled)
-;;
-;;  (5) On save, optionally unttabify, remove trailing white-spaces, and
-;;  definitely indent the file (if enabled).
-;;
-;;  (6) TextMate behavior of keys if desired (see below)
-;;
-;;  (7) Deleting the end of a line will shrink the whitespace to just
-;;  one (if desired and enabled)
-;;
-;;  (8) Automatically indent paired expressions like () or {}, if
-;;  desired `auto-indent-after-begin-or-finish-pairs'
-;;
-;;  All of these options can be customized. (customize auto-indent)
-;;
-;;  To use put this in your load path and then put the following in your Emacs
-;;  file:
-;;
-;;  (setq auto-indent-on-visit-file t) ;; If you want auto-indent on for files
-;;  (require 'auto-indent-mode)
-;;
-;;  If you (almost) always want this on, add the following to ~/.emacs:
-;;
-;;  (auto-indent-global-mode)
-;;
-;;  Excluded modes are defined in `auto-indent-disabled-modes-list'
-;;
-;;  If you only want this on for a single mode, you would add the following to
-;;  ~/.emacs
-;;
-;;  (add-hook 'emacs-lisp-mode-hook 'auto-indent-minor-mode)
-;;
-;;  You could always turn on the minor mode with the command
-;;  `auto-indent-minor-mode'
-;;
-;;  If you would like TextMate behavior of Meta-RETURN going to the
-;;  end of the line and then inserting a newline, as well as
-;;  Meta-shift return going to the end of the line, inserting a
-;;  semi-colon then inserting a newline, use the following:
-;;
-;;
-;;  (setq auto-indent-key-for-end-of-line-then-newline "<M-return>")
-;;  (setq auto-indent-key-for-end-of-line-insert-char-then-newline "<M-S-return>")
-;;  (require 'auto-indent-mode)
-;;  (auto-indent-global-mode)
-;;
-;;  This may or may not work on your system.  Many times Emacs cannot
-;;  distinguish between M-RET and M-S-RET, so if you don't mind a
-;;  slight redefinition use:
-;;
-;;  (setq auto-indent-key-for-end-of-line-then-newline "<M-return>")
-;;  (setq auto-indent-key-for-end-of-line-insert-char-then-newline "<C-M-return>")
-;;  (require 'auto-indent-mode)
-;;  (auto-indent-global-mode)
-;;
-;;
-;;  If you want to insert something other than a semi-colon (like a
-;;  colon) in a specific mode, say colon-mode, do the following:
-;;
-;;  (add-hook 'colon-mode-hook (lambda () (setq auto-indent-eol-char ":")))
-;;
-;;
-;;  If you wish to use this with autopairs and yasnippet, please load
-;;  this library first.
-;;
-;;  Also if you wish to just use specific functions from this library
-;;  that is possible as well.
-;;
-;;  To have the auto-indentation-paste use:
-;;
-;;  (autoload 'auto-indent-yank "auto-indent-mode" "" t)
-;;  (autoload 'auto-indent-yank-pop "auto-indent-mode" "" t)
-;;
-;;  (define-key global-map [remap yank] 'auto-indent-yank)
-;;  (define-key global-map [remap yank-pop] 'auto-indent-yank-pop)
-;;
-;;  (autoload 'auto-indent-delete-char "auto-indent-mode" "" t)
-;;  (define-key global-map [remap delete-char] 'auto-indent-delete-char)
-;;
-;;  (autoload 'auto-indent-kill-line "auto-indent-mode" "" t)
-;;  (define-key global-map [remap kill-line] 'auto-indent-kill-line)
-;;
-;;  However, this does not honor the excluded modes in
-;;  `auto-indent-disabled-modes-list'
-;;
+;; 
+;; * About auto-indent-mode
+;; 
+;;  Provides auto-indentation minor mode for Emacs.  This allows the
+;;   following: 
+;; 
+;;   - Return automatically indents the code appropriately (if enabled)
+;; 
+;;   - Pasting/Yanking indents the appropriately
+;; 
+;;   - Killing line will take off unneeded spaces (if enabled)
+;; 
+;;   - On visit file, indent appropriately, but DONT SAVE. (Pretend like
+;;     nothing happened, if enabled)
+;; 
+;;   - On save, optionally unttabify, remove trailing white-spaces, and
+;;     definitely indent the file (if enabled).
+;; 
+;;   - TextMate behavior of keys if desired (see below)
+;; 
+;;   - Deleting the end of a line will shrink the whitespace to just one
+;;     (if desired and enabled)
+;; 
+;;   - Automatically indent balanced parenthetical expression, or sexp, if desired
+;;      =auto-indent-current-pairs= or =auto-indent-next-pair= is set
+;;     to be true (enabled by default).  This is not immediate but occurs
+;;     after 1/4 a second to allow better responsiveness in emacs.
+;; 
+;;   All of these options can be customized. (customize auto-indent)
+;; * Installing auto-indent-mode
+;;   To use put this in your load path and then put the following in your emacs
+;;   file:
+;; 
+;;   (setq auto-indent-on-visit-file t) ;; If you want auto-indent on for files
+;;   (require 'auto-indent-mode)
+;; 
+;; 
+;;   If you (almost) always want this on, add the following to ~/.emacs:
+;; 
+;; 
+;;    (auto-indent-global-mode)
+;; 
+;;  
+;; 
+;;   Excluded modes are defined in =auto-indent-disabled-modes-list=
+;; 
+;;   If you only want this on for a single mode, you would add the following to
+;;   ~/.emacs
+;; 
+;; 
+;;   (add-hook 'emacs-lisp-mode-hook 'auto-indent-minor-mode)
+;; 
+;; 
+;; 
+;;   You could always turn on the minor mode with the command
+;;   =auto-indent-minor-mode=
+;; * TextMate Meta-Return behavior
+;;   If you would like TextMate behavior of Meta-RETURN going to the
+;;   end of the line and then inserting a newline, as well as
+;;   Meta-shift return going to the end of the line, inserting a
+;;   semi-colon then inserting a newline, use the following:
+;; 
+;; 
+;;   (setq auto-indent-key-for-end-of-line-then-newline "<M-return>")
+;;   (setq auto-indent-key-for-end-of-line-insert-char-then-newline "<M-S-return>")
+;;   (require 'auto-indent-mode)
+;;   (auto-indent-global-mode)
+;; 
+;; 
+;;   This may or may not work on your system.  Many times emacs cannot
+;;   distinguish between M-RET and M-S-RET, so if you don't mind a
+;;   slight redefinition use:
+;; 
+;; 
+;;   (setq auto-indent-key-for-end-of-line-then-newline "<M-return>")
+;;   (setq auto-indent-key-for-end-of-line-insert-char-then-newline "<C-M-return>")
+;;   (require 'auto-indent-mode)
+;;   (auto-indent-global-mode)
+;; 
+;; 
+;;   If you want to insert something other than a semi-colon (like a
+;;   colon) in a specific mode, say colon-mode, do the following:
+;; 
+;; 
+;;   (add-hook 'colon-mode-hook (lambda () (setq auto-indent-eol-char ":")))
+;; 
+;; * Notes about autopair-mode and yasnippet compatibility
+;;   If you wish to use this with autopairs and yasnippet, please load
+;;   this library first.
+;; * Using specific functions from auto-indent-mode
+;; 
+;;   Also if you wish to just use specific functions from this library
+;;   that is possible as well.
+;; 
+;;   To have the auto-indentation-paste use:
+;; 
+;; 
+;;   (autoload 'auto-indent-yank "auto-indent-mode" "" t)
+;;   (autoload 'auto-indent-yank-pop "auto-indent-mode" "" t)
+;;   
+;;   (define-key global-map [remap yank] 'auto-indent-yank)
+;;   (define-key global-map [remap yank-pop] 'auto-indent-yank-pop)
+;;   
+;;   (autoload 'auto-indent-delete-char "auto-indent-mode" "" t)
+;;   (define-key global-map [remap delete-char] 'auto-indent-delete-char)
+;;   
+;;   (autoload 'auto-indent-kill-line "auto-indent-mode" "" t)
+;;   (define-key global-map [remap kill-line] 'auto-indent-kill-line)
+;;   
+;; 
+;; 
+;;  
+;;   However, this does not honor the excluded modes in
+;;   =auto-indent-disabled-modes-list=
+;; 
+;; 
+;; * Making certain modes perform tasks on paste/yank.
+;; Sometimes, like in R, it is convenient to paste c:\ and change it to
+;; c:/.  This can be accomplished by modifying the
+;; =auto-indent-after-yank-hook=.
+;; 
+;; The code for changing the paths is as follows:  
+;; 
+;; 
+;; (defun kicker-ess-fix-path (beg end)
+;;     "Fixes ess path"
+;;     (save-restriction
+;;       (save-excursion
+;;         (narrow-to-region beg end)
+;;         (goto-char (point-min))
+;;         (when (looking-at "[A-Z]:\\\\")
+;;           (while (search-forward "\\" nil t)
+;;             (replace-match "/"))))))
+;;   
+;;   (defun kicker-ess-turn-on-fix-path ()
+;;     (interactive)
+;;     (when (string= "S" ess-language)
+;;       (add-hook 'auto-indent-after-yank-hook 'kicker-ess-fix-path t t)))
+;;   (add-hook 'ess-mode-hook 'kicker-ess-turn-on-fix-path)
+;; 
+;; 
+;; Another R-hack is to take of the ">" and "+" of a command line
+;; copy. For example copying:
+;; 
+;;  > 
+;;  > availDists <- c(Normal="rnorm", Exponential="rexp")
+;;  > availKernels <- c("gaussian", "epanechnikov", "rectangular",
+;;  + "triangular", "biweight", "cosine", "optcosine")
+;; 
+;; 
+;; Should give the following code on paste:
+;; 
+;;  
+;;  availDists <- c(Normal="rnorm", Exponential="rexp")
+;;  availKernels <- c("gaussian", "epanechnikov", "rectangular",
+;;  "triangular", "biweight", "cosine", "optcosine")
+;; 
+;; 
+;; This is setup by the following code snippet:
+;; 
+;; 
+;;   (defun kicker-ess-fix-code (beg end)
+;;     "Fixes ess path"
+;;     (save-restriction
+;;       (save-excursion
+;;         (save-match-data
+;;           (narrow-to-region beg end)
+;;           (goto-char (point-min))
+;;           (while (re-search-forward "^[ \t]*[>][ \t]+" nil t)
+;;             (replace-match "")
+;;             (goto-char (point-at-eol))
+;;             (while (looking-at "[ \t\n]*[+][ \t]+")
+;;               (replace-match "\n")
+;;               (goto-char (point-at-eol))))))))
+;;   
+;;   (defun kicker-ess-turn-on-fix-code ()
+;;     (interactive)
+;;     (when (string= "S" ess-language)
+;;       (add-hook 'auto-indent-after-yank-hook 'kicker-ess-fix-code t t)))
+;;   (add-hook 'ess-mode-hook 'kicker-ess-turn-on-fix-code)
+;; 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
 ;; 04-Aug-2012    Matthew L. Fidler  
+;;    Last-Updated: Sat Aug  4 21:30:02 2012 (-0500) #1403 (Matthew L. Fidler)
+;;    Added ability to turn off dynamic growth of timers per mode.
+;;    The algorithm to change has not been perfected yet.
+;; 04-Aug-2012    Matthew L. Fidler
 ;;    Last-Updated: Sat Aug  4 01:25:56 2012 (-0500) #1390 (Matthew L. Fidler)
 ;;    Fixed a bug introduced by cleaning typos.
 ;;    Changing again.
@@ -554,7 +644,7 @@ It is useful when using this option to have some sort of autopairing on."
 The faster the value, the slower Emacs responsiveness but the
 faster Emacs indents the region.  The slower the value, the
 faster Emacs responds.  This should be changed dynamically by
-typing with `auto-indent-next-pair-timer-interval-multiplier'"
+typing with `auto-indent-next-pair-timer-interval-addition'"
   :type '(repeat (list (symbol :tag "Major Mode Symbol or default")
                        (number :tag "Interval")))
   :group 'auto-indent)
@@ -579,8 +669,8 @@ The test for presence of the car of ELT-CONS is done with `equal'."
 
 (add-hook 'kill-emacs-hook 'auto-indent-save-par-region-interval)
 
-(defun auto-indent-par-region-interval (&optional interval div)
-  "Gets the interval based on `auto-indent-next-pair-timer-interval'.
+(defun auto-indent-par-region-interval (&optional interval div) ;
+  "Gets the interval based on `auto-indent-next-pair-timer-interval'. 
 If INTERVAL is pre-specified, than don't look up the interval.  If
 DIV is specified divide by the number of lines instead of
 multiply by the number of lines and then save the division."
@@ -600,15 +690,18 @@ multiply by the number of lines and then save the division."
         ;; i = saved interval for the number of lines
         ;; interval = actual interval for the number of lines
         (when (> interval i)
-          (setq i (* auto-indent-next-pair-timer-interval-multiplier interval))
+          (setq i (+ auto-indent-next-pair-timer-interval-addition interval))
           (setq i (/ i nlines))
           (auto-indent-add-to-alist 'auto-indent-next-pair-timer-interval `(,major-mode ,interval))))
       (symbol-value 'i))))
 
+(defcustom auto-indent-next-pairt-timer-interval-do-not-grow t
+  "If true, do not magically grow the mode-based indent time for a region."
+  :type 'boolean
+  :group 'auto-number)
 
-
-(defcustom auto-indent-next-pair-timer-interval-multiplier 1.005
-  "If the indent operation for a file takes longer than the specified idle timer, grow that timer by this number for a particular mode.  (0.5% by default)."
+(defcustom auto-indent-next-pair-timer-interval-addition 0.00005
+  "If the indent operation for a file takes longer than the specified idle timer, grow that timer by this number for a particular mode."
   :type 'number
   :group 'auto-indent)
 
@@ -630,7 +723,7 @@ multiply by the number of lines and then save the division."
 (defcustom auto-indent-on-save-file nil
   "* Auto Indent on visit file."
   :type 'boolean
-  :group 'auto-indent)
+  :group 'auto-indent)                  
 
 (defcustom auto-indent-untabify-on-visit-file nil
   "* Automatically convert tabs into spaces when visiting a file."
@@ -1773,7 +1866,8 @@ Allows the kill ring save to delete the beginning white-space if desired."
     (when (not (minibufferp))
       (let ((start-time (float-time)))
         (indent-region auto-indent-pairs-begin auto-indent-pairs-end)
-        (auto-indent-par-region-interval (- (float-time) start-time) 'save-new-interval))
+        (unless auto-indent-next-pairt-timer-interval-do-not-grow
+          (auto-indent-par-region-interval (- (float-time) start-time) 'save-new-interval)))
       (when (or (> (point) auto-indent-pairs-end)
                 (< (point) auto-indent-pairs-begin))
         (set (make-local-variable 'auto-indent-pairs-begin) nil)
