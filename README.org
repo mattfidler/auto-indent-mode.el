@@ -257,7 +257,7 @@ This is setup by the following code snippet:
   - 18-Jan-2011 ::  Added support to turn on == when inside an org-file. (Matthew L. Fidler)
   - 12-Jan-2011 ::  Added fix for ortbl-minor-mode. Now it will work when orgtbl-minor mode is enabled. (Matthew L. Fidler)
   - 09-Dec-2010 ::  Bugfix. Now instead of indenting the region pasted, indent the region-pasted + beginning of line at region begin and end of line at region end. (Matthew L. Fidler)
-  - 02-Dec-2010 ::  Last-Updated: Sat Aug  4 21:34:22 2012 (-0500)
+  - 02-Dec-2010 ::  Last-Updated: Sat Aug  4 21:40:36 2012 (-0500)
   - 02-Dec-2010 ::  Removed auto-indent on paste/yank for modes with indent-relative and indent-relative-maybe. This has annoyed me forever. (Matthew L. Fidler)
   - 02-Dec-2010 ::  Added an advice to delete-char. When deleting a new-line character, shrink white-spaces afterward. (Matthew L. Fidler)
   - 02-Dec-2010 ::  Speed enhancement by checking for yasnippets only on indentation. (Matthew L. Fidler)
