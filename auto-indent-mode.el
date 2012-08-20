@@ -6,9 +6,9 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
 ;; Version: 0.67
-;; Last-Updated: Mon Aug 20 13:18:48 2012 (-0500)
+;; Last-Updated: Mon Aug 20 13:21:54 2012 (-0500)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1444
+;;     Update #: 1446
 ;; URL: https://github.com/mlf176f2/auto-indent-mode.el/
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -46,6 +46,9 @@
 ;;     `auto-indent-current-pairs' or `auto-indent-next-pair' is set
 ;;     to be true (disabled by default).  This is not immediate but occurs
 ;;     after a bit to allow better responsiveness in emacs.
+;; 
+;;   - Attempts to set the indentation level (number of spaces for an
+;;     indent) for a major-mode.
 ;; 
 ;; All of these options can be customized. (customize auto-indent)
 ;; * Installing auto-indent-mode
@@ -238,6 +241,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 20-Aug-2012    Matthew L. Fidler  
+;;    Last-Updated: Mon Aug 20 13:18:48 2012 (-0500) #1444 (Matthew L. Fidler)
+;;    Another documentation revision.
 ;; 20-Aug-2012    Matthew L. Fidler  
 ;;    Last-Updated: Mon Aug 20 12:47:45 2012 (-0500) #1442 (Matthew L. Fidler)
 ;;    Documentation update.

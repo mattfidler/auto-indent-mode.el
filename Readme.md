@@ -10,9 +10,9 @@
 - __Maintainer__ --  Matthew L. Fidler
 - __Created__ --  Sat Nov  6 11:02:07 2010 (-0500)
 - __Version__ --  0.67
-- __Last-Updated__ --  Mon Aug 20 13:18:17 2012 (-0500)
+- __Last-Updated__ --  Mon Aug 20 13:21:28 2012 (-0500)
 - __By__ --  Matthew L. Fidler
-- __Update #__ --  1443
+- __Update #__ --  1445
 - __URL__ --  https:__github.com_mlf176f2_auto-indent-mode.el/
 - __Keywords__ --  Auto Indentation
 - __Compatibility__ --  Tested with Emacs 23.x
@@ -46,6 +46,9 @@ following:
     `auto-indent-current-pairs` or `auto-indent-next-pair` is set
     to be true (disabled by default).  This is not immediate but occurs
     after a bit to allow better responsiveness in emacs.
+
+  - Attempts to set the indentation level (number of spaces for an
+    indent) for a major-mode.
 
 All of these options can be customized. (customize auto-indent)
 ## Installing auto-indent-mode
@@ -240,10 +243,11 @@ See:
 
 ## History
 
+- __20-Aug-2012__ --   Another documentation revision. (Matthew L. Fidler)
 - __20-Aug-2012__ --   Documentation update. (Matthew L. Fidler)
 - __20-Aug-2012__ --   Added a generic function to change the number of spaces for an indentation. Should fix issue #4. (Matthew L. Fidler)
 - __20-Aug-2012__ --   Clarified documentation (Matthew L. Fidler)
-- __20-Aug-2012__ --   Added some documentation about major mode indentation issues. 7-Aug-2012 Matthew L. Fidler Last-Updated: Mon Aug 20 13:18:39 2012 (-0500)
+- __20-Aug-2012__ --   Added some documentation about major mode indentation issues. 7-Aug-2012 Matthew L. Fidler Last-Updated: Mon Aug 20 13:21:45 2012 (-0500)
 - __04-Aug-2012__ --   Added ability to turn off dynamic growth of timers per mode. The algorithm to change has not been perfected yet. (Matthew L. Fidler)
 - __04-Aug-2012__ --   Fixed a bug introduced by cleaning typos. Changing again. (Matthew L. Fidler)
 - __03-Aug-2012__ --   Save indentation settings on exit emacs. (Matthew L. Fidler)
