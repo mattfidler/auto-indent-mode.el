@@ -17,7 +17,6 @@ Matthew L. Fidler
 @menu
 * Library Information::
 * Possible Dependencies::
-* auto-indent-modeel* --- Auto indent Minor mode::
 * About auto-indent-mode::
 * TextMate Meta-Return behavior::
 * Notes about autopair-mode and yasnippet compatibility::
@@ -44,11 +43,11 @@ Matthew L. Fidler
 @item
 @strong{Version} -- 0.67
 @item
-@strong{Last-Updated} -- Mon Aug 20 12:47:13 2012 (-0500)
+@strong{Last-Updated} -- Mon Aug 20 13:18:17 2012 (-0500)
 @item
 @strong{By} -- Matthew L. Fidler
 @item
-@strong{Update #} -- 1441
+@strong{Update #} -- 1443
 @item
 @strong{URL} -- https:__github.com_mlf176f2_auto-indent-mode.el/
 @item
@@ -60,35 +59,6 @@ Matthew L. Fidler
 @node Possible Dependencies
 @section Possible Dependencies
 None
-
-@node auto-indent-modeel* --- Auto indent Minor mode
-@section auto-indent-mode.el* --- Auto indent Minor mode
-@itemize
-@item
-@strong{Filename} -- auto-indent-mode.el
-@item
-@strong{Description} -- Auto Indent text on Yank/Paste
-@item
-@strong{Author} -- Matthew L. Fidler@comma{} Le Wang & Others
-@item
-@strong{Maintainer} -- Matthew L. Fidler
-@item
-@strong{Created} -- Sat Nov 6 11:02:07 2010 (-0500)
-@item
-@strong{Version} -- 0.66
-@item
-@strong{Last-Updated} -- Mon Aug 20 10:30:23 2012 (-0500)
-@item
-@strong{By} -- Matthew L. Fidler
-@item
-@strong{Update #} -- 1418
-@item
-@strong{URL} -- https:__github.com_mlf176f2_auto-indent-mode.el/
-@item
-@strong{Keywords} -- Auto Indentation
-@item
-@strong{Compatibility} -- Tested with Emacs 23.x
-@end itemize
 
 @node About auto-indent-mode
 @section About auto-indent-mode
@@ -240,11 +210,13 @@ See:
 @section History
 @itemize
 @item
+@strong{20-Aug-2012} -- Documentation update. (Matthew L. Fidler)
+@item
 @strong{20-Aug-2012} -- Added a generic function to change the number of spaces for an indentation. Should fix issue #4. (Matthew L. Fidler)
 @item
 @strong{20-Aug-2012} -- Clarified documentation (Matthew L. Fidler)
 @item
-@strong{20-Aug-2012} -- Added some documentation about major mode indentation issues. 7-Aug-2012 Matthew L. Fidler Last-Updated: Mon Aug 20 12:47:36 2012 (-0500)
+@strong{20-Aug-2012} -- Added some documentation about major mode indentation issues. 7-Aug-2012 Matthew L. Fidler Last-Updated: Mon Aug 20 13:18:39 2012 (-0500)
 @item
 @strong{04-Aug-2012} -- Added ability to turn off dynamic growth of timers per mode. The algorithm to change has not been perfected yet. (Matthew L. Fidler)
 @item

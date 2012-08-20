@@ -6,9 +6,9 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
 ;; Version: 0.67
-;; Last-Updated: Mon Aug 20 12:47:45 2012 (-0500)
+;; Last-Updated: Mon Aug 20 13:18:48 2012 (-0500)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1442
+;;     Update #: 1444
 ;; URL: https://github.com/mlf176f2/auto-indent-mode.el/
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -20,21 +20,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Commentary:
-;; 
-;; *auto-indent-mode.el* --- Auto indent Minor mode
-;; 
-;;  - Filename :: [[file:auto-indent-mode.el][auto-indent-mode.el]]
-;;  - Description :: Auto Indent text on Yank/Paste
-;;  - Author :: Matthew L. Fidler, Le Wang & Others
-;;  - Maintainer :: Matthew L. Fidler
-;;  - Created :: Sat Nov  6 11:02:07 2010 (-0500)
-;;  - Version :: 0.66
-;;  - Last-Updated :: Mon Aug 20 10:30:23 2012 (-0500)
-;;  -           By :: Matthew L. Fidler
-;;  -     Update 
-;;  - URL :: https://github.com/mlf176f2/auto-indent-mode.el/
-;;  - Keywords :: Auto Indentation
-;;  - Compatibility :: Tested with Emacs 23.x
 ;; 
 ;; * About auto-indent-mode
 ;; Provides auto-indentation minor mode for Emacs.  This allows the
@@ -253,6 +238,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 20-Aug-2012    Matthew L. Fidler  
+;;    Last-Updated: Mon Aug 20 12:47:45 2012 (-0500) #1442 (Matthew L. Fidler)
+;;    Documentation update.
 ;; 20-Aug-2012    Matthew L. Fidler  
 ;;    Last-Updated: Mon Aug 20 12:46:02 2012 (-0500) #1440 (Matthew L. Fidler)
 ;;    Added a generic function to change the number of spaces for an
