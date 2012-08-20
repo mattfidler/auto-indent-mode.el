@@ -9,10 +9,10 @@
 - __Author__ --  Matthew L. Fidler, Le Wang & Others
 - __Maintainer__ --  Matthew L. Fidler
 - __Created__ --  Sat Nov  6 11:02:07 2010 (-0500)
-- __Version__ --  0.66
-- __Last-Updated__ --  Mon Aug 20 10:30:23 2012 (-0500)
+- __Version__ --  0.67
+- __Last-Updated__ --  Mon Aug 20 12:47:13 2012 (-0500)
 - __By__ --  Matthew L. Fidler
-- __Update #__ --  1418
+- __Update #__ --  1441
 - __URL__ --  https:__github.com_mlf176f2_auto-indent-mode.el/
 - __Keywords__ --  Auto Indentation
 - __Compatibility__ --  Tested with Emacs 23.x
@@ -20,6 +20,21 @@
 ## Possible Dependencies
 
   None
+
+## auto-indent-mode.el* --- Auto indent Minor mode
+
+- __Filename__ --  auto-indent-mode.el
+- __Description__ --  Auto Indent text on Yank/Paste
+- __Author__ --  Matthew L. Fidler, Le Wang & Others
+- __Maintainer__ --  Matthew L. Fidler
+- __Created__ --  Sat Nov  6 11:02:07 2010 (-0500)
+- __Version__ --  0.66
+- __Last-Updated__ --  Mon Aug 20 10:30:23 2012 (-0500)
+- __By__ --  Matthew L. Fidler
+- __Update #__ --  1418
+- __URL__ --  https:__github.com_mlf176f2_auto-indent-mode.el/
+- __Keywords__ --  Auto Indentation
+- __Compatibility__ --  Tested with Emacs 23.x
 
 ## About auto-indent-mode
 Provides auto-indentation minor mode for Emacs.  This allows the
@@ -76,6 +91,21 @@ If you only want this on for a single mode, you would add the following to
 
 You could always turn on the minor mode with the command
 `auto-indent-minor-mode`
+## Setting the number of spaces for indenting major modes
+While this is controlled by the major mode, as a convenience,
+auto-indent-mode attempts to set the default number of spaces for an
+indentation for specific major mode.  
+
+This is done by:
+1. Making local variables of all the variables specified in
+   `auto-indent-known-indent-level-variables` and setting them to
+   auto-indent's `auto-indent-assign-indent-level`
+2. Looking to see if major mode variables
+   `major-mode-indent-level` and `major-mode-basic-offset` variables
+   are present.  If either of these variables are present,
+   `auto-indent-mode` sets these variables to the default
+   `auto-indent-assign-indent-level`.   
+
 ## TextMate Meta-Return behavior
 If you would like TextMate behavior of Meta-RETURN going to the
 end of the line and then inserting a newline, as well as
@@ -206,19 +236,28 @@ This is setup by the following code snippet:
 
 
 ## FAQ
-### How can you control the number of spaces auto-indent uses for indentation?
-Currently this is unsupported.  This is controlled by the major mode.
+### Why isn't my mode indenting?
+Some modes are excluded for compatability reasons, such as
+text-modes.  This is controlled by the variable
+`auto-indent-disabled-modes-list`
+### Why isn't my specific mode have the right number of spaces?
+Actually, the number of spaces for indentation is controlled by the
+major mode. If there is a major-mode specific variable that controls
+this offset, you can add this variable to
+`auto-indent-known-indent-level-variables` to change the indentation
+for this mode when auto-indent-mode starts.
 
-See [In Emacs how can I change tab sizes?](http:__kb.iu.edu_data_abde.html)
+See:
 
-There is a possibility of supporting this, however it would take some
-additional functionality.
+- [Understanding GNU Emacs and tabs](http:__www.pement.org/emacs_tabs.htm)
+- [In Emacs how can I change tab sizes?](http:__kb.iu.edu_data_abde.html)
 
 
 ## History
 
+- __20-Aug-2012__ --   Added a generic function to change the number of spaces for an indentation. Should fix issue #4. (Matthew L. Fidler)
 - __20-Aug-2012__ --   Clarified documentation (Matthew L. Fidler)
-- __20-Aug-2012__ --   Added some documentation about major mode indentation issues. 7-Aug-2012 Matthew L. Fidler Last-Updated: Mon Aug 20 10:30:44 2012 (-0500)
+- __20-Aug-2012__ --   Added some documentation about major mode indentation issues. 7-Aug-2012 Matthew L. Fidler Last-Updated: Mon Aug 20 12:47:36 2012 (-0500)
 - __04-Aug-2012__ --   Added ability to turn off dynamic growth of timers per mode. The algorithm to change has not been perfected yet. (Matthew L. Fidler)
 - __04-Aug-2012__ --   Fixed a bug introduced by cleaning typos. Changing again. (Matthew L. Fidler)
 - __03-Aug-2012__ --   Save indentation settings on exit emacs. (Matthew L. Fidler)

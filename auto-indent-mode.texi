@@ -17,7 +17,9 @@ Matthew L. Fidler
 @menu
 * Library Information::
 * Possible Dependencies::
+* auto-indent-modeel* --- Auto indent Minor mode::
 * About auto-indent-mode::
+* TextMate Meta-Return behavior::
 * Notes about autopair-mode and yasnippet compatibility::
 * Making certain modes perform tasks on paste/yank::
 * FAQ::
@@ -28,6 +30,39 @@ Matthew L. Fidler
 @section Library Information
 @strong{auto-indent-mode.el} --- Auto indent Minor mode
 
+@itemize
+@item
+@strong{Filename} -- auto-indent-mode.el
+@item
+@strong{Description} -- Auto Indent text on Yank/Paste
+@item
+@strong{Author} -- Matthew L. Fidler@comma{} Le Wang & Others
+@item
+@strong{Maintainer} -- Matthew L. Fidler
+@item
+@strong{Created} -- Sat Nov 6 11:02:07 2010 (-0500)
+@item
+@strong{Version} -- 0.67
+@item
+@strong{Last-Updated} -- Mon Aug 20 12:47:13 2012 (-0500)
+@item
+@strong{By} -- Matthew L. Fidler
+@item
+@strong{Update #} -- 1441
+@item
+@strong{URL} -- https:__github.com_mlf176f2_auto-indent-mode.el/
+@item
+@strong{Keywords} -- Auto Indentation
+@item
+@strong{Compatibility} -- Tested with Emacs 23.x
+@end itemize
+
+@node Possible Dependencies
+@section Possible Dependencies
+None
+
+@node auto-indent-modeel* --- Auto indent Minor mode
+@section auto-indent-mode.el* --- Auto indent Minor mode
 @itemize
 @item
 @strong{Filename} -- auto-indent-mode.el
@@ -54,10 +89,6 @@ Matthew L. Fidler
 @item
 @strong{Compatibility} -- Tested with Emacs 23.x
 @end itemize
-
-@node Possible Dependencies
-@section Possible Dependencies
-None
 
 @node About auto-indent-mode
 @section About auto-indent-mode
@@ -106,7 +137,13 @@ If you only want this on for a single mode@comma{} you would add the following t
 
 (add-hook 'emacs-lisp-mode-hook 'auto-indent-minor-mode)
 
-You could always turn on the minor mode with the command @code{auto-indent-minor-mode} ## TextMate Meta-Return behavior If you would like TextMate behavior of Meta-RETURN going to the end of the line and then inserting a newline@comma{} as well as Meta-shift return going to the end of the line@comma{} inserting a semi-colon then inserting a newline@comma{} use the following:
+You could always turn on the minor mode with the command @code{auto-indent-minor-mode} ## Setting the number of spaces for indenting major modes While this is controlled by the major mode@comma{} as a convenience@comma{} auto-indent-mode attempts to set the default number of spaces for an indentation for specific major mode.
+
+This is done by: 1. Making local variables of all the variables specified in @code{auto-indent-known-indent-level-variables} and setting them to auto-indent's @code{auto-indent-assign-indent-level} 2. Looking to see if major mode variables @code{major-mode-indent-level} and @code{major-mode-basic-offset} variables are present. If either of these variables are present@comma{} @code{auto-indent-mode} sets these variables to the default @code{auto-indent-assign-indent-level}.
+
+@node TextMate Meta-Return behavior
+@section TextMate Meta-Return behavior
+If you would like TextMate behavior of Meta-RETURN going to the end of the line and then inserting a newline@comma{} as well as Meta-shift return going to the end of the line@comma{} inserting a semi-colon then inserting a newline@comma{} use the following:
 
 (setq auto-indent-key-for-end-of-line-then-newline "") (setq auto-indent-key-for-end-of-line-insert-char-then-newline "") (require 'auto-indent-mode) (auto-indent-global-mode)
 
@@ -183,24 +220,31 @@ This is setup by the following code snippet:
 @node FAQ
 @section FAQ
 @menu
-* How can you control the number of spaces auto-indent uses for indentation?::
+* Why isn't my mode indenting?::
 @end menu
 
-@node How can you control the number of spaces auto-indent uses for indentation?
-@subsection How can you control the number of spaces auto-indent uses for indentation?
-Currently this is unsupported. This is controlled by the major mode.
+@node Why isn't my mode indenting?
+@subsection Why isn't my mode indenting?
+Some modes are excluded for compatability reasons@comma{} such as text-modes. This is controlled by the variable @code{auto-indent-disabled-modes-list} ### Why isn't my specific mode have the right number of spaces? Actually@comma{} the number of spaces for indentation is controlled by the major mode. If there is a major-mode specific variable that controls this offset@comma{} you can add this variable to @code{auto-indent-known-indent-level-variables} to change the indentation for this mode when auto-indent-mode starts.
 
-See @uref{http:__kb.iu.edu_data_abde.html,In Emacs how can I change tab sizes?}
+See:
 
-There is a possibility of supporting this@comma{} however it would take some additional functionality.
+@itemize
+@item
+@uref{http:__www.pement.org/emacs_tabs.htm,Understanding GNU Emacs and tabs}
+@item
+@uref{http:__kb.iu.edu_data_abde.html,In Emacs how can I change tab sizes?}
+@end itemize
 
 @node History
 @section History
 @itemize
 @item
+@strong{20-Aug-2012} -- Added a generic function to change the number of spaces for an indentation. Should fix issue #4. (Matthew L. Fidler)
+@item
 @strong{20-Aug-2012} -- Clarified documentation (Matthew L. Fidler)
 @item
-@strong{20-Aug-2012} -- Added some documentation about major mode indentation issues. 7-Aug-2012 Matthew L. Fidler Last-Updated: Mon Aug 20 10:30:44 2012 (-0500)
+@strong{20-Aug-2012} -- Added some documentation about major mode indentation issues. 7-Aug-2012 Matthew L. Fidler Last-Updated: Mon Aug 20 12:47:36 2012 (-0500)
 @item
 @strong{04-Aug-2012} -- Added ability to turn off dynamic growth of timers per mode. The algorithm to change has not been perfected yet. (Matthew L. Fidler)
 @item
