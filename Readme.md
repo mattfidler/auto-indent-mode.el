@@ -10,9 +10,9 @@
 - __Maintainer__ --  Matthew L. Fidler
 - __Created__ --  Sat Nov  6 11:02:07 2010 (-0500)
 - __Version__ --  0.66
-- __Last-Updated__ --  Mon Aug 20 10:14:41 2012 (-0500)
+- __Last-Updated__ --  Mon Aug 20 10:30:23 2012 (-0500)
 - __By__ --  Matthew L. Fidler
-- __Update #__ --  1416
+- __Update #__ --  1418
 - __URL__ --  https:__github.com_mlf176f2_auto-indent-mode.el/
 - __Keywords__ --  Auto Indentation
 - __Compatibility__ --  Tested with Emacs 23.x
@@ -20,21 +20,6 @@
 ## Possible Dependencies
 
   None
-
-## auto-indent-mode.el* --- Auto indent Minor mode
-
-- __Filename__ --  auto-indent-mode.el
-- __Description__ --  Auto Indent text on Yank/Paste
-- __Author__ --  Matthew L. Fidler, Le Wang & Others
-- __Maintainer__ --  Matthew L. Fidler
-- __Created__ --  Sat Nov  6 11:02:07 2010 (-0500)
-- __Version__ --  0.64
-- __Last-Updated__ --  Tue Aug  7 19:28:44 2012 (-0500)
-- __By__ --  Matthew L. Fidler
-- __Update #__ --  1412
-- __URL__ --  https:__github.com_mlf176f2_auto-indent-mode.el/
-- __Keywords__ --  Auto Indentation
-- __Compatibility__ --  Tested with Emacs 23.x
 
 ## About auto-indent-mode
 Provides auto-indentation minor mode for Emacs.  This allows the
@@ -64,6 +49,7 @@ following:
 
 All of these options can be customized. (customize auto-indent)
 ## Installing auto-indent-mode
+
 To use put this in your load path and then put the following in your emacs
 file:
 
@@ -221,17 +207,18 @@ This is setup by the following code snippet:
 
 ## FAQ
 ### How can you control the number of spaces auto-indent uses for indentation?
-Currently this is unsupported.  This is controlled by the major mode,
-and there is very little standards on how each mode implements
-indentation.  
+Currently this is unsupported.  This is controlled by the major mode.
 
-It could be possibly supported by attempting to create a function that
-takes over `indent-line-function`, and normalizes to the default
-tab-stop/number of spaces in the mode, but this has not been
-implemented yet.
+See [In Emacs how can I change tab sizes?](http:__kb.iu.edu_data_abde.html)
+
+There is a possibility of supporting this, however it would take some
+additional functionality.
+
+
 ## History
 
-- __20-Aug-2012__ --   Added some documentation about major mode indentation issues. 7-Aug-2012 Matthew L. Fidler Last-Updated: Mon Aug 20 10:15:01 2012 (-0500)
+- __20-Aug-2012__ --   Clarified documentation (Matthew L. Fidler)
+- __20-Aug-2012__ --   Added some documentation about major mode indentation issues. 7-Aug-2012 Matthew L. Fidler Last-Updated: Mon Aug 20 10:30:44 2012 (-0500)
 - __04-Aug-2012__ --   Added ability to turn off dynamic growth of timers per mode. The algorithm to change has not been perfected yet. (Matthew L. Fidler)
 - __04-Aug-2012__ --   Fixed a bug introduced by cleaning typos. Changing again. (Matthew L. Fidler)
 - __03-Aug-2012__ --   Save indentation settings on exit emacs. (Matthew L. Fidler)
