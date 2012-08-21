@@ -6,9 +6,9 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
 ;; Version: 0.67
-;; Last-Updated: Mon Aug 20 13:21:54 2012 (-0500)
+;; Last-Updated: Mon Aug 20 23:02:51 2012 (-0500)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1446
+;;     Update #: 1450
 ;; URL: https://github.com/mlf176f2/auto-indent-mode.el/
 ;; Keywords: Auto Indentation
 ;; Compatibility: Tested with Emacs 23.x
@@ -241,6 +241,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 20-Aug-2012    Matthew L. Fidler  
+;;    Last-Updated: Mon Aug 20 23:01:35 2012 (-0500) #1448 (Matthew L. Fidler)
+;;    Drop Readme.md
 ;; 20-Aug-2012    Matthew L. Fidler  
 ;;    Last-Updated: Mon Aug 20 13:18:48 2012 (-0500) #1444 (Matthew L. Fidler)
 ;;    Another documentation revision.
