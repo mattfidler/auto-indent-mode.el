@@ -200,263 +200,355 @@ See:
 @item
 @uref{http:__www.pement.org/emacs_tabs.htm,Understanding GNU Emacs and tabs}
 @item
-@uref{http:__kb.iu.edu_data_abde.html,In Emacs how can I change tab sizes?} ## History
-
-@item
-@strong{12-Oct-2012} -- Fix header readme by using the latest version of org-readme. (Matthew L. Fidler)
-@item
-@strong{12-Oct-2012} -- Took out documentation that started with a star since it messes up org-readme. (Matthew L. Fidler)
-@item
-@strong{12-Oct-2012} -- Trying to fix header (Matthew L. Fidler)
-@item
-@strong{12-Oct-2012} -- Added better org-mode support for code-blocks. (Matthew L. Fidler)
-@item
-@strong{12-Sep-2012} -- Fixed commentary section. (Matthew L. Fidler)
-@item
-@strong{12-Sep-2012} -- Changed yasnippet checking to be compatible with yasnippet 0.8's function renaming. (Matthew L. Fidler)
-@item
-@strong{21-Aug-2012} -- Attempt to fix documentation with updated org-readme. (Matthew L. Fidler)
-@item
-@strong{21-Aug-2012} -- Added @code{auto-indent-next-pair-timer-interval-max} and a bug fix to the interval-growth algorithm. (Matthew L. Fidler)
-@item
-@strong{21-Aug-2012} -- Attempt to change documentation. (Matthew L. Fidler)
-@item
-@strong{21-Aug-2012} -- Changed the default @code{auto-indent-next-pairt-timer-interval-do-not-grow} to nil. (Matthew L. Fidler)
-@item
-@strong{20-Aug-2012} -- Drop Readme.md (Matthew L. Fidler)
-@item
-@strong{20-Aug-2012} -- Another documentation revision. (Matthew L. Fidler)
-@item
-@strong{20-Aug-2012} -- Documentation update. (Matthew L. Fidler)
-@item
-@strong{20-Aug-2012} -- Added a generic function to change the number of spaces for an indentation. Should fix issue #4. (Matthew L. Fidler)
-@item
-@strong{20-Aug-2012} -- Clarified documentation (Matthew L. Fidler)
-@item
-@strong{20-Aug-2012} -- Added some documentation about major mode indentation issues. 7-Aug-2012 Matthew L. Fidler Last-Updated: Sun Aug 5 12:36:11 2012 (-0500) #1411 (Matthew L. Fidler) Changed a mistake in the documentation; Autoindenting of balanced sexps are not supported by default but need to be enabled. (Matthew L. Fidler)
-@item
-@strong{04-Aug-2012} -- Added ability to turn off dynamic growth of timers per mode. The algorithm to change has not been perfected yet. (Matthew L. Fidler)
-@item
-@strong{04-Aug-2012} -- Fixed a bug introduced by cleaning typos. Changing again. (Matthew L. Idler)
-@item
-@strong{03-Aug-2012} -- Save indentation settings on exit emacs. (Matthew L. Fidler)
-@item
-@strong{03-Aug-2012} -- Fixed Documentation@comma{} and a few minor bugs caught by linting. (Matthew L. Fidler)
-@item
-@strong{30-Jul-2012} -- Made the Fix for issue #3 more specific to org tables. (Matthew L. Fidler)
-@item
-@strong{30-Jul-2012} -- Actual Fix for Issue #3. Now the delete character may not work in org-mode. (Matthew L. Fidler)
-@item
-@strong{23-Jul-2012} -- Fix Issue #3. Thanks harrylove for pointing it out. (Matthew L. Fidler)
-@item
-@strong{02-Jul-2012} -- Have an mode-based timer normalized to the number of lines used for next parenthetical indentation. (Matthew L. Fidler)
-@item
-@strong{26-Jun-2012} -- Bug fix for point-shift involved in @code{auto-indent-after-yank-hook} (Matthew L. Fidler)
-@item
-@strong{13-Jun-2012} -- Added @code{auto-indent-after-yank-hook} (Matthew L. Fidler)
-@item
-@strong{18-May-2012} -- Changed @code{auto-indent-next-pair} to be off by default. (Matthew L. Fidler)
-@item
-@strong{13-Mar-2012} -- Made timer for parenthetical statements customizable. (Matthew L. Fidler)
-@item
-@strong{06-Mar-2012} -- Speed enhancements for parenthetical statements. (Matthew L. Fidler)
-@item
-@strong{05-Mar-2012} -- Bug fix for autopair-backspace. (Matthew L. Fidler)
-@item
-@strong{05-Mar-2012} -- Have backspace cancel parenthetical alignment timer canceling (Matthew L. Fidler)
-@item
-@strong{29-Feb-2012} -- Bug fix for paren handling. (Matthew L. Fidler)
-@item
-@strong{29-Feb-2012} -- Made the handling of pairs a timer-based function so it doesn't interfere with work flow. (Matthew L. Fidler)
-@item
-@strong{29-Feb-2012} -- Better handling of pairs. (Matthew L. Fidler)
-@item
-@strong{28-Feb-2012} -- Added subsequent-whole-line from Le Wang's fork. (Matthew L. Fidler)
-@item
-@strong{14-Feb-2012} -- Fixing issue #2 (Matthew L. Fidler)
-@item
-@strong{01-Feb-2012} -- Added makefile-gmake-mode to the excluded auto-indent modes. (Matthew L. Fidler)
-@item
-@strong{22-Dec-2011} -- Added bug fix for home-key (Matthew L. Fidler)
-@item
-@strong{21-Dec-2011} -- Added another smart delete case. (Matthew L. Fidler)
-@item
-@strong{14-Dec-2011} -- Went back to last known working @code{auto-indent-def-del-forward-char} and deleted message. (Matthew L. Fidler)
-@item
-@strong{14-Dec-2011} -- Another Paren (Matthew L. Fidler)
-@item
-@strong{14-Dec-2011} -- Paren Bug Fix. (Matthew L. Fidler)
-@item
-@strong{14-Dec-2011} -- Changed the @code{auto-indent-kill-remove-extra-spaces} default to nil so that you copy-paste what you expect. (us041375)
-@item
-@strong{10-Dec-2011} -- Bug fix for annoying old debugging macros. (Matthew L. Fidler)
-@item
-@strong{08-Dec-2011} -- Added autoload cookie. (Matthew L. Fidler)
-@item
-@strong{08-Dec-2011} -- Bug fix for duplicate macros (Matthew L. Fidler)
-@item
-@strong{08-Dec-2011} -- Added (( and )) to the automatically delete extra whitespace at the end of a function list. (Matthew L. Fidler)
-@item
-@strong{08-Dec-2011} -- Added @code{auto-indent-alternate-return-function-for-end-of-line-then-newline} option (Matthew L. Fidler)
-@item
-@strong{08-Dec-2011} -- Added a possibility of adding a space if necessary. (Matthew L. Fidler)
-@item
-@strong{08-Dec-2011} -- Smarter delete end of line character enhancements. (Matthew L. Fidler)
-@item
-@strong{08-Dec-2011} -- Changed default options. (Matthew L. Fidler)
-@item
-@strong{29-Nov-2011} -- Bug Fix in @code{auto-indent-mode-pre-command-hook} (Matthew L. Fidler)
-@item
-@strong{28-Nov-2011} -- Bugfix for auto-indent-mode (Matthew L. Fidler)
-@item
-@strong{21-Nov-2011} -- Changed @code{auto-indent-after-begin-or-finish-sexp} to be called after every other hook has been run. That way autopair-mode should be indented correctly. (Matthew L. Fidler)
-@item
-@strong{18-Nov-2011} -- Added @code{auto-indent-after-begin-or-finish-sexp} (Matthew L. Fidler)
-@item
-@strong{08-Apr-2011} -- Bug fix for when Yasnippet is disabled. Now will work with it disabled or enabled. (MatthewL. Fidler)
-@item
-@strong{08-Mar-2011} -- Changed @code{auto-indent-delete-line-char-remove-extra-spaces} to nil by default. (Matthew L. Fidler)
-@item
-@strong{16-Feb-2011} -- Added a just one space function for pasting (Matthew L. Fidler)
-@item
-@strong{15-Feb-2011} -- Removed the deactivation of advices when this mode is turned off. I think it was causing some issues. (Matthew L. Fidler)
-@item
-@strong{10-Feb-2011} -- Added check to make sure not trying to paste on indent for @code{auto-indent-disabled-modes-list} (Matthew L. Fidler)
-@item
-@strong{03-Feb-2011} -- Swap @code{backward-delete-char} with @code{backward-delete-char-untabify}. Also use @code{auto-indent-backward-delete-char-behavior} when auto-indent-mode is active. (Matthew L. Fidler)
-@item
-@strong{03-Feb-2011} -- Added definition of @code{cua-copy-region} to advised functions (I thought it would have been taken care of with @code{kill-ring-save}) (Matthew L. Fidler)
-@item
-@strong{03-Feb-2011} -- Added option to delete indentation when copying or cutting regions using @code{kill-region} and @code{kill-ring-save}. Also changed @code{auto-indent-kill-line-remove-extra-spaces} to @code{auto-indent-kill-remove-extra-spaces} (Matthew L. Fidler)
-@item
-@strong{03-Feb-2011} -- Made sure that auto-indent-kill-line doesn't use the kill-line advice. (Matthew L. Fidler)
-@item
-@strong{03-Feb-2011} -- (Matthew L. Fidler)
-@item
-@strong{03-Feb-2011} -- Another kill-line bug-fix. (Matthew L. Fidler)
-@item
-@strong{03-Feb-2011} -- Fixed the kill-line bug (Matthew L. Fidler)
-@item
-@strong{03-Feb-2011} -- yank engine bug fix. (Matthew L. Fidler)
-@item
-@strong{03-Feb-2011} -- Bug fix for determining if the function is a yank (Matthew L. Fidler)
-@item
-@strong{02-Feb-2011} -- Added kill-line bug-fix from Le Wang. Also there is a the bug of when called as a function@comma{} you need to check for disabled modes every time. (Matthew L. Fidler)
-@item
-@strong{02-Feb-2011} -- Added interactive requriment again. This time tried to back-guess if the key has been hijacked. If so assume it was called interactively. (Matthew L. Fidler)
-@item
-@strong{01-Feb-2011} -- Took out the interactive requirement again. Causes bugs like org-delete-char below. (Matthew L. Fidler)
-@item
-@strong{01-Feb-2011} -- Bug fix for org-delete-char (and possibly others). Allow delete-char to have auto-indent changed behavior when the command lookup is the same as the delete command (as well as if it is called interactively) (Matthew L. Fidler)
-@item
-@strong{01-Feb-2011} -- Added bugfix to kill-line advice and function (from Le Wang) (Matthew L. Fidler)
-@item
-@strong{01-Feb-2011} -- Added cua-paste and cua-paste-pop (Matthew L. Fidler)
-@item
-@strong{01-Feb-2011} -- Added auto-indent on move up and down with the arrow keys. (Matthew L. Fidler)
-@item
-@strong{01-Feb-2011} -- Added a keyboard engine that indents instead of using hooks and advices. (Matthew L. Fidler)
-@item
-@strong{01-Feb-2011} -- Removed the interactivity in the hooks. They are definitely not interactive. (Matthew L. Fidler)
-@item
-@strong{01-Feb-2011} -- Added Le Wang's fixes:
-@itemize
-@item
-Many functions are checked for interactivity
-@item
-Kill-line prefix argument is fixed
-@item
-Kill region when region is active is controled by auto-indent-kill-line-kill-region-when-active
-@item
-Kill-line when at eol has more options
-@item
-Change auto-indent-indentation-function to auto-indent-newline-function (Matthew L. Fidler)
+@uref{http:__kb.iu.edu_data_abde.html,In Emacs how can I change tab sizes?} ## Auto indentation on moving cursor to blank lines.
 @end itemize
 
-@item
-@strong{31-Jan-2011} -- Removed indirect reference to @code{shrink-whitespaces}. Thanks Le Wang (Matthew L. Fidler)
-@item
-@strong{31-Jan-2011} -- Added explicit requirement for functions (Matthew L. Fidler)
-@item
-@strong{18-Jan-2011} -- Added support to turn on @code{org-indent-mode} when inside an org-file. (Matthew L. Fidler)
-@item
-@strong{12-Jan-2011} -- Added fix for ortbl-minor-mode. Now it will work when orgtbl-minor mode is enabled. (Matthew L. Fidler)
-@item
-@strong{09-Dec-2010} -- Bugfix. Now instead of indenting the region pasted@comma{} indent the region-pasted + beginning of line at region begin and end of line at region end. (Matthew L. Fidler) 02-Dec-2010 Matthew L. Fidler
-
-@end itemize
-
-Last-Updated: Thu Dec 2 13:02:02 2010 (-0600) #411 (Matthew L. Fidler) Made ignoring of modes with indent-relative and indent-relative-maybe apply to indenting returns as well. - @strong{02-Dec-2010} -- Removed auto-indent on paste/yank for modes with indent-relative and indent-relative-maybe. This has annoyed me forever. (Matthew L. Fidler) - @strong{02-Dec-2010} -- Added an advice to delete-char. When deleting a new-line character@comma{} shrink white-spaces afterward. (Matthew L. Fidler) - @strong{02-Dec-2010} -- Speed enhancement by checking for yasnippets only on indentation. (Matthew L. Fidler) - @strong{29-Nov-2010} -- Bug fix to allow authotkey files to save. (Matthew L. Fidler) - @strong{29-Nov-2010} -- Change auto-indent-on-save to be disabled by default. (Matthew L. Fidler) - @strong{22-Nov-2010} -- Yasnippet bug-fix. (Matthew L. Fidler) - @strong{22-Nov-2010} -- auto-indent bug fix for save on save buffer hooks. (Matthew L. Fidler) - @strong{16-Nov-2010} -- Added conf-windows-mode to ignored modes. (Matthew L. Fidler) - @strong{15-Nov-2010} -- Bugfix for deletion of whitespace (Matthew L. Fidler) - @strong{15-Nov-2010} -- Bugfix for post-command-hook. (Matthew L. Fidler) - @strong{15-Nov-2010} -- Added diff-mode to excluded modes for auto-indentaion. (Matthew L. Fidler) - @strong{15-Nov-2010} -- Added fundamental mode to excluded modes for auto-indentation. (Matthew L. Fidler) - @strong{13-Nov-2010} -- Bug fix try #3 (Matthew L. Fidler) - @strong{13-Nov-2010} -- Anothe bug-fix for yasnippet. (Matthew L. Fidler) - @strong{13-Nov-2010} -- Bug fix for auto-indent-mode. Now it checks to make sure that @code{last-command-event} is non-nil. (Matthew L. Fidler) - @strong{11-Nov-2010} -- Put back processes in. Made the return key handled by pre and post-command-hooks. (Matthew L. Fidler) - @strong{11-Nov-2010} -- Took out processes such as @strong{R} or @strong{eshell} (Matthew L. Fidler) - @strong{09-Nov-2010} -- Bug fix when interacting with the SVN version of yasnippet. It will not perform the line indentation when Yasnippet is running. (Matthew L. Fidler) - @strong{09-Nov-2010} -- Made sure that the auto-paste indentation doesn't work in minibuffer. (Matthew L. Fidler) - @strong{09-Nov-2010} -- When @code{auto-indent-pre-command-hook} is inactivated by some means@comma{} add it back. (Matthew L. Fidler) - @strong{09-Nov-2010} -- Added snippet-mode to excluded modes. Also turned off the kill-line by default. (Matthew L. Fidler) - @strong{07-Nov-2010} -- Added the possibility of TextMate type returns. (Matthew L. Fidler) - @strong{07-Nov-2010} -- Bug fix where backspace on indented region stopped working.Added TextMate (Matthew L. Fidler) - @strong{07-Nov-2010} -- Another small bug fix. (Matthew L. Fidler) - @strong{07-Nov-2010} -- Added bugfix and also allow movement on blank lines to be automatically indented to the correct position. (Matthew L. Fidler) - @strong{06-Nov-2010} -- Initial release. (Matthew L. Fidler)* Functions ### Interactive Functions
 @menu
-* Internal Functions::
+* Internal Variables::
 * Internal Variables::
 @end menu
 
-@node auto-indent-deactivate-advices
-@subsubsection auto-indent-deactivate-advices
-@code{(auto-indent-deactivate-advices)}
+@node auto-indent-current-pairs
+@subsubsection auto-indent-current-pairs
+@itemize
+@item
+Automatically indent the current parenthetical statement.
+@end itemize
 
-Deactivate Advices for @code{auto-indent-mode}.
+@node auto-indent-delete-line-char-add-extra-spaces
+@subsubsection auto-indent-delete-line-char-add-extra-spaces
+@itemize
+@item
+When deleting a return@comma{} add a space (when appropriate) between the newly joined lines.
+@end itemize
 
-@node auto-indent-eol-char-newline
-@subsubsection auto-indent-eol-char-newline
-It is bound to .
+This takes care of the condition when deleting text
 
-@code{(auto-indent-eol-char-newline)}
+Lorem ipsum dolor sit| amet@comma{} consectetur adipiscing elit. Morbi id
 
-Auto-indent function for @code{end-of-line}@comma{} insert @code{auto-indent-eol-char}@comma{} and then newline.
+Lorem ipsum dolor sit|amet@comma{} consectetur adipiscing elit. Morbi id
 
-@node auto-indent-eol-newline
-@subsubsection auto-indent-eol-newline
-It is bound to .
+Which ideally should be deleted to:
 
-@code{(auto-indent-eol-newline)}
+Lorem ipsum dolor sit| amet@comma{} consectetur adipiscing elit. Morbi id
 
-Auto-indent function for @code{end-of-line} and then newline.
+This is controlled by the regular expressions in @code{auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs} and @code{auto-indent-delete-line-char-add-extra-spaces-text-mode-regs}
 
-@node auto-indent-minor-mode-on
-@subsubsection auto-indent-minor-mode-on
-@code{(auto-indent-minor-mode-on)}
+@node auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs
+@subsubsection auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs
+@itemize
+@item
+Regular expressions for use with @code{auto-indent-delete-line-char-add-extra-spaces}. This is used for programming modes as determined by @code{auto-indent-is-prog-mode-p}.
+@end itemize
 
-Turn on auto-indent minor mode.
+@node auto-indent-delete-line-char-add-extra-spaces-text-mode-regs
+@subsubsection auto-indent-delete-line-char-add-extra-spaces-text-mode-regs
+@itemize
+@item
+Regular expressions for use with @code{auto-indent-delete-line-char-add-extra-spaces}. This is used for programming modes as determined by @code{auto-indent-is-prog-mode-p}.
+@end itemize
 
-@node auto-indent-whole-buffer
-@subsubsection auto-indent-whole-buffer
-@code{(auto-indent-whole-buffer &optional SAVE)}
+@node auto-indent-delete-line-char-remove-extra-spaces
+@subsubsection auto-indent-delete-line-char-remove-extra-spaces
+When deleting a return@comma{} delete any extra spaces between the newly joined lines.
 
-Auto-indent whole buffer and untabify it.
+@node auto-indent-delete-line-char-remove-last-space
+@subsubsection auto-indent-delete-line-char-remove-last-space
+Remove last space when deleting a line.
 
-If SAVE is specified@comma{} save the buffer after indenting the entire buffer.
+When @code{auto-indent-delete-line-char-remove-extra-spaces} is enabled@comma{} expressions like lists can be removed in a less than optimal manner. For example@comma{} assuming `@code{|}' is the cursor:
 
-@node Internal Functions
-@subsection Internal Functions
+c("Vehicle QD TO"@comma{}| "1 ug IVT"@comma{}"3 ug IVT"@comma{}...
+
+would be deleted to the following
+
+c("Vehicle QD TO"@comma{}| "1 ug IVT"@comma{}"3 ug IVT"@comma{}...
+
+In this case it would be preferable to delete to:
+
+c("Vehicle QD TO"@comma{}|"1 ug IVT"@comma{}"3 ug IVT"@comma{}...
+
+However cases like sentences:
+
+Lorem ipsum dolor sit amet@comma{}| consectetur adipiscing elit. Morbi id
+
+Deletes to Lorem ipsum dolor sit amet@comma{}| consectetur adipiscing elit. Morbi id
+
+Which is a desired behavior.
+
+When this is enabled@comma{} auto-indent attempts to be smarter by deleting the extra space when characters before and after match expressions defined in @code{auto-indent-delete-line-char-remove-last-space-prog-mode-regs} and @code{auto-indent-delete-line-char-remove-last-space-text-mode-regs}.
+
+@node auto-indent-delete-line-char-remove-last-space-prog-mode-regs
+@subsubsection auto-indent-delete-line-char-remove-last-space-prog-mode-regs
+@itemize
+@item
+Regular expressions for use with @code{auto-indent-delete-line-char-remove-last-space}. This is used for programming modes as determined by @code{auto-indent-is-prog-mode-p}.
+@end itemize
+
+@node auto-indent-delete-line-char-remove-last-space-text-mode-regs
+@subsubsection auto-indent-delete-line-char-remove-last-space-text-mode-regs
+Regular expressions for use with @code{auto-indent-delete-line-char-remove-last-space}. This is used for modes other than programming modes. This is determined by @code{auto-indent-is-prog-mode-p}.
+
+@node auto-indent-delete-trailing-whitespace-on-save-file
+@subsubsection auto-indent-delete-trailing-whitespace-on-save-file
+@itemize
+@item
+When saving file delete trailing whitespace.
+@end itemize
+
+@node auto-indent-delete-trailing-whitespace-on-visit-file
+@subsubsection auto-indent-delete-trailing-whitespace-on-visit-file
+@itemize
+@item
+Automatically remove trailing whitespace when visiting file.
+@end itemize
+
+@node auto-indent-disabled-indent-functions
+@subsubsection auto-indent-disabled-indent-functions
+List of disabled indent functions.
+
+List of functions that auto-indent ignores the @code{indent-region} on paste and automated indent by pressing return. The default is @code{indent-relative} and @code{indent-relative-maybe}. If these are used the indentation is may not specified for the current mode.
+
+@node auto-indent-disabled-modes-list
+@subsubsection auto-indent-disabled-modes-list
+List of modes disabled when global @code{auto-indent-mode} is on.
+
+@node auto-indent-disabled-modes-on-save
+@subsubsection auto-indent-disabled-modes-on-save
+@itemize
+@item
+List of modes where @code{indent-region} of the whole file is ignored.
+@end itemize
+
+@node auto-indent-engine
+@subsubsection auto-indent-engine
+Type of engine to use. The possibilities are:
+
+default: Use hooks and advices to implement auto-indent-mode
+
+keymap: Use key remappings to implement auto-indent-mode. This may work in some modes but may cause things such as @code{company-mode} or @code{auto-complete-mode} to function improperly
+
+@node auto-indent-eol-char
+@subsubsection auto-indent-eol-char
+End of line/statement character@comma{} like C or matlab's semi-colon.
+
+Character inserted when @code{auto-indent-key-for-end-of-line-inser-char-then-newline} is defined. This is a buffer local variable@comma{} therefore if you have a mode that instead of using a semi-colon for an end of statement@comma{} you use a colon@comma{} this can be added to the mode as follows:
+@verbatim
+ (add-hook 'strange-mode-hook (lambda() (setq auto-indent-eol-char ":")))
+@end verbatim
+
+autoThis is similar to Textmate's behavior. This is useful when used in conjunction with something that pairs delimiters like @code{autopair-mode}.
+
+@node auto-indent-fix-org-backspace
+@subsubsection auto-indent-fix-org-backspace
+Fixes @code{org-backspace} to use @code{auto-indent-backward-delete-char-behavior} for @code{org-mode} buffers.
+
+@node auto-indent-fix-org-return
+@subsubsection auto-indent-fix-org-return
+Allows newline and indent behavior in source code blocks in org-mode.
+
+@node auto-indent-force-interactive-advices
+@subsubsection auto-indent-force-interactive-advices
+Forces interactive advices.
+
+This makes sure that this is called when this is an interactive call directly to the function. However@comma{} if someone defines something such as @code{org-delete-char} to delete a character@comma{} when @code{org-delete-char} is called interactively and then calls @code{delete-char} the advice is never activated (when it should be). If this is activated@comma{} @code{auto-indent-mode} tries to do the right thing by guessing what key should have been pressed to get this event. If it is the key that was pressed enable the advice.
+
+@node auto-indent-home-is-beginning-of-indent
+@subsubsection auto-indent-home-is-beginning-of-indent
+The Home key@comma{} or rather the @code{move-beginning-of-line} function@comma{} will move to the beginning of the indentation when called interactively. If it is already at the beginning of the indent@comma{} move to the beginning of the line.
+
+@node auto-indent-home-is-beginning-of-indent-when-spaces-follow
+@subsubsection auto-indent-home-is-beginning-of-indent-when-spaces-follow
+This is a customization for the home key.
+
+If @code{auto-indent-home-is-beginning-of-indent} is enabled@comma{} the Home key@comma{} or rather the @code{move-beginning-of-line} function@comma{} will move to the beginning of the indentation when called interactively.
+
+If it is already at the beginning of the indent@comma{}and move to the beginning of the line. When @code{auto-indent-home-is-beginning-of-indent-when-spaces-follow} is enabled@comma{} a home key press from
+@verbatim
+(defadvice move-beginning-of-line (around auto-indent-minor-mode-advice)
+| (let (at-beginning)
+@end verbatim
+
+will change to
+@verbatim
+(defadvice move-beginning-of-line (around auto-indent-minor-mode-advice)
+  |(let (at-beginning)
+@end verbatim
+
+Another home-key will chang to cursor
+@verbatim
+(defadvice move-beginning-of-line (around auto-indent-minor-mode-advice)
+@end verbatim
+
+| (let (at-beginning)
+
+@node auto-indent-key-for-end-of-line-insert-char-then-newline
+@subsubsection auto-indent-key-for-end-of-line-insert-char-then-newline
+Key for end of line@comma{} @code{auto-indent-eol-char}@comma{} then newline.
+
+By default the @code{auto-indent-eol-char} is the semicolon. TextMate uses shift-meta return@comma{} I believe (S-M-RET). If blank@comma{} no key is defined. The key should be in a format used for having keyboard macros (see @code{edmacro-mode}). This is useful when used in conjunction with something that pairs delimiters like @code{autopair-mode}.
+
+@node auto-indent-key-for-end-of-line-then-newline
+@subsubsection auto-indent-key-for-end-of-line-then-newline
+Key for end of line@comma{} then newline.
+
+TextMate uses meta return@comma{} I believe (M-RET). If blank@comma{} no key is defined. The key should be in a format used for saving keyboard macros (see @code{edmacro-mode}). This is useful when used in conjunction with something that pairs delimiters like @code{autopair-mode}.
+
+@node auto-indent-kill-line-at-eol
+@subsubsection auto-indent-kill-line-at-eol
+Determines how a kill at the end of line behaves.
+
+When killing lines@comma{} if at the end of a line@comma{}
+
+nil - join next line to the current line. Deletes white-space at join. [this essentially duplicated delete-char]
+@verbatim
+     See also `auto-indent-kill-remove-extra-spaces`
+@end verbatim
+
+whole-line - kill next lines
+
+subsequent-whole-lines - merge lines on first call@comma{} subsequent kill whole lines
+
+blanks - kill all empty lines after the current line@comma{} and then any lines specified.
+
+You should also set the function @code{kill-whole-line} to do what you want.
+
+@node auto-indent-kill-line-kill-region-when-active
+@subsubsection auto-indent-kill-line-kill-region-when-active
+@itemize
+@item
+When killing lines@comma{} if region is active@comma{} kill region instead.
+@end itemize
+
+@node auto-indent-kill-remove-extra-spaces
+@subsubsection auto-indent-kill-remove-extra-spaces
+@itemize
+@item
+Remove indentation before killing the line or region.
+@end itemize
+
+@node auto-indent-known-indent-level-variables
+@subsubsection auto-indent-known-indent-level-variables
+Known indent-level-variables for major modes. Set locally when auto-indent-mode initializes.
+
+@node auto-indent-known-text-modes
+@subsubsection auto-indent-known-text-modes
+@itemize
+@item
+List of auto-indent's known text-modes.
+@end itemize
+
+@node auto-indent-minor-mode-symbol
+@subsubsection auto-indent-minor-mode-symbol
+@itemize
+@item
+When true@comma{} Auto Indent puts AI on the mode line.
+@end itemize
+
+@node auto-indent-mode-untabify-on-yank-or-paste
+@subsubsection auto-indent-mode-untabify-on-yank-or-paste
+@itemize
+@item
+Untabify pasted or yanked region.
+@end itemize
+
+@node auto-indent-newline-function
+@subsubsection auto-indent-newline-function
+@itemize
+@item
+Auto indentation function for the return key.
+@end itemize
+
+@node auto-indent-next-pair
+@subsubsection auto-indent-next-pair
+Automatically indent the next parenthetical statement. For example in R:
+
+d| <- read.csv("dat.csv"@comma{} na.strings=c("."@comma{}"NA"))
+
+When typing .old@comma{} the indentation will be updated as follows:
+
+d.old <- read.csv("dat.csv"@comma{} na.strings=c("."@comma{}"NA"))
+
+This will slow down your computation@comma{} so if you use it make sure that the @code{auto-indent-next-pair-timer-interval} is appropriate for your needs.
+
+It is useful when using this option to have some sort of autopairing on.
+
+@node auto-indent-next-pair-timer-interval
+@subsubsection auto-indent-next-pair-timer-interval
+Number of seconds before the observed parenthetical statement is indented. The faster the value@comma{} the slower Emacs responsiveness but the faster Emacs indents the region. The slower the value@comma{} the faster Emacs responds. This should be changed dynamically by typing with @code{auto-indent-next-pair-timer-interval-addition}. The maximum that a particular mode can delay the timer is given by @code{auto-indent-next-pair-timer-interval-max}.
+
+@node auto-indent-next-pair-timer-interval-addition
+@subsubsection auto-indent-next-pair-timer-interval-addition
+If the indent operation for a file takes longer than the specified idle timer@comma{} grow that timer by this number for a particular mode.
+
+@node auto-indent-next-pair-timer-interval-max
+@subsubsection auto-indent-next-pair-timer-interval-max
+Maximum number seconds that auto-indent-mode will grow a parenthetical statement. If this is less than or equal to zero@comma{} these will be no limit.
+
+@node auto-indent-next-pairt-timer-interval-do-not-grow
+@subsubsection auto-indent-next-pairt-timer-interval-do-not-grow
+If true@comma{} do not magically grow the mode-based indent time for a region.
+
+@node auto-indent-on-save-file
+@subsubsection auto-indent-on-save-file
+@itemize
+@item
+Auto Indent on visit file.
+@end itemize
+
+@node auto-indent-on-visit-file
+@subsubsection auto-indent-on-visit-file
+@itemize
+@item
+Auto Indent file upon visit.
+@end itemize
+
+@node auto-indent-on-visit-pretend-nothing-changed
+@subsubsection auto-indent-on-visit-pretend-nothing-changed
+@itemize
+@item
+When modifying the file on visit@comma{} pretend nothing changed.
+@end itemize
+
+@node auto-indent-on-yank-or-paste
+@subsubsection auto-indent-on-yank-or-paste
+@itemize
+@item
+Indent pasted or yanked region.
+@end itemize
+
+@node auto-indent-start-org-indent
+@subsubsection auto-indent-start-org-indent
+Starts @code{org-indent-mode} when in org-mode.
+
+@node auto-indent-untabify-on-save-file
+@subsubsection auto-indent-untabify-on-save-file
+@itemize
+@item
+Change tabs to spaces on file-save.
+@end itemize
+
+@node auto-indent-untabify-on-visit-file
+@subsubsection auto-indent-untabify-on-visit-file
+@itemize
+@item
+Automatically convert tabs into spaces when visiting a file.
+@end itemize
+
+@node auto-indent-use-text-boundaries
+@subsubsection auto-indent-use-text-boundaries
+Use text boundaries when killing lines.
+
+When killing lines@comma{} if point is before any text@comma{} act as if point is at BOL. And if point is after text@comma{} act as if point is at EOL
+
+@node Internal Variables
+@subsection Internal Variables
 @menu
-* auto-indent-add-to-alist::
-* auto-indent-bolp::
-* auto-indent-deindent-last-kill::
-* auto-indent-eolp::
-* auto-indent-file-when-save::
-* auto-indent-file-when-visit::
-* auto-indent-handle-end-of-line::
-* auto-indent-is-bs-key-p::
-* auto-indent-is-del-key-p::
-* auto-indent-is-kill-line-p::
-* auto-indent-is-kill-region-p::
-* auto-indent-is-kill-ring-save-p::
-* auto-indent-is-prog-mode-p::
-* auto-indent-is-yank-p::
-* auto-indent-mode-post-command-hook::
-* auto-indent-mode-post-command-hook-last::
-* auto-indent-mode-pre-command-hook::
-* auto-indent-original-binding::
-* auto-indent-par-region::
-* auto-indent-par-region-interval::
-* auto-indent-point-inside-pairs-p::
-* auto-indent-remove-advice-p::
-* auto-indent-save-par-region-interval::
-* auto-indent-setup-map::
-* auto-indent-turn-on-org-indent::
-* auto-indent-yank-engine::
+* auto-indent-eol-ret-save::
+* auto-indent-eol-ret-semi-save::
+* auto-indent-minor-mode-map::
+* auto-indent-pairs-begin::
+* auto-indent-pairs-end::
 * auto-indent-current-pairs::
 * auto-indent-delete-line-char-add-extra-spaces::
 * auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs::
@@ -502,182 +594,28 @@ If SAVE is specified@comma{} save the buffer after indenting the entire buffer.
 * auto-indent-use-text-boundaries::
 @end menu
 
-@node auto-indent-add-to-alist
-@subsubsection auto-indent-add-to-alist
-@code{(auto-indent-add-to-alist ALIST-VAR ELT-CONS &optional NO-REPLACE)}
+@node auto-indent-eol-ret-save
+@subsubsection auto-indent-eol-ret-save
+Saved variable for keyboard state.
 
-Add to the value of ALIST-VAR an element ELT-CONS if it isn't there yet. If an element with the same car as the car of ELT-CONS is already present@comma{} replace it with ELT-CONS unless NO-REPLACE is non-nil; if a matching element is not already present@comma{} add ELT-CONS to the front of the alist. The test for presence of the car of ELT-CONS is done with @code{equal}.
+@node auto-indent-eol-ret-semi-save
+@subsubsection auto-indent-eol-ret-semi-save
+Saved variable for keyboard state.
 
-@node auto-indent-bolp
-@subsubsection auto-indent-bolp
-@code{(auto-indent-bolp)}
-
-Return t if point is at bol respecting @code{auto-indent-use-text-boundaries}.
-
-@node auto-indent-deindent-last-kill
-@subsubsection auto-indent-deindent-last-kill
-@code{(auto-indent-deindent-last-kill)}
-
-Strips out indentation in the last kill.
-
-@node auto-indent-eolp
-@subsubsection auto-indent-eolp
-@code{(auto-indent-eolp)}
-
-Return t if point is at eol respecting @code{auto-indent-use-text-boundaries}.
-
-@node auto-indent-file-when-save
-@subsubsection auto-indent-file-when-save
-@code{(auto-indent-file-when-save)}
-
-Auto-indent file when save.
-
-@node auto-indent-file-when-visit
-@subsubsection auto-indent-file-when-visit
-@code{(auto-indent-file-when-visit)}
-
-auto-indent file when visit.
-
-@node auto-indent-handle-end-of-line
-@subsubsection auto-indent-handle-end-of-line
-@code{(auto-indent-handle-end-of-line LST &optional ADD)}
-
-Handle end of line operations.
-
-LST is the list of regular expressions to consider.
-
-ADD lets @code{auto-indent-mode} know that it should add a space instead.
-
-@node auto-indent-is-bs-key-p
-@subsubsection auto-indent-is-bs-key-p
-@code{(auto-indent-is-bs-key-p &optional COMMAND)}
-
-Determines if the backspace key was @code{this-command} or COMMAND.
-
-@node auto-indent-is-del-key-p
-@subsubsection auto-indent-is-del-key-p
-@code{(auto-indent-is-del-key-p &optional COMMAND)}
-
-Determines if the delete key was @code{this-command} or COMMAND.
-
-This is based on standards for Viper@comma{} ErgoEmacs and standard Emacs
-
-@node auto-indent-is-kill-line-p
-@subsubsection auto-indent-is-kill-line-p
-@code{(auto-indent-is-kill-line-p &optional COMMAND)}
-
-Determines if the @code{kill-line} was either @code{this-command} or COMMAND.
-
-This is based on standards for Viper@comma{} ErgoEmacs and standard Emacs
-
-@node auto-indent-is-kill-region-p
-@subsubsection auto-indent-is-kill-region-p
-@code{(auto-indent-is-kill-region-p &optional COMMAND)}
-
-Determines if the kill region/cut was @code{this-command} or COMMAND.
-
-This is based on standards for viper@comma{} ergoemacs and standard Emacs.
-
-@node auto-indent-is-kill-ring-save-p
-@subsubsection auto-indent-is-kill-ring-save-p
-@code{(auto-indent-is-kill-ring-save-p &optional COMMAND)}
-
-Determines if @code{kill-ring-save} was called in @code{this-command} or COMMAND.
-
-This is based on standards for viper@comma{} ergoemacs and standard Emacs.
-
-@node auto-indent-is-prog-mode-p
-@subsubsection auto-indent-is-prog-mode-p
-@code{(auto-indent-is-prog-mode-p)}
-
-Determines if this mode is a programming mode.
-
-@node auto-indent-is-yank-p
-@subsubsection auto-indent-is-yank-p
-@code{(auto-indent-is-yank-p &optional COMMAND)}
-
-Test if the @code{this-command} or COMMAND was a yank.
-
-@node auto-indent-mode-post-command-hook
-@subsubsection auto-indent-mode-post-command-hook
-@code{(auto-indent-mode-post-command-hook)}
-
-Post-command hook for @code{auto-indent-mode}.
-
-Allows auto-indent-mode to go to the right place when moving around and the whitespace was deleted from the line.
-
-@node auto-indent-mode-post-command-hook-last
-@subsubsection auto-indent-mode-post-command-hook-last
-@code{(auto-indent-mode-post-command-hook-last)}
-
-Last @code{post-command-hook} run.
-
-Last hook run to take care of auto-indenting that needs to be performed after all other post-command hooks have run (like sexp auto-indenting)
-
-@node auto-indent-mode-pre-command-hook
-@subsubsection auto-indent-mode-pre-command-hook
-@code{(auto-indent-mode-pre-command-hook)}
-
-Hook for @code{auto-indent-mode} to tell if the point has been moved.
-
-@node auto-indent-original-binding
-@subsubsection auto-indent-original-binding
-@code{(auto-indent-original-binding KEY)}
-
-Gets the original key binding for a specified KEY.
-
-@node auto-indent-par-region
-@subsubsection auto-indent-par-region
-@code{(auto-indent-par-region)}
-
-Indent a parenthetical region (based on a timer).
-
-@node auto-indent-par-region-interval
-@subsubsection auto-indent-par-region-interval
-@code{(auto-indent-par-region-interval &optional INTERVAL DIV)}
-
-Gets the interval based on @code{auto-indent-next-pair-timer-interval}. If INTERVAL is pre-specified@comma{} than don't look up the interval. If DIV is specified divide by the number of lines instead of multiply by the number of lines and then save the division.
-
-@node auto-indent-point-inside-pairs-p
-@subsubsection auto-indent-point-inside-pairs-p
-@code{(auto-indent-point-inside-pairs-p)}
-
-Is point inside any pairs?
-
-@node auto-indent-remove-advice-p
-@subsubsection auto-indent-remove-advice-p
-@code{(auto-indent-remove-advice-p &optional COMMAND)}
-
-Should the advice be removed?
-
-This is based on either the current command (@code{this-command}) or the provided COMMAND. Removes advice if the function called is actually an auto-indent function OR it should be disabled in this mode.
-
-@node auto-indent-save-par-region-interval
-@subsubsection auto-indent-save-par-region-interval
-@code{(auto-indent-save-par-region-interval)}
-
-Saves @code{auto-indent-next-pair-timer-interval}.
-
-@node auto-indent-setup-map
-@subsubsection auto-indent-setup-map
-@code{(auto-indent-setup-map)}
-
+@node auto-indent-minor-mode-map
+@subsubsection auto-indent-minor-mode-map
 @itemize
 @item
-Set up minor mode map.
+Auto Indent mode map.
 @end itemize
 
-@node auto-indent-turn-on-org-indent
-@subsubsection auto-indent-turn-on-org-indent
-@code{(auto-indent-turn-on-org-indent)}
+@node auto-indent-pairs-begin
+@subsubsection auto-indent-pairs-begin
+Defines where the pair region begins.
 
-Turn on org-indent.
-
-@node auto-indent-yank-engine
-@subsubsection auto-indent-yank-engine
-@code{(auto-indent-yank-engine)}
-
-Engine for the auto-indent yank functions/advices. ## Auto indentation on moving cursor to blank lines.
+@node auto-indent-pairs-end
+@subsubsection auto-indent-pairs-end
+Defines where the pair region ends. ## Auto indentation on moving cursor to blank lines.
 
 @node auto-indent-current-pairs
 @subsubsection auto-indent-current-pairs
