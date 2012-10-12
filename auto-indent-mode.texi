@@ -27,7 +27,7 @@ Matthew L. Fidler ## Library Information @emph{auto-indent-mode.el} --- Auto ind
 @item
 @strong{Created} -- Sat Nov 6 11:02:07 2010 (-0500)
 @item
-@strong{Version} -- 0.72
+@strong{Version} -- 0.73
 @item
 @strong{Last-Updated} -- Tue Aug 21 13:08:42 2012 (-0500)
 @item
@@ -192,7 +192,7 @@ This is setup by the following code snippet:
 
 @node Auto-indent and org-mode
 @section Auto-indent and org-mode
-Auto-indent does not technically turn on for org-mode. Instead the following can be added/changed: 1. @code{org-indent-mode} is turned on when @code{auto-indent-start-org-indent} is true 2. The return behavior is changed to newline and indent in code blocks when @code{auto-indent-fix-org-return} is true. 3. The backspace behavior is changed to auto-indent's backspace when @code{auto-indent-delete-backward-char} is true. ## FAQ ### Why isn't my mode indenting? Some modes are excluded for compatability reasons@comma{} such as text-modes. This is controlled by the variable @code{auto-indent-disabled-modes-list} ### Why isn't my specific mode have the right number of spaces? Actually@comma{} the number of spaces for indentation is controlled by the major mode. If there is a major-mode specific variable that controls this offset@comma{} you can add this variable to @code{auto-indent-known-indent-level-variables} to change the indentation for this mode when auto-indent-mode starts.
+Auto-indent does not technically turn on for org-mode. Instead the following can be added/changed: 1. @code{org-indent-mode} is turned on when @code{auto-indent-start-org-indent} is true 2. The return behavior is changed to newline and indent in code blocks when @code{auto-indent-fix-org-return} is true. 3. The backspace behavior is changed to auto-indent's backspace when @code{auto-indent-delete-backward-char} is true. 4. The yank/paste behavior is changed to auto-indent in a code block when @code{auto-indent-fix-org-yank} is true. ## FAQ ### Why isn't my mode indenting? Some modes are excluded for compatability reasons@comma{} such as text-modes. This is controlled by the variable @code{auto-indent-disabled-modes-list} ### Why isn't my specific mode have the right number of spaces? Actually@comma{} the number of spaces for indentation is controlled by the major mode. If there is a major-mode specific variable that controls this offset@comma{} you can add this variable to @code{auto-indent-known-indent-level-variables} to change the indentation for this mode when auto-indent-mode starts.
 
 See:
 
@@ -566,6 +566,7 @@ When killing lines@comma{} if point is before any text@comma{} act as if point i
 * auto-indent-eol-char::
 * auto-indent-fix-org-backspace::
 * auto-indent-fix-org-return::
+* auto-indent-fix-org-yank::
 * auto-indent-force-interactive-advices::
 * auto-indent-home-is-beginning-of-indent::
 * auto-indent-home-is-beginning-of-indent-when-spaces-follow::
@@ -755,6 +756,10 @@ Fixes @code{org-backspace} to use @code{auto-indent-backward-delete-char-behavio
 @node auto-indent-fix-org-return
 @subsubsection auto-indent-fix-org-return
 Allows newline and indent behavior in source code blocks in org-mode.
+
+@node auto-indent-fix-org-yank
+@subsubsection auto-indent-fix-org-yank
+Allows org-mode yanks to be indented in source code blocks of org-mode.
 
 @node auto-indent-force-interactive-advices
 @subsubsection auto-indent-force-interactive-advices
