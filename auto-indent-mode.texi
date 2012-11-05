@@ -27,7 +27,7 @@ Matthew L. Fidler ## Library Information @emph{auto-indent-mode.el} --- Auto ind
 @item
 @strong{Created} -- Sat Nov 6 11:02:07 2010 (-0500)
 @item
-@strong{Version} -- 0.78
+@strong{Version} -- 0.79
 @item
 @strong{Last-Updated} -- Tue Aug 21 13:08:42 2012 (-0500)
 @item
@@ -548,10 +548,6 @@ Character inserted when @code{auto-indent-key-for-end-of-line-inser-char-then-ne
 
 autoThis is similar to Textmate's behavior. This is useful when used in conjunction with something that pairs delimiters like @code{autopair-mode}.
 
-@node auto-indent-fix-org-auto-fill
-@subsubsection auto-indent-fix-org-auto-fill
-Fixes org-based auto-fill-function (i.e. @code{org-auto-fill-function}) to only auto-fill for things outside of a source block.
-
 @node auto-indent-fix-org-backspace
 @subsubsection auto-indent-fix-org-backspace
 Fixes @code{org-backspace} to use @code{auto-indent-backward-delete-char-behavior} for @code{org-mode} buffers.
@@ -773,7 +769,9 @@ When killing lines@comma{} if point is before any text@comma{} act as if point i
 * auto-indent-disabled-modes-on-save::
 * auto-indent-engine::
 * auto-indent-eol-char::
+* auto-indent-fix-org-auto-fill::
 * auto-indent-fix-org-backspace::
+* auto-indent-fix-org-move-beginning-of-line::
 * auto-indent-fix-org-return::
 * auto-indent-fix-org-yank::
 * auto-indent-force-interactive-advices::
@@ -952,14 +950,23 @@ keymap: Use key remappings to implement auto-indent-mode. This may work in some 
 End of line/statement character@comma{} like C or matlab's semi-colon.
 
 Character inserted when @code{auto-indent-key-for-end-of-line-inser-char-then-newline} is defined. This is a buffer local variable@comma{} therefore if you have a mode that instead of using a semi-colon for an end of statement@comma{} you use a colon@comma{} this can be added to the mode as follows:
-
-(add-hook 'strange-mode-hook (lambda() (setq auto-indent-eol-char ":")))
+@verbatim
+ (add-hook 'strange-mode-hook (lambda() (setq auto-indent-eol-char ":")))
+@end verbatim
 
 autoThis is similar to Textmate's behavior. This is useful when used in conjunction with something that pairs delimiters like @code{autopair-mode}.
+
+@node auto-indent-fix-org-auto-fill
+@subsubsection auto-indent-fix-org-auto-fill
+Fixes org-based auto-fill-function (i.e. @code{org-auto-fill-function}) to only auto-fill for things outside of a source block.
 
 @node auto-indent-fix-org-backspace
 @subsubsection auto-indent-fix-org-backspace
 Fixes @code{org-backspace} to use @code{auto-indent-backward-delete-char-behavior} for @code{org-mode} buffers.
+
+@node auto-indent-fix-org-move-beginning-of-line
+@subsubsection auto-indent-fix-org-move-beginning-of-line
+Fixes @code{move-beginning-of-line} in @code{org-mode} when in source blocks to follow @code{auto-indent-mode}.
 
 @node auto-indent-fix-org-return
 @subsubsection auto-indent-fix-org-return
@@ -986,16 +993,23 @@ This is a customization for the home key.
 If @code{auto-indent-home-is-beginning-of-indent} is enabled@comma{} the Home key@comma{} or rather the @code{move-beginning-of-line} function@comma{} will move to the beginning of the indentation when called interactively.
 
 If it is already at the beginning of the indent@comma{}and move to the beginning of the line. When @code{auto-indent-home-is-beginning-of-indent-when-spaces-follow} is enabled@comma{} a home key press from
-
-(defadvice move-beginning-of-line (around auto-indent-minor-mode-advice) | (let (at-beginning)
+@verbatim
+(defadvice move-beginning-of-line (around auto-indent-minor-mode-advice)
+| (let (at-beginning)
+@end verbatim
 
 will change to
-
-(defadvice move-beginning-of-line (around auto-indent-minor-mode-advice) |(let (at-beginning)
+@verbatim
+(defadvice move-beginning-of-line (around auto-indent-minor-mode-advice)
+  |(let (at-beginning)
+@end verbatim
 
 Another home-key will chang to cursor
+@verbatim
+(defadvice move-beginning-of-line (around auto-indent-minor-mode-advice)
+@end verbatim
 
-(defadvice move-beginning-of-line (around auto-indent-minor-mode-advice) | (let (at-beginning)
+| (let (at-beginning)
 
 @node auto-indent-key-for-end-of-line-insert-char-then-newline
 @subsubsection auto-indent-key-for-end-of-line-insert-char-then-newline
@@ -1016,8 +1030,9 @@ Determines how a kill at the end of line behaves.
 When killing lines@comma{} if at the end of a line@comma{}
 
 nil - join next line to the current line. Deletes white-space at join. [this essentially duplicated delete-char]
-
-See also @code{auto-indent-kill-remove-extra-spaces}
+@verbatim
+     See also `auto-indent-kill-remove-extra-spaces`
+@end verbatim
 
 whole-line - kill next lines
 
