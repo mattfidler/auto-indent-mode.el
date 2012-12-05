@@ -8,7 +8,7 @@
  - Author :: Matthew L. Fidler, Le Wang & Others
  - Maintainer :: Matthew L. Fidler
  - Created :: Sat Nov  6 11:02:07 2010 (-0500)
- - Version :: 0.87
+ - Version :: 0.88
  - Last-Updated :: Tue Aug 21 13:08:42 2012 (-0500)
  -           By :: Matthew L. Fidler
  -     Update # :: 1467
@@ -256,6 +256,7 @@ See:
 - [[http://kb.iu.edu/data/abde.html][In Emacs how can I change tab sizes?]]
 * History
 
+ - 05-Dec-2012 ::  Added support for new ergoemacs-mode. Also provided updated bug-fix for indent-region (Matthew L. Fidler)
  - 19-Nov-2012 ::  Bug fix for aligning parenthetical region when a yasnippet is active (It messes up yasnippet expansions.) (Matthew L. Fidler)
  - 12-Nov-2012 ::  Bug fix for overflows and NaNs (Matthew L. Fidler)
  - 17-Oct-2012 ::  Bug fix for yanking in org-mode.  (Matthew L. Fidler)
@@ -381,7 +382,43 @@ See:
  - 07-Nov-2010 ::  Bug fix where backspace on indented region stopped working.Added TextMate (Matthew L. Fidler)
  - 07-Nov-2010 ::  Another small bug fix. (Matthew L. Fidler)
  - 07-Nov-2010 ::  Added bugfix and also allow movement on blank lines to be automatically indented to the correct position.  (Matthew L. Fidler)
- - 06-Nov-2010 ::  Initial release.  (Matthew L. Fidler)*Auto indentation on moving cursor to blank lines.
+ - 06-Nov-2010 ::  Initial release.  (Matthew L. Fidler)* Functions
+** Interactive Functions
+
+** Internal Functions
+* Variables
+** Customizable Variables
+
+*** auto-indent-after-yank-hook
+Hooks to run after auto-indent's yank.  The arguments sent to the function should be the two points in the yank.
+
+*** auto-indent-alternate-return-function-for-end-of-line-then-newline
+Defines an alternate return function smart returns.
+This allows a different function to take over for the
+end-of-line-then newline.  This is useful in =R-mode=, where you can
+make this send the current line to the R buffer, if you wish.
+
+*** auto-indent-assign-indent-level
+Indent level assigned when an indent-level variable is found.
+
+*** auto-indent-assign-indent-level-variables
+Attempt to assign =auto-indent-known-indent-level-variables= as local variables.
+If the major mode has =major-mode-indent-level=, =major-indent-level=, =major-mode-basic-offset=, or
+=major-basic-offset= then attempt to set that variable as well.
+
+*** auto-indent-backward-delete-char-behavior
+Backspace behavior when =auto-indent-mode= is enabled.
+Based on =backward-delete-char-untabify-method=
+
+Currently, this can be:
+
+- =untabify= -- turn a tab to many spaces, then delete one space;
+- =hungry= -- delete all whitespace, both tabs and spaces;
+- =all= -- delete all whitespace, including tabs, spaces and newlines;
+- nil -- just delete one character.
+
+*** auto-indent-blank-lines-on-move
+*Auto indentation on moving cursor to blank lines.
 
 *** auto-indent-current-pairs
  - Automatically indent the current parenthetical statement.
@@ -507,6 +544,9 @@ Fixes org-based
 *** auto-indent-fix-org-backspace
 Fixes =org-backspace= to use =auto-indent-backward-delete-char-behavior= for =org-mode= buffers.
 
+*** auto-indent-fix-org-move-beginning-of-line
+Fixes =move-beginning-of-line= in =org-mode= when in source blocks to follow =auto-indent-mode=.
+
 *** auto-indent-fix-org-return
 Allows newline and indent behavior in source code blocks in org-mode.
 
@@ -629,24 +669,12 @@ for your needs.
 
 It is useful when using this option to have some sort of autopairing on.
 
-*** auto-indent-next-pair-timer-interval
+*** auto-indent-next-pair-timer-geo-mean
 Number of seconds before the observed parenthetical statement is indented.
 The faster the value, the slower Emacs responsiveness but the
 faster Emacs indents the region.  The slower the value, the
 faster Emacs responds.  This should be changed dynamically by
-typing with =auto-indent-next-pair-timer-interval-addition=.  The
-maximum that a particular mode can delay the timer is given by
-=auto-indent-next-pair-timer-interval-max=.
-
-*** auto-indent-next-pair-timer-interval-addition
-If the indent operation for a file takes longer than the specified idle timer, grow that timer by this number for a particular mode.
-
-*** auto-indent-next-pair-timer-interval-max
-Maximum number seconds that auto-indent-mode will grow a parenthetical statement.
-If this is less than or equal to zero, these will be no limit.
-
-*** auto-indent-next-pairt-timer-interval-do-not-grow
-If true, do not magically grow the mode-based indent time for a region.
+to the geometric mean of rate to indent a single line.
 
 *** auto-indent-on-save-file
  - Auto Indent on visit file.
@@ -692,238 +720,6 @@ Defines where the pair region begins.
 
 *** auto-indent-pairs-end
 Defines where the pair region ends.
-* Functions
-** Interactive Functions
-
-*** auto-indent-deactivate-advices
-=(auto-indent-deactivate-advices)=
-
-Deactivate Advices for =auto-indent-mode=.
-
-*** auto-indent-eol-char-newline
-It is bound to <M-S-return>.
-
-=(auto-indent-eol-char-newline)=
-
-Auto-indent function for =end-of-line=, insert =auto-indent-eol-char=, and then newline.
-
-*** auto-indent-eol-newline
-It is bound to <M-return>.
-
-=(auto-indent-eol-newline)=
-
-Auto-indent function for =end-of-line= and then newline.
-
-*** auto-indent-minor-mode-on
-=(auto-indent-minor-mode-on)=
-
-Turn on auto-indent minor mode.
-
-*** auto-indent-whole-buffer
-=(auto-indent-whole-buffer &optional SAVE)=
-
-Auto-indent whole buffer and untabify it.
-
-If SAVE is specified, save the buffer after indenting the entire
-buffer.
-
-** Internal Functions
-
-*** auto-indent-add-to-alist
-=(auto-indent-add-to-alist ALIST-VAR ELT-CONS &optional NO-REPLACE)=
-
-Add to the value of ALIST-VAR an element ELT-CONS if it isn't there yet.
-If an element with the same car as the car of ELT-CONS is already present,
-replace it with ELT-CONS unless NO-REPLACE is non-nil; if a matching
-element is not already present, add ELT-CONS to the front of the alist.
-The test for presence of the car of ELT-CONS is done with =equal=.
-
-*** auto-indent-bolp
-=(auto-indent-bolp)=
-
-Return t if point is at bol respecting =auto-indent-use-text-boundaries=.
-
-*** auto-indent-deindent-last-kill
-=(auto-indent-deindent-last-kill)=
-
-Strips out indentation in the last kill.
-
-*** auto-indent-eolp
-=(auto-indent-eolp)=
-
-Return t if point is at eol respecting =auto-indent-use-text-boundaries=.
-
-*** auto-indent-file-when-save
-=(auto-indent-file-when-save)=
-
-Auto-indent file when save.
-
-*** auto-indent-file-when-visit
-=(auto-indent-file-when-visit)=
-
-auto-indent file when visit.
-
-*** auto-indent-handle-end-of-line
-=(auto-indent-handle-end-of-line LST &optional ADD)=
-
-Handle end of line operations.
-
-LST is the list of regular expressions to consider.
-
-ADD lets =auto-indent-mode= know that it should add a space instead.
-
-*** auto-indent-is-bs-key-p
-=(auto-indent-is-bs-key-p &optional COMMAND)=
-
-Determines if the backspace key was =this-command= or COMMAND.
-
-*** auto-indent-is-del-key-p
-=(auto-indent-is-del-key-p &optional COMMAND)=
-
-Determines if the delete key was =this-command= or COMMAND.
-
-This is based on standards for Viper, ErgoEmacs and standard Emacs
-
-*** auto-indent-is-kill-line-p
-=(auto-indent-is-kill-line-p &optional COMMAND)=
-
-Determines if the =kill-line= was either =this-command= or COMMAND.
-
-This is based on standards for Viper, ErgoEmacs and standard
-Emacs
-
-*** auto-indent-is-kill-region-p
-=(auto-indent-is-kill-region-p &optional COMMAND)=
-
-Determines if the kill region/cut was =this-command= or COMMAND.
-
-This is based on standards for viper, ergoemacs and standard Emacs.
-
-*** auto-indent-is-kill-ring-save-p
-=(auto-indent-is-kill-ring-save-p &optional COMMAND)=
-
-Determines if =kill-ring-save= was called in =this-command= or COMMAND.
-
-This is based on standards for viper, ergoemacs and standard Emacs.
-
-*** auto-indent-is-prog-mode-p
-=(auto-indent-is-prog-mode-p)=
-
-Determines if this mode is a programming mode.
-
-*** auto-indent-is-yank-p
-=(auto-indent-is-yank-p &optional COMMAND)=
-
-Test if the =this-command= or COMMAND was a yank.
-
-*** auto-indent-mode-post-command-hook
-=(auto-indent-mode-post-command-hook)=
-
-Post-command hook for =auto-indent-mode=.
-
-Allows auto-indent-mode to go to the right place when moving
-around and the whitespace was deleted from the line.
-
-*** auto-indent-mode-post-command-hook-last
-=(auto-indent-mode-post-command-hook-last)=
-
-Last =post-command-hook= run.
-
-Last hook run to take care of auto-indenting that needs to be
-performed after all other post-command hooks have run (like sexp
-auto-indenting)
-
-*** auto-indent-mode-pre-command-hook
-=(auto-indent-mode-pre-command-hook)=
-
-Hook for =auto-indent-mode= to tell if the point has been moved.
-
-*** auto-indent-original-binding
-=(auto-indent-original-binding KEY)=
-
-Gets the original key binding for a specified KEY.
-
-*** auto-indent-par-region
-=(auto-indent-par-region)=
-
-Indent a parenthetical region (based on a timer).
-
-*** auto-indent-par-region-interval
-=(auto-indent-par-region-interval &optional INTERVAL DIV)=
-
-Gets the interval based on =auto-indent-next-pair-timer-geo-mean=.
-
-*** auto-indent-par-region-interval-update
-=(auto-indent-par-region-interval-update INTERVAL)=
-
-Updates =auto-indent-next-pair-timer-geo-mean=
-
-*** auto-indent-point-inside-pairs-p
-=(auto-indent-point-inside-pairs-p)=
-
-Is point inside any pairs?
-
-*** auto-indent-remove-advice-p
-=(auto-indent-remove-advice-p &optional COMMAND)=
-
-Should the advice be removed?
-
-This is based on either the current command (=this-command=) or
-the provided COMMAND.  Removes advice if the function called is
-actually an auto-indent function OR it should be disabled in this
-mode.
-
-*** auto-indent-save-par-region-interval
-=(auto-indent-save-par-region-interval)=
-
-Saves =auto-indent-next-pair-timer-geo-mean=.
-
-*** auto-indent-setup-map
-=(auto-indent-setup-map)=
-
- - Set up minor mode map.
-
-*** auto-indent-turn-on-org-indent
-=(auto-indent-turn-on-org-indent)=
-
-Turn on org-indent.
-
-*** auto-indent-yank-engine
-=(auto-indent-yank-engine)=
-
-Engine for the auto-indent yank functions/advices.
-* Variables
-** Customizable Variables
-
-*** auto-indent-after-yank-hook
-Hooks to run after auto-indent's yank.  The arguments sent to the function should be the two points in the yank.
-
-*** auto-indent-alternate-return-function-for-end-of-line-then-newline
-Defines an alternate return function smart returns.
-This allows a different function to take over for the
-end-of-line-then newline.  This is useful in =R-mode=, where you can
-make this send the current line to the R buffer, if you wish.
-
-*** auto-indent-assign-indent-level
-Indent level assigned when an indent-level variable is found.
-
-*** auto-indent-assign-indent-level-variables
-Attempt to assign =auto-indent-known-indent-level-variables= as local variables.
-If the major mode has =major-mode-indent-level=, =major-indent-level=, =major-mode-basic-offset=, or
-=major-basic-offset= then attempt to set that variable as well.
-
-*** auto-indent-backward-delete-char-behavior
-Backspace behavior when =auto-indent-mode= is enabled.
-Based on =backward-delete-char-untabify-method=
-
-Currently, this can be:
-
-- =untabify= -- turn a tab to many spaces, then delete one space;
-- =hungry= -- delete all whitespace, both tabs and spaces;
-- =all= -- delete all whitespace, including tabs, spaces and newlines;
-- nil -- just delete one character.
-
-*** auto-indent-blank-lines-on-move
 *Auto indentation on moving cursor to blank lines.
 
 *** auto-indent-current-pairs

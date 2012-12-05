@@ -27,7 +27,7 @@ Matthew L. Fidler ## Library Information @emph{auto-indent-mode.el} --- Auto ind
 @item
 @strong{Created} -- Sat Nov 6 11:02:07 2010 (-0500)
 @item
-@strong{Version} -- 0.86
+@strong{Version} -- 0.88
 @item
 @strong{Last-Updated} -- Tue Aug 21 13:08:42 2012 (-0500)
 @item
@@ -49,6 +49,7 @@ Matthew L. Fidler ## Library Information @emph{auto-indent-mode.el} --- Auto ind
 * Notes about autopair-mode and yasnippet compatibility::
 * Making certain modes perform tasks on paste/yank::
 * Auto-indent and org-mode::
+* Auto indentation on moving cursor to blank lines::
 @end menu
 
 @node Possible Dependencies
@@ -217,6 +218,8 @@ See:
 @item
 @uref{http:__kb.iu.edu_data_abde.html,In Emacs how can I change tab sizes?} ## History
 
+@item
+@strong{05-Dec-2012} -- Added support for new ergoemacs-mode. Also provided updated bug-fix for indent-region (Matthew L. Fidler)
 @item
 @strong{19-Nov-2012} -- Bug fix for aligning parenthetical region when a yasnippet is active (It messes up yasnippet expansions.) (Matthew L. Fidler)
 @item
@@ -413,7 +416,16 @@ Change auto-indent-indentation-function to auto-indent-newline-function (Matthew
 
 @end itemize
 
-Last-Updated: Thu Dec 2 13:02:02 2010 (-0600) #411 (Matthew L. Fidler) Made ignoring of modes with indent-relative and indent-relative-maybe apply to indenting returns as well. - @strong{02-Dec-2010} -- Removed auto-indent on paste/yank for modes with indent-relative and indent-relative-maybe. This has annoyed me forever. (Matthew L. Fidler) - @strong{02-Dec-2010} -- Added an advice to delete-char. When deleting a new-line character@comma{} shrink white-spaces afterward. (Matthew L. Fidler) - @strong{02-Dec-2010} -- Speed enhancement by checking for yasnippets only on indentation. (Matthew L. Fidler) - @strong{29-Nov-2010} -- Bug fix to allow authotkey files to save. (Matthew L. Fidler) - @strong{29-Nov-2010} -- Change auto-indent-on-save to be disabled by default. (Matthew L. Fidler) - @strong{22-Nov-2010} -- Yasnippet bug-fix. (Matthew L. Fidler) - @strong{22-Nov-2010} -- auto-indent bug fix for save on save buffer hooks. (Matthew L. Fidler) - @strong{16-Nov-2010} -- Added conf-windows-mode to ignored modes. (Matthew L. Fidler) - @strong{15-Nov-2010} -- Bugfix for deletion of whitespace (Matthew L. Fidler) - @strong{15-Nov-2010} -- Bugfix for post-command-hook. (Matthew L. Fidler) - @strong{15-Nov-2010} -- Added diff-mode to excluded modes for auto-indentaion. (Matthew L. Fidler) - @strong{15-Nov-2010} -- Added fundamental mode to excluded modes for auto-indentation. (Matthew L. Fidler) - @strong{13-Nov-2010} -- Bug fix try #3 (Matthew L. Fidler) - @strong{13-Nov-2010} -- Anothe bug-fix for yasnippet. (Matthew L. Fidler) - @strong{13-Nov-2010} -- Bug fix for auto-indent-mode. Now it checks to make sure that @code{last-command-event} is non-nil. (Matthew L. Fidler) - @strong{11-Nov-2010} -- Put back processes in. Made the return key handled by pre and post-command-hooks. (Matthew L. Fidler) - @strong{11-Nov-2010} -- Took out processes such as @strong{R} or @strong{eshell} (Matthew L. Fidler) - @strong{09-Nov-2010} -- Bug fix when interacting with the SVN version of yasnippet. It will not perform the line indentation when Yasnippet is running. (Matthew L. Fidler) - @strong{09-Nov-2010} -- Made sure that the auto-paste indentation doesn't work in minibuffer. (Matthew L. Fidler) - @strong{09-Nov-2010} -- When @code{auto-indent-pre-command-hook} is inactivated by some means@comma{} add it back. (Matthew L. Fidler) - @strong{09-Nov-2010} -- Added snippet-mode to excluded modes. Also turned off the kill-line by default. (Matthew L. Fidler) - @strong{07-Nov-2010} -- Added the possibility of TextMate type returns. (Matthew L. Fidler) - @strong{07-Nov-2010} -- Bug fix where backspace on indented region stopped working.Added TextMate (Matthew L. Fidler) - @strong{07-Nov-2010} -- Another small bug fix. (Matthew L. Fidler) - @strong{07-Nov-2010} -- Added bugfix and also allow movement on blank lines to be automatically indented to the correct position. (Matthew L. Fidler) - @strong{06-Nov-2010} -- Initial release. (Matthew L. Fidler)*Auto indentation on moving cursor to blank lines.
+Last-Updated: Thu Dec 2 13:02:02 2010 (-0600) #411 (Matthew L. Fidler) Made ignoring of modes with indent-relative and indent-relative-maybe apply to indenting returns as well. - @strong{02-Dec-2010} -- Removed auto-indent on paste/yank for modes with indent-relative and indent-relative-maybe. This has annoyed me forever. (Matthew L. Fidler) - @strong{02-Dec-2010} -- Added an advice to delete-char. When deleting a new-line character@comma{} shrink white-spaces afterward. (Matthew L. Fidler) - @strong{02-Dec-2010} -- Speed enhancement by checking for yasnippets only on indentation. (Matthew L. Fidler) - @strong{29-Nov-2010} -- Bug fix to allow authotkey files to save. (Matthew L. Fidler) - @strong{29-Nov-2010} -- Change auto-indent-on-save to be disabled by default. (Matthew L. Fidler) - @strong{22-Nov-2010} -- Yasnippet bug-fix. (Matthew L. Fidler) - @strong{22-Nov-2010} -- auto-indent bug fix for save on save buffer hooks. (Matthew L. Fidler) - @strong{16-Nov-2010} -- Added conf-windows-mode to ignored modes. (Matthew L. Fidler) - @strong{15-Nov-2010} -- Bugfix for deletion of whitespace (Matthew L. Fidler) - @strong{15-Nov-2010} -- Bugfix for post-command-hook. (Matthew L. Fidler) - @strong{15-Nov-2010} -- Added diff-mode to excluded modes for auto-indentaion. (Matthew L. Fidler) - @strong{15-Nov-2010} -- Added fundamental mode to excluded modes for auto-indentation. (Matthew L. Fidler) - @strong{13-Nov-2010} -- Bug fix try #3 (Matthew L. Fidler) - @strong{13-Nov-2010} -- Anothe bug-fix for yasnippet. (Matthew L. Fidler) - @strong{13-Nov-2010} -- Bug fix for auto-indent-mode. Now it checks to make sure that @code{last-command-event} is non-nil. (Matthew L. Fidler) - @strong{11-Nov-2010} -- Put back processes in. Made the return key handled by pre and post-command-hooks. (Matthew L. Fidler) - @strong{11-Nov-2010} -- Took out processes such as @strong{R} or @strong{eshell} (Matthew L. Fidler) - @strong{09-Nov-2010} -- Bug fix when interacting with the SVN version of yasnippet. It will not perform the line indentation when Yasnippet is running. (Matthew L. Fidler) - @strong{09-Nov-2010} -- Made sure that the auto-paste indentation doesn't work in minibuffer. (Matthew L. Fidler) - @strong{09-Nov-2010} -- When @code{auto-indent-pre-command-hook} is inactivated by some means@comma{} add it back. (Matthew L. Fidler) - @strong{09-Nov-2010} -- Added snippet-mode to excluded modes. Also turned off the kill-line by default. (Matthew L. Fidler) - @strong{07-Nov-2010} -- Added the possibility of TextMate type returns. (Matthew L. Fidler) - @strong{07-Nov-2010} -- Bug fix where backspace on indented region stopped working.Added TextMate (Matthew L. Fidler) - @strong{07-Nov-2010} -- Another small bug fix. (Matthew L. Fidler) - @strong{07-Nov-2010} -- Added bugfix and also allow movement on blank lines to be automatically indented to the correct position. (Matthew L. Fidler) - @strong{06-Nov-2010} -- Initial release. (Matthew L. Fidler)* Functions ### Interactive Functions
+@menu
+* Internal Functions::
+@end menu
+
+@node Internal Functions
+@subsection Internal Functions
+
+@node Auto indentation on moving cursor to blank lines
+@section Auto indentation on moving cursor to blank lines.
 @menu
 * Internal Variables::
 * Internal Variables::
@@ -701,21 +713,9 @@ This will slow down your computation@comma{} so if you use it make sure that the
 
 It is useful when using this option to have some sort of autopairing on.
 
-@node auto-indent-next-pair-timer-interval
-@subsubsection auto-indent-next-pair-timer-interval
-Number of seconds before the observed parenthetical statement is indented. The faster the value@comma{} the slower Emacs responsiveness but the faster Emacs indents the region. The slower the value@comma{} the faster Emacs responds. This should be changed dynamically by typing with @code{auto-indent-next-pair-timer-interval-addition}. The maximum that a particular mode can delay the timer is given by @code{auto-indent-next-pair-timer-interval-max}.
-
-@node auto-indent-next-pair-timer-interval-addition
-@subsubsection auto-indent-next-pair-timer-interval-addition
-If the indent operation for a file takes longer than the specified idle timer@comma{} grow that timer by this number for a particular mode.
-
-@node auto-indent-next-pair-timer-interval-max
-@subsubsection auto-indent-next-pair-timer-interval-max
-Maximum number seconds that auto-indent-mode will grow a parenthetical statement. If this is less than or equal to zero@comma{} these will be no limit.
-
-@node auto-indent-next-pairt-timer-interval-do-not-grow
-@subsubsection auto-indent-next-pairt-timer-interval-do-not-grow
-If true@comma{} do not magically grow the mode-based indent time for a region.
+@node auto-indent-next-pair-timer-geo-mean
+@subsubsection auto-indent-next-pair-timer-geo-mean
+Number of seconds before the observed parenthetical statement is indented. The faster the value@comma{} the slower Emacs responsiveness but the faster Emacs indents the region. The slower the value@comma{} the faster Emacs responds. This should be changed dynamically by to the geometric mean of rate to indent a single line.
 
 @node auto-indent-on-save-file
 @subsubsection auto-indent-on-save-file
@@ -794,6 +794,7 @@ When killing lines@comma{} if point is before any text@comma{} act as if point i
 * auto-indent-eol-char::
 * auto-indent-fix-org-auto-fill::
 * auto-indent-fix-org-backspace::
+* auto-indent-fix-org-move-beginning-of-line::
 * auto-indent-fix-org-return::
 * auto-indent-fix-org-yank::
 * auto-indent-force-interactive-advices::
@@ -810,10 +811,7 @@ When killing lines@comma{} if point is before any text@comma{} act as if point i
 * auto-indent-mode-untabify-on-yank-or-paste::
 * auto-indent-newline-function::
 * auto-indent-next-pair::
-* auto-indent-next-pair-timer-interval::
-* auto-indent-next-pair-timer-interval-addition::
-* auto-indent-next-pair-timer-interval-max::
-* auto-indent-next-pairt-timer-interval-do-not-grow::
+* auto-indent-next-pair-timer-geo-mean::
 * auto-indent-on-save-file::
 * auto-indent-on-visit-file::
 * auto-indent-on-visit-pretend-nothing-changed::
@@ -986,6 +984,10 @@ Fixes org-based auto-fill-function (i.e. @code{org-auto-fill-function}) to only 
 @subsubsection auto-indent-fix-org-backspace
 Fixes @code{org-backspace} to use @code{auto-indent-backward-delete-char-behavior} for @code{org-mode} buffers.
 
+@node auto-indent-fix-org-move-beginning-of-line
+@subsubsection auto-indent-fix-org-move-beginning-of-line
+Fixes @code{move-beginning-of-line} in @code{org-mode} when in source blocks to follow @code{auto-indent-mode}.
+
 @node auto-indent-fix-org-return
 @subsubsection auto-indent-fix-org-return
 Allows newline and indent behavior in source code blocks in org-mode.
@@ -1120,21 +1122,9 @@ This will slow down your computation@comma{} so if you use it make sure that the
 
 It is useful when using this option to have some sort of autopairing on.
 
-@node auto-indent-next-pair-timer-interval
-@subsubsection auto-indent-next-pair-timer-interval
-Number of seconds before the observed parenthetical statement is indented. The faster the value@comma{} the slower Emacs responsiveness but the faster Emacs indents the region. The slower the value@comma{} the faster Emacs responds. This should be changed dynamically by typing with @code{auto-indent-next-pair-timer-interval-addition}. The maximum that a particular mode can delay the timer is given by @code{auto-indent-next-pair-timer-interval-max}.
-
-@node auto-indent-next-pair-timer-interval-addition
-@subsubsection auto-indent-next-pair-timer-interval-addition
-If the indent operation for a file takes longer than the specified idle timer@comma{} grow that timer by this number for a particular mode.
-
-@node auto-indent-next-pair-timer-interval-max
-@subsubsection auto-indent-next-pair-timer-interval-max
-Maximum number seconds that auto-indent-mode will grow a parenthetical statement. If this is less than or equal to zero@comma{} these will be no limit.
-
-@node auto-indent-next-pairt-timer-interval-do-not-grow
-@subsubsection auto-indent-next-pairt-timer-interval-do-not-grow
-If true@comma{} do not magically grow the mode-based indent time for a region.
+@node auto-indent-next-pair-timer-geo-mean
+@subsubsection auto-indent-next-pair-timer-geo-mean
+Number of seconds before the observed parenthetical statement is indented. The faster the value@comma{} the slower Emacs responsiveness but the faster Emacs indents the region. The slower the value@comma{} the faster Emacs responds. This should be changed dynamically by to the geometric mean of rate to indent a single line.
 
 @node auto-indent-on-save-file
 @subsubsection auto-indent-on-save-file
