@@ -3281,9 +3281,13 @@ http://www.emacswiki.org/emacs/AutoIndentation
 (defadvice org-return (around auto-indent-mode activate)
   "Fixes org-return to press tab after a newline when `auto-indent-fix-org-return' is true"
   ad-do-it
-  (let ((org-src-tab-acts-natively t))
-    (when auto-indent-fix-org-return
-      (org-src-native-tab-command-maybe))))
+  (when auto-indent-fix-org-return
+    (let ((bh (org-babel-where-is-src-block-head)))
+      (when bh
+        (unless (= (point-at-bol) bh)
+          ;; Indent line
+          (org-babel-do-in-edit-buffer
+           (indent-according-to-mode)))))))
 
 (defadvice org-delete-backward-char (around auto-indent-mode activate)
   "Fixes org-backspace to use `auto-indent-delete-backward-char'"
