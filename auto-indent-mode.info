@@ -35,7 +35,7 @@ indent Minor mode
 
    * *Created* - Sat Nov 6 11:02:07 2010 (-0500)
 
-   * *Version* - 0.90
+   * *Version* - 0.91
 
    * *Last-Updated* - Tue Aug 21 13:08:42 2012 (-0500)
 
@@ -1053,18 +1053,9 @@ needs.
 It is useful when using this option to have some sort of autopairing on.
 
 
-File: auto-indent-mode.info,  Node: auto-indent-next-pair-throttle
-
-1.6.0.35 auto-indent-next-pair-throttle
-.......................................
-
-Throttle the max time for indent to this number. If nil, no throttling
-occurs?
-
-
 File: auto-indent-mode.info,  Node: auto-indent-next-pair-timer-geo-mean
 
-1.6.0.36 auto-indent-next-pair-timer-geo-mean
+1.6.0.35 auto-indent-next-pair-timer-geo-mean
 .............................................
 
 Number of seconds before the observed parenthetical statement is
@@ -1076,7 +1067,7 @@ of rate to indent a single line.
 
 File: auto-indent-mode.info,  Node: auto-indent-on-save-file
 
-1.6.0.37 auto-indent-on-save-file
+1.6.0.36 auto-indent-on-save-file
 .................................
 
    * Auto Indent on visit file.
@@ -1084,7 +1075,7 @@ File: auto-indent-mode.info,  Node: auto-indent-on-save-file
 
 File: auto-indent-mode.info,  Node: auto-indent-on-visit-file
 
-1.6.0.38 auto-indent-on-visit-file
+1.6.0.37 auto-indent-on-visit-file
 ..................................
 
    * Auto Indent file upon visit.
@@ -1092,7 +1083,7 @@ File: auto-indent-mode.info,  Node: auto-indent-on-visit-file
 
 File: auto-indent-mode.info,  Node: auto-indent-on-visit-pretend-nothing-changed
 
-1.6.0.39 auto-indent-on-visit-pretend-nothing-changed
+1.6.0.38 auto-indent-on-visit-pretend-nothing-changed
 .....................................................
 
    * When modifying the file on visit, pretend nothing changed.
@@ -1100,23 +1091,15 @@ File: auto-indent-mode.info,  Node: auto-indent-on-visit-pretend-nothing-changed
 
 File: auto-indent-mode.info,  Node: auto-indent-on-yank-or-paste
 
-1.6.0.40 auto-indent-on-yank-or-paste
+1.6.0.39 auto-indent-on-yank-or-paste
 .....................................
 
    * Indent pasted or yanked region.
 
 
-File: auto-indent-mode.info,  Node: auto-indent-save-next-pair
-
-1.6.0.41 auto-indent-save-next-pair
-...................................
-
-Saves the knowledge of next-pair timings when emacs exits.
-
-
 File: auto-indent-mode.info,  Node: auto-indent-start-org-indent
 
-1.6.0.42 auto-indent-start-org-indent
+1.6.0.40 auto-indent-start-org-indent
 .....................................
 
 Starts `org-indent-mode' when in org-mode.
@@ -1124,7 +1107,7 @@ Starts `org-indent-mode' when in org-mode.
 
 File: auto-indent-mode.info,  Node: auto-indent-untabify-on-save-file
 
-1.6.0.43 auto-indent-untabify-on-save-file
+1.6.0.41 auto-indent-untabify-on-save-file
 ..........................................
 
    * Change tabs to spaces on file-save.
@@ -1132,7 +1115,7 @@ File: auto-indent-mode.info,  Node: auto-indent-untabify-on-save-file
 
 File: auto-indent-mode.info,  Node: auto-indent-untabify-on-visit-file
 
-1.6.0.44 auto-indent-untabify-on-visit-file
+1.6.0.42 auto-indent-untabify-on-visit-file
 ...........................................
 
    * Automatically convert tabs into spaces when visiting a file.
@@ -1140,7 +1123,7 @@ File: auto-indent-mode.info,  Node: auto-indent-untabify-on-visit-file
 
 File: auto-indent-mode.info,  Node: auto-indent-use-text-boundaries
 
-1.6.0.45 auto-indent-use-text-boundaries
+1.6.0.43 auto-indent-use-text-boundaries
 ........................................
 
 Use text boundaries when killing lines.
