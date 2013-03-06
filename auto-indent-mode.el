@@ -3953,7 +3953,9 @@ the provided COMMAND.  Removes advice if the function called is
 actually an auto-indent function OR it should be disabled in this
 mode."
   (or (and (memq major-mode auto-indent-disabled-modes-list)) (minibufferp)
-      (string-match "^auto-indent" (symbol-name (or command this-command)))))
+      (string-match "^auto-indent" (symbol-name (or command
+                                                    (and (symbolp this-command)
+                                                         this-command))))))
 
 (defun auto-indent-is-yank-p (&optional command)
   "Test if the `this-command' or COMMAND was a yank."
