@@ -35,7 +35,7 @@ indent Minor mode
 
    * *Created* - Sat Nov 6 11:02:07 2010 (-0500)
 
-   * *Version* - 0.91
+   * *Version* - 0.92
 
    * *Last-Updated* - Tue Aug 21 13:08:42 2012 (-0500)
 
@@ -57,6 +57,7 @@ indent Minor mode
 * Notes about autopair-mode and yasnippet compatibility::
 * Making certain modes perform tasks on paste/yank::
 * Auto-indent and org-mode::
+* Auto indentation on moving cursor to blank lines::
 
 
 File: auto-indent-mode.info,  Node: Possible Dependencies,  Next: About auto-indent-mode,  Up: Auto-Indent-Mode
@@ -245,7 +246,7 @@ _
 (1)
 
 
-File: auto-indent-mode.info,  Node: Auto-indent and org-mode,  Prev: Making certain modes perform tasks on paste/yank,  Up: Auto-Indent-Mode
+File: auto-indent-mode.info,  Node: Auto-indent and org-mode,  Next: Auto indentation on moving cursor to blank lines,  Prev: Making certain modes perform tasks on paste/yank,  Up: Auto-Indent-Mode
 
 1.6 Auto-indent and org-mode
 ============================
@@ -289,6 +290,9 @@ See:
 
    * In Emacs how can I change tab sizes?
      (http:__kb.iu.edu_data_abde.html) ## History
+
+   * *13-Mar-2013* - Push new version. I believe that the strange
+     duplication issue is fixed. (Matthew L. Fidler)
 
    * *13-Mar-2013* - Attempt to fix issue #11 (Matthew L. Fidler)
 
@@ -618,22 +622,87 @@ where backspace on indented region stopped working.Added TextMate
 L. Fidler) - *07-Nov-2010* - Added bugfix and also allow movement on
 blank lines to be automatically indented to the correct position.
 (Matthew L. Fidler) - *06-Nov-2010* - Initial release. (Matthew L.
-Fidler)*Auto indentation on moving cursor to blank lines.
+Fidler)* Variables ### Customizable Variables
+
+
+File: auto-indent-mode.info,  Node: auto-indent-after-yank-hook
+
+1.6.0.1 auto-indent-after-yank-hook
+...................................
+
+Hooks to run after auto-indent's yank. The arguments sent to the
+function should be the two points in the yank.
+
+
+File: auto-indent-mode.info,  Node: auto-indent-alternate-return-function-for-end-of-line-then-newline
+
+1.6.0.2 auto-indent-alternate-return-function-for-end-of-line-then-newline
+..........................................................................
+
+Defines an alternate return function smart returns. This allows a
+different function to take over for the end-of-line-then newline. This
+is useful in `R-mode', where you can make this send the current line to
+the R buffer, if you wish.
+
+
+File: auto-indent-mode.info,  Node: auto-indent-assign-indent-level
+
+1.6.0.3 auto-indent-assign-indent-level
+.......................................
+
+Indent level assigned when an indent-level variable is found.
+
+
+File: auto-indent-mode.info,  Node: auto-indent-assign-indent-level-variables
+
+1.6.0.4 auto-indent-assign-indent-level-variables
+.................................................
+
+Attempt to assign `auto-indent-known-indent-level-variables' as local
+variables. If the major mode has `major-mode-indent-level',
+`major-indent-level', `major-mode-basic-offset', or
+`major-basic-offset' then attempt to set that variable as well.
+
+
+File: auto-indent-mode.info,  Node: auto-indent-backward-delete-char-behavior
+
+1.6.0.5 auto-indent-backward-delete-char-behavior
+.................................................
+
+Backspace behavior when `auto-indent-mode' is enabled. Based on
+`backward-delete-char-untabify-method'
+
+Currently, this can be:
+
+   * `untabify' - turn a tab to many spaces, then delete one space;
+
+   * `hungry' - delete all whitespace, both tabs and spaces;
+
+   * `all' - delete all whitespace, including tabs, spaces and newlines;
+
+   * nil - just delete one character.
+
+
+File: auto-indent-mode.info,  Node: auto-indent-blank-lines-on-move
+
+1.6.0.6 auto-indent-blank-lines-on-move
+.......................................
+
+
+File: auto-indent-mode.info,  Node: Auto indentation on moving cursor to blank lines,  Prev: Auto-indent and org-mode,  Up: Auto-Indent-Mode
+
+1.7 Auto indentation on moving cursor to blank lines.
+=====================================================
 
 * Menu:
 
-* Internal Variables::
-* Internal Variables::
-* Internal Variables::
-* Internal Variables::
-* Internal Variables::
 * Internal Variables::
 * Internal Variables::
 
 
 File: auto-indent-mode.info,  Node: auto-indent-current-pairs
 
-1.6.0.1 auto-indent-current-pairs
+1.7.0.1 auto-indent-current-pairs
 .................................
 
    * Automatically indent the current parenthetical statement.
@@ -641,7 +710,7 @@ File: auto-indent-mode.info,  Node: auto-indent-current-pairs
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-add-extra-spaces
 
-1.6.0.2 auto-indent-delete-line-char-add-extra-spaces
+1.7.0.2 auto-indent-delete-line-char-add-extra-spaces
 .....................................................
 
    * When deleting a return, add a space (when appropriate) between the
@@ -664,7 +733,7 @@ This is controlled by the regular expressions in
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs
 
-1.6.0.3 auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs
+1.7.0.3 auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs
 ....................................................................
 
    * Regular expressions for use with
@@ -674,7 +743,7 @@ File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-add-extra-space
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-add-extra-spaces-text-mode-regs
 
-1.6.0.4 auto-indent-delete-line-char-add-extra-spaces-text-mode-regs
+1.7.0.4 auto-indent-delete-line-char-add-extra-spaces-text-mode-regs
 ....................................................................
 
    * Regular expressions for use with
@@ -684,7 +753,7 @@ File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-add-extra-space
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-remove-extra-spaces
 
-1.6.0.5 auto-indent-delete-line-char-remove-extra-spaces
+1.7.0.5 auto-indent-delete-line-char-remove-extra-spaces
 ........................................................
 
 When deleting a return, delete any extra spaces between the newly
@@ -693,7 +762,7 @@ joined lines.
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-remove-last-space
 
-1.6.0.6 auto-indent-delete-line-char-remove-last-space
+1.7.0.6 auto-indent-delete-line-char-remove-last-space
 ......................................................
 
 Remove last space when deleting a line.
@@ -730,7 +799,7 @@ defined in
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-remove-last-space-prog-mode-regs
 
-1.6.0.7 auto-indent-delete-line-char-remove-last-space-prog-mode-regs
+1.7.0.7 auto-indent-delete-line-char-remove-last-space-prog-mode-regs
 .....................................................................
 
    * Regular expressions for use with
@@ -740,7 +809,7 @@ File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-remove-last-spa
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-remove-last-space-text-mode-regs
 
-1.6.0.8 auto-indent-delete-line-char-remove-last-space-text-mode-regs
+1.7.0.8 auto-indent-delete-line-char-remove-last-space-text-mode-regs
 .....................................................................
 
 Regular expressions for use with
@@ -751,7 +820,7 @@ modes other than programming modes. This is determined by
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-trailing-whitespace-on-save-file
 
-1.6.0.9 auto-indent-delete-trailing-whitespace-on-save-file
+1.7.0.9 auto-indent-delete-trailing-whitespace-on-save-file
 ...........................................................
 
    * When saving file delete trailing whitespace.
@@ -759,7 +828,7 @@ File: auto-indent-mode.info,  Node: auto-indent-delete-trailing-whitespace-on-sa
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-trailing-whitespace-on-visit-file
 
-1.6.0.10 auto-indent-delete-trailing-whitespace-on-visit-file
+1.7.0.10 auto-indent-delete-trailing-whitespace-on-visit-file
 .............................................................
 
    * Automatically remove trailing whitespace when visiting file.
@@ -767,7 +836,7 @@ File: auto-indent-mode.info,  Node: auto-indent-delete-trailing-whitespace-on-vi
 
 File: auto-indent-mode.info,  Node: auto-indent-disabled-indent-functions
 
-1.6.0.11 auto-indent-disabled-indent-functions
+1.7.0.11 auto-indent-disabled-indent-functions
 ..............................................
 
 List of disabled indent functions.
@@ -780,7 +849,7 @@ indentation is may not specified for the current mode.
 
 File: auto-indent-mode.info,  Node: auto-indent-disabled-modes-list
 
-1.6.0.12 auto-indent-disabled-modes-list
+1.7.0.12 auto-indent-disabled-modes-list
 ........................................
 
 List of modes disabled when global `auto-indent-mode' is on.
@@ -788,7 +857,7 @@ List of modes disabled when global `auto-indent-mode' is on.
 
 File: auto-indent-mode.info,  Node: auto-indent-disabled-modes-on-save
 
-1.6.0.13 auto-indent-disabled-modes-on-save
+1.7.0.13 auto-indent-disabled-modes-on-save
 ...........................................
 
    * List of modes where `indent-region' of the whole file is ignored.
@@ -796,7 +865,7 @@ File: auto-indent-mode.info,  Node: auto-indent-disabled-modes-on-save
 
 File: auto-indent-mode.info,  Node: auto-indent-engine
 
-1.6.0.14 auto-indent-engine
+1.7.0.14 auto-indent-engine
 ...........................
 
 Type of engine to use. The possibilities are:
@@ -810,7 +879,7 @@ in some modes but may cause things such as `company-mode' or
 
 File: auto-indent-mode.info,  Node: auto-indent-eol-char
 
-1.6.0.15 auto-indent-eol-char
+1.7.0.15 auto-indent-eol-char
 .............................
 
 End of line/statement character, like C or matlab's semi-colon.
@@ -828,7 +897,7 @@ conjunction with something that pairs delimiters like `autopair-mode'.
 
 File: auto-indent-mode.info,  Node: auto-indent-fix-org-auto-fill
 
-1.6.0.16 auto-indent-fix-org-auto-fill
+1.7.0.16 auto-indent-fix-org-auto-fill
 ......................................
 
 Fixes org-based auto-fill-function (i.e. `org-auto-fill-function') to
@@ -837,7 +906,7 @@ only auto-fill for things outside of a source block.
 
 File: auto-indent-mode.info,  Node: auto-indent-fix-org-backspace
 
-1.6.0.17 auto-indent-fix-org-backspace
+1.7.0.17 auto-indent-fix-org-backspace
 ......................................
 
 Fixes `org-backspace' to use
@@ -846,7 +915,7 @@ Fixes `org-backspace' to use
 
 File: auto-indent-mode.info,  Node: auto-indent-fix-org-move-beginning-of-line
 
-1.6.0.18 auto-indent-fix-org-move-beginning-of-line
+1.7.0.18 auto-indent-fix-org-move-beginning-of-line
 ...................................................
 
 Fixes `move-beginning-of-line' in `org-mode' when in source blocks to
@@ -855,7 +924,7 @@ follow `auto-indent-mode'.
 
 File: auto-indent-mode.info,  Node: auto-indent-fix-org-return
 
-1.6.0.19 auto-indent-fix-org-return
+1.7.0.19 auto-indent-fix-org-return
 ...................................
 
 Allows newline and indent behavior in source code blocks in org-mode.
@@ -863,7 +932,7 @@ Allows newline and indent behavior in source code blocks in org-mode.
 
 File: auto-indent-mode.info,  Node: auto-indent-fix-org-yank
 
-1.6.0.20 auto-indent-fix-org-yank
+1.7.0.20 auto-indent-fix-org-yank
 .................................
 
 Allows org-mode yanks to be indented in source code blocks of org-mode.
@@ -871,7 +940,7 @@ Allows org-mode yanks to be indented in source code blocks of org-mode.
 
 File: auto-indent-mode.info,  Node: auto-indent-force-interactive-advices
 
-1.6.0.21 auto-indent-force-interactive-advices
+1.7.0.21 auto-indent-force-interactive-advices
 ..............................................
 
 Forces interactive advices.
@@ -888,7 +957,7 @@ advice.
 
 File: auto-indent-mode.info,  Node: auto-indent-home-is-beginning-of-indent
 
-1.6.0.22 auto-indent-home-is-beginning-of-indent
+1.7.0.22 auto-indent-home-is-beginning-of-indent
 ................................................
 
 The Home key, or rather the `move-beginning-of-line' function, will
@@ -899,7 +968,7 @@ the line.
 
 File: auto-indent-mode.info,  Node: auto-indent-home-is-beginning-of-indent-when-spaces-follow
 
-1.6.0.23 auto-indent-home-is-beginning-of-indent-when-spaces-follow
+1.7.0.23 auto-indent-home-is-beginning-of-indent-when-spaces-follow
 ...................................................................
 
 This is a customization for the home key.
@@ -927,7 +996,7 @@ Another home-key will chang to cursor
 
 File: auto-indent-mode.info,  Node: auto-indent-key-for-end-of-line-insert-char-then-newline
 
-1.6.0.24 auto-indent-key-for-end-of-line-insert-char-then-newline
+1.7.0.24 auto-indent-key-for-end-of-line-insert-char-then-newline
 .................................................................
 
 Key for end of line, `auto-indent-eol-char', then newline.
@@ -941,7 +1010,7 @@ that pairs delimiters like `autopair-mode'.
 
 File: auto-indent-mode.info,  Node: auto-indent-key-for-end-of-line-then-newline
 
-1.6.0.25 auto-indent-key-for-end-of-line-then-newline
+1.7.0.25 auto-indent-key-for-end-of-line-then-newline
 .....................................................
 
 Key for end of line, then newline.
@@ -954,7 +1023,7 @@ something that pairs delimiters like `autopair-mode'.
 
 File: auto-indent-mode.info,  Node: auto-indent-kill-line-at-eol
 
-1.6.0.26 auto-indent-kill-line-at-eol
+1.7.0.26 auto-indent-kill-line-at-eol
 .....................................
 
 Determines how a kill at the end of line behaves.
@@ -978,7 +1047,7 @@ You should also set the function `kill-whole-line' to do what you want.
 
 File: auto-indent-mode.info,  Node: auto-indent-kill-line-kill-region-when-active
 
-1.6.0.27 auto-indent-kill-line-kill-region-when-active
+1.7.0.27 auto-indent-kill-line-kill-region-when-active
 ......................................................
 
    * When killing lines, if region is active, kill region instead.
@@ -986,7 +1055,7 @@ File: auto-indent-mode.info,  Node: auto-indent-kill-line-kill-region-when-activ
 
 File: auto-indent-mode.info,  Node: auto-indent-kill-remove-extra-spaces
 
-1.6.0.28 auto-indent-kill-remove-extra-spaces
+1.7.0.28 auto-indent-kill-remove-extra-spaces
 .............................................
 
    * Remove indentation before killing the line or region.
@@ -994,7 +1063,7 @@ File: auto-indent-mode.info,  Node: auto-indent-kill-remove-extra-spaces
 
 File: auto-indent-mode.info,  Node: auto-indent-known-indent-level-variables
 
-1.6.0.29 auto-indent-known-indent-level-variables
+1.7.0.29 auto-indent-known-indent-level-variables
 .................................................
 
 Known indent-level-variables for major modes. Set locally when
@@ -1003,7 +1072,7 @@ auto-indent-mode initializes.
 
 File: auto-indent-mode.info,  Node: auto-indent-known-text-modes
 
-1.6.0.30 auto-indent-known-text-modes
+1.7.0.30 auto-indent-known-text-modes
 .....................................
 
    * List of auto-indent's known text-modes.
@@ -1011,7 +1080,7 @@ File: auto-indent-mode.info,  Node: auto-indent-known-text-modes
 
 File: auto-indent-mode.info,  Node: auto-indent-minor-mode-symbol
 
-1.6.0.31 auto-indent-minor-mode-symbol
+1.7.0.31 auto-indent-minor-mode-symbol
 ......................................
 
    * When true, Auto Indent puts AI on the mode line.
@@ -1019,7 +1088,7 @@ File: auto-indent-mode.info,  Node: auto-indent-minor-mode-symbol
 
 File: auto-indent-mode.info,  Node: auto-indent-mode-untabify-on-yank-or-paste
 
-1.6.0.32 auto-indent-mode-untabify-on-yank-or-paste
+1.7.0.32 auto-indent-mode-untabify-on-yank-or-paste
 ...................................................
 
    * Untabify pasted or yanked region.
@@ -1027,7 +1096,7 @@ File: auto-indent-mode.info,  Node: auto-indent-mode-untabify-on-yank-or-paste
 
 File: auto-indent-mode.info,  Node: auto-indent-newline-function
 
-1.6.0.33 auto-indent-newline-function
+1.7.0.33 auto-indent-newline-function
 .....................................
 
    * Auto indentation function for the return key.
@@ -1035,7 +1104,7 @@ File: auto-indent-mode.info,  Node: auto-indent-newline-function
 
 File: auto-indent-mode.info,  Node: auto-indent-next-pair
 
-1.6.0.34 auto-indent-next-pair
+1.7.0.34 auto-indent-next-pair
 ..............................
 
 Automatically indent the next parenthetical statement. For example in R:
@@ -1053,9 +1122,18 @@ needs.
 It is useful when using this option to have some sort of autopairing on.
 
 
+File: auto-indent-mode.info,  Node: auto-indent-next-pair-throttle
+
+1.7.0.35 auto-indent-next-pair-throttle
+.......................................
+
+Throttle the max time for indent to this number. If nil, no throttling
+occurs?
+
+
 File: auto-indent-mode.info,  Node: auto-indent-next-pair-timer-geo-mean
 
-1.6.0.35 auto-indent-next-pair-timer-geo-mean
+1.7.0.36 auto-indent-next-pair-timer-geo-mean
 .............................................
 
 Number of seconds before the observed parenthetical statement is
@@ -1067,7 +1145,7 @@ of rate to indent a single line.
 
 File: auto-indent-mode.info,  Node: auto-indent-on-save-file
 
-1.6.0.36 auto-indent-on-save-file
+1.7.0.37 auto-indent-on-save-file
 .................................
 
    * Auto Indent on visit file.
@@ -1075,7 +1153,7 @@ File: auto-indent-mode.info,  Node: auto-indent-on-save-file
 
 File: auto-indent-mode.info,  Node: auto-indent-on-visit-file
 
-1.6.0.37 auto-indent-on-visit-file
+1.7.0.38 auto-indent-on-visit-file
 ..................................
 
    * Auto Indent file upon visit.
@@ -1083,7 +1161,7 @@ File: auto-indent-mode.info,  Node: auto-indent-on-visit-file
 
 File: auto-indent-mode.info,  Node: auto-indent-on-visit-pretend-nothing-changed
 
-1.6.0.38 auto-indent-on-visit-pretend-nothing-changed
+1.7.0.39 auto-indent-on-visit-pretend-nothing-changed
 .....................................................
 
    * When modifying the file on visit, pretend nothing changed.
@@ -1091,15 +1169,23 @@ File: auto-indent-mode.info,  Node: auto-indent-on-visit-pretend-nothing-changed
 
 File: auto-indent-mode.info,  Node: auto-indent-on-yank-or-paste
 
-1.6.0.39 auto-indent-on-yank-or-paste
+1.7.0.40 auto-indent-on-yank-or-paste
 .....................................
 
    * Indent pasted or yanked region.
 
 
+File: auto-indent-mode.info,  Node: auto-indent-save-next-pair
+
+1.7.0.41 auto-indent-save-next-pair
+...................................
+
+Saves the knowledge of next-pair timings when emacs exits.
+
+
 File: auto-indent-mode.info,  Node: auto-indent-start-org-indent
 
-1.6.0.40 auto-indent-start-org-indent
+1.7.0.42 auto-indent-start-org-indent
 .....................................
 
 Starts `org-indent-mode' when in org-mode.
@@ -1107,7 +1193,7 @@ Starts `org-indent-mode' when in org-mode.
 
 File: auto-indent-mode.info,  Node: auto-indent-untabify-on-save-file
 
-1.6.0.41 auto-indent-untabify-on-save-file
+1.7.0.43 auto-indent-untabify-on-save-file
 ..........................................
 
    * Change tabs to spaces on file-save.
@@ -1115,7 +1201,7 @@ File: auto-indent-mode.info,  Node: auto-indent-untabify-on-save-file
 
 File: auto-indent-mode.info,  Node: auto-indent-untabify-on-visit-file
 
-1.6.0.42 auto-indent-untabify-on-visit-file
+1.7.0.44 auto-indent-untabify-on-visit-file
 ...........................................
 
    * Automatically convert tabs into spaces when visiting a file.
@@ -1123,7 +1209,7 @@ File: auto-indent-mode.info,  Node: auto-indent-untabify-on-visit-file
 
 File: auto-indent-mode.info,  Node: auto-indent-use-text-boundaries
 
-1.6.0.43 auto-indent-use-text-boundaries
+1.7.0.45 auto-indent-use-text-boundaries
 ........................................
 
 Use text boundaries when killing lines.
@@ -1132,9 +1218,9 @@ When killing lines, if point is before any text, act as if point is at
 BOL. And if point is after text, act as if point is at EOL
 
 
-File: auto-indent-mode.info,  Node: Internal Variables,  Prev: Internal Variables,  Up: Auto-indent and org-mode
+File: auto-indent-mode.info,  Node: Internal Variables,  Prev: Internal Variables,  Up: Auto indentation on moving cursor to blank lines
 
-1.6.1 Internal Variables
+1.7.1 Internal Variables
 ------------------------
 
 * Menu:
@@ -1178,11 +1264,13 @@ File: auto-indent-mode.info,  Node: Internal Variables,  Prev: Internal Variable
 * auto-indent-mode-untabify-on-yank-or-paste::
 * auto-indent-newline-function::
 * auto-indent-next-pair::
+* auto-indent-next-pair-throttle::
 * auto-indent-next-pair-timer-geo-mean::
 * auto-indent-on-save-file::
 * auto-indent-on-visit-file::
 * auto-indent-on-visit-pretend-nothing-changed::
 * auto-indent-on-yank-or-paste::
+* auto-indent-save-next-pair::
 * auto-indent-start-org-indent::
 * auto-indent-untabify-on-save-file::
 * auto-indent-untabify-on-visit-file::
@@ -1191,7 +1279,7 @@ File: auto-indent-mode.info,  Node: Internal Variables,  Prev: Internal Variable
 
 File: auto-indent-mode.info,  Node: auto-indent-eol-ret-save,  Next: auto-indent-eol-ret-semi-save,  Up: Internal Variables
 
-1.6.1.1 auto-indent-eol-ret-save
+1.7.1.1 auto-indent-eol-ret-save
 ................................
 
 Saved variable for keyboard state.
@@ -1199,7 +1287,7 @@ Saved variable for keyboard state.
 
 File: auto-indent-mode.info,  Node: auto-indent-eol-ret-semi-save,  Next: auto-indent-minor-mode-map,  Prev: auto-indent-eol-ret-save,  Up: Internal Variables
 
-1.6.1.2 auto-indent-eol-ret-semi-save
+1.7.1.2 auto-indent-eol-ret-semi-save
 .....................................
 
 Saved variable for keyboard state.
@@ -1207,7 +1295,7 @@ Saved variable for keyboard state.
 
 File: auto-indent-mode.info,  Node: auto-indent-minor-mode-map,  Next: auto-indent-pairs-begin,  Prev: auto-indent-eol-ret-semi-save,  Up: Internal Variables
 
-1.6.1.3 auto-indent-minor-mode-map
+1.7.1.3 auto-indent-minor-mode-map
 ..................................
 
    * Auto Indent mode map.
@@ -1215,7 +1303,7 @@ File: auto-indent-mode.info,  Node: auto-indent-minor-mode-map,  Next: auto-inde
 
 File: auto-indent-mode.info,  Node: auto-indent-pairs-begin,  Next: auto-indent-pairs-end,  Prev: auto-indent-minor-mode-map,  Up: Internal Variables
 
-1.6.1.4 auto-indent-pairs-begin
+1.7.1.4 auto-indent-pairs-begin
 ...............................
 
 Defines where the pair region begins.
@@ -1223,7 +1311,7 @@ Defines where the pair region begins.
 
 File: auto-indent-mode.info,  Node: auto-indent-pairs-end,  Next: auto-indent-current-pairs,  Prev: auto-indent-pairs-begin,  Up: Internal Variables
 
-1.6.1.5 auto-indent-pairs-end
+1.7.1.5 auto-indent-pairs-end
 .............................
 
 Defines where the pair region ends. ## Auto indentation on moving
@@ -1232,7 +1320,7 @@ cursor to blank lines.
 
 File: auto-indent-mode.info,  Node: auto-indent-current-pairs,  Next: auto-indent-delete-line-char-add-extra-spaces,  Prev: auto-indent-pairs-end,  Up: Internal Variables
 
-1.6.1.6 auto-indent-current-pairs
+1.7.1.6 auto-indent-current-pairs
 .................................
 
    * Automatically indent the current parenthetical statement.
@@ -1240,7 +1328,7 @@ File: auto-indent-mode.info,  Node: auto-indent-current-pairs,  Next: auto-inden
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-add-extra-spaces,  Next: auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs,  Prev: auto-indent-current-pairs,  Up: Internal Variables
 
-1.6.1.7 auto-indent-delete-line-char-add-extra-spaces
+1.7.1.7 auto-indent-delete-line-char-add-extra-spaces
 .....................................................
 
    * When deleting a return, add a space (when appropriate) between the
@@ -1263,7 +1351,7 @@ This is controlled by the regular expressions in
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs,  Next: auto-indent-delete-line-char-add-extra-spaces-text-mode-regs,  Prev: auto-indent-delete-line-char-add-extra-spaces,  Up: Internal Variables
 
-1.6.1.8 auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs
+1.7.1.8 auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs
 ....................................................................
 
    * Regular expressions for use with
@@ -1273,7 +1361,7 @@ File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-add-extra-space
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-add-extra-spaces-text-mode-regs,  Next: auto-indent-delete-line-char-remove-extra-spaces,  Prev: auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs,  Up: Internal Variables
 
-1.6.1.9 auto-indent-delete-line-char-add-extra-spaces-text-mode-regs
+1.7.1.9 auto-indent-delete-line-char-add-extra-spaces-text-mode-regs
 ....................................................................
 
    * Regular expressions for use with
@@ -1283,7 +1371,7 @@ File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-add-extra-space
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-remove-extra-spaces,  Next: auto-indent-delete-line-char-remove-last-space,  Prev: auto-indent-delete-line-char-add-extra-spaces-text-mode-regs,  Up: Internal Variables
 
-1.6.1.10 auto-indent-delete-line-char-remove-extra-spaces
+1.7.1.10 auto-indent-delete-line-char-remove-extra-spaces
 .........................................................
 
 When deleting a return, delete any extra spaces between the newly
@@ -1292,7 +1380,7 @@ joined lines.
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-remove-last-space,  Next: auto-indent-delete-line-char-remove-last-space-prog-mode-regs,  Prev: auto-indent-delete-line-char-remove-extra-spaces,  Up: Internal Variables
 
-1.6.1.11 auto-indent-delete-line-char-remove-last-space
+1.7.1.11 auto-indent-delete-line-char-remove-last-space
 .......................................................
 
 Remove last space when deleting a line.
@@ -1329,7 +1417,7 @@ defined in
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-remove-last-space-prog-mode-regs,  Next: auto-indent-delete-line-char-remove-last-space-text-mode-regs,  Prev: auto-indent-delete-line-char-remove-last-space,  Up: Internal Variables
 
-1.6.1.12 auto-indent-delete-line-char-remove-last-space-prog-mode-regs
+1.7.1.12 auto-indent-delete-line-char-remove-last-space-prog-mode-regs
 ......................................................................
 
    * Regular expressions for use with
@@ -1339,7 +1427,7 @@ File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-remove-last-spa
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-remove-last-space-text-mode-regs,  Next: auto-indent-delete-trailing-whitespace-on-save-file,  Prev: auto-indent-delete-line-char-remove-last-space-prog-mode-regs,  Up: Internal Variables
 
-1.6.1.13 auto-indent-delete-line-char-remove-last-space-text-mode-regs
+1.7.1.13 auto-indent-delete-line-char-remove-last-space-text-mode-regs
 ......................................................................
 
 Regular expressions for use with
@@ -1350,7 +1438,7 @@ modes other than programming modes. This is determined by
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-trailing-whitespace-on-save-file,  Next: auto-indent-delete-trailing-whitespace-on-visit-file,  Prev: auto-indent-delete-line-char-remove-last-space-text-mode-regs,  Up: Internal Variables
 
-1.6.1.14 auto-indent-delete-trailing-whitespace-on-save-file
+1.7.1.14 auto-indent-delete-trailing-whitespace-on-save-file
 ............................................................
 
    * When saving file delete trailing whitespace.
@@ -1358,7 +1446,7 @@ File: auto-indent-mode.info,  Node: auto-indent-delete-trailing-whitespace-on-sa
 
 File: auto-indent-mode.info,  Node: auto-indent-delete-trailing-whitespace-on-visit-file,  Next: auto-indent-disabled-indent-functions,  Prev: auto-indent-delete-trailing-whitespace-on-save-file,  Up: Internal Variables
 
-1.6.1.15 auto-indent-delete-trailing-whitespace-on-visit-file
+1.7.1.15 auto-indent-delete-trailing-whitespace-on-visit-file
 .............................................................
 
    * Automatically remove trailing whitespace when visiting file.
@@ -1366,7 +1454,7 @@ File: auto-indent-mode.info,  Node: auto-indent-delete-trailing-whitespace-on-vi
 
 File: auto-indent-mode.info,  Node: auto-indent-disabled-indent-functions,  Next: auto-indent-disabled-modes-list,  Prev: auto-indent-delete-trailing-whitespace-on-visit-file,  Up: Internal Variables
 
-1.6.1.16 auto-indent-disabled-indent-functions
+1.7.1.16 auto-indent-disabled-indent-functions
 ..............................................
 
 List of disabled indent functions.
@@ -1379,7 +1467,7 @@ indentation is may not specified for the current mode.
 
 File: auto-indent-mode.info,  Node: auto-indent-disabled-modes-list,  Next: auto-indent-disabled-modes-on-save,  Prev: auto-indent-disabled-indent-functions,  Up: Internal Variables
 
-1.6.1.17 auto-indent-disabled-modes-list
+1.7.1.17 auto-indent-disabled-modes-list
 ........................................
 
 List of modes disabled when global `auto-indent-mode' is on.
@@ -1387,7 +1475,7 @@ List of modes disabled when global `auto-indent-mode' is on.
 
 File: auto-indent-mode.info,  Node: auto-indent-disabled-modes-on-save,  Next: auto-indent-engine,  Prev: auto-indent-disabled-modes-list,  Up: Internal Variables
 
-1.6.1.18 auto-indent-disabled-modes-on-save
+1.7.1.18 auto-indent-disabled-modes-on-save
 ...........................................
 
    * List of modes where `indent-region' of the whole file is ignored.
@@ -1395,7 +1483,7 @@ File: auto-indent-mode.info,  Node: auto-indent-disabled-modes-on-save,  Next: a
 
 File: auto-indent-mode.info,  Node: auto-indent-engine,  Next: auto-indent-eol-char,  Prev: auto-indent-disabled-modes-on-save,  Up: Internal Variables
 
-1.6.1.19 auto-indent-engine
+1.7.1.19 auto-indent-engine
 ...........................
 
 Type of engine to use. The possibilities are:
@@ -1409,7 +1497,7 @@ in some modes but may cause things such as `company-mode' or
 
 File: auto-indent-mode.info,  Node: auto-indent-eol-char,  Next: auto-indent-fix-org-auto-fill,  Prev: auto-indent-engine,  Up: Internal Variables
 
-1.6.1.20 auto-indent-eol-char
+1.7.1.20 auto-indent-eol-char
 .............................
 
 End of line/statement character, like C or matlab's semi-colon.
@@ -1427,7 +1515,7 @@ conjunction with something that pairs delimiters like `autopair-mode'.
 
 File: auto-indent-mode.info,  Node: auto-indent-fix-org-auto-fill,  Next: auto-indent-fix-org-backspace,  Prev: auto-indent-eol-char,  Up: Internal Variables
 
-1.6.1.21 auto-indent-fix-org-auto-fill
+1.7.1.21 auto-indent-fix-org-auto-fill
 ......................................
 
 Fixes org-based auto-fill-function (i.e. `org-auto-fill-function') to
@@ -1436,7 +1524,7 @@ only auto-fill for things outside of a source block.
 
 File: auto-indent-mode.info,  Node: auto-indent-fix-org-backspace,  Next: auto-indent-fix-org-move-beginning-of-line,  Prev: auto-indent-fix-org-auto-fill,  Up: Internal Variables
 
-1.6.1.22 auto-indent-fix-org-backspace
+1.7.1.22 auto-indent-fix-org-backspace
 ......................................
 
 Fixes `org-backspace' to use
@@ -1445,7 +1533,7 @@ Fixes `org-backspace' to use
 
 File: auto-indent-mode.info,  Node: auto-indent-fix-org-move-beginning-of-line,  Next: auto-indent-fix-org-return,  Prev: auto-indent-fix-org-backspace,  Up: Internal Variables
 
-1.6.1.23 auto-indent-fix-org-move-beginning-of-line
+1.7.1.23 auto-indent-fix-org-move-beginning-of-line
 ...................................................
 
 Fixes `move-beginning-of-line' in `org-mode' when in source blocks to
@@ -1454,7 +1542,7 @@ follow `auto-indent-mode'.
 
 File: auto-indent-mode.info,  Node: auto-indent-fix-org-return,  Next: auto-indent-fix-org-yank,  Prev: auto-indent-fix-org-move-beginning-of-line,  Up: Internal Variables
 
-1.6.1.24 auto-indent-fix-org-return
+1.7.1.24 auto-indent-fix-org-return
 ...................................
 
 Allows newline and indent behavior in source code blocks in org-mode.
@@ -1462,7 +1550,7 @@ Allows newline and indent behavior in source code blocks in org-mode.
 
 File: auto-indent-mode.info,  Node: auto-indent-fix-org-yank,  Next: auto-indent-force-interactive-advices,  Prev: auto-indent-fix-org-return,  Up: Internal Variables
 
-1.6.1.25 auto-indent-fix-org-yank
+1.7.1.25 auto-indent-fix-org-yank
 .................................
 
 Allows org-mode yanks to be indented in source code blocks of org-mode.
@@ -1470,7 +1558,7 @@ Allows org-mode yanks to be indented in source code blocks of org-mode.
 
 File: auto-indent-mode.info,  Node: auto-indent-force-interactive-advices,  Next: auto-indent-home-is-beginning-of-indent,  Prev: auto-indent-fix-org-yank,  Up: Internal Variables
 
-1.6.1.26 auto-indent-force-interactive-advices
+1.7.1.26 auto-indent-force-interactive-advices
 ..............................................
 
 Forces interactive advices.
@@ -1487,7 +1575,7 @@ advice.
 
 File: auto-indent-mode.info,  Node: auto-indent-home-is-beginning-of-indent,  Next: auto-indent-home-is-beginning-of-indent-when-spaces-follow,  Prev: auto-indent-force-interactive-advices,  Up: Internal Variables
 
-1.6.1.27 auto-indent-home-is-beginning-of-indent
+1.7.1.27 auto-indent-home-is-beginning-of-indent
 ................................................
 
 The Home key, or rather the `move-beginning-of-line' function, will
@@ -1498,7 +1586,7 @@ the line.
 
 File: auto-indent-mode.info,  Node: auto-indent-home-is-beginning-of-indent-when-spaces-follow,  Next: auto-indent-key-for-end-of-line-insert-char-then-newline,  Prev: auto-indent-home-is-beginning-of-indent,  Up: Internal Variables
 
-1.6.1.28 auto-indent-home-is-beginning-of-indent-when-spaces-follow
+1.7.1.28 auto-indent-home-is-beginning-of-indent-when-spaces-follow
 ...................................................................
 
 This is a customization for the home key.
@@ -1526,7 +1614,7 @@ Another home-key will chang to cursor
 
 File: auto-indent-mode.info,  Node: auto-indent-key-for-end-of-line-insert-char-then-newline,  Next: auto-indent-key-for-end-of-line-then-newline,  Prev: auto-indent-home-is-beginning-of-indent-when-spaces-follow,  Up: Internal Variables
 
-1.6.1.29 auto-indent-key-for-end-of-line-insert-char-then-newline
+1.7.1.29 auto-indent-key-for-end-of-line-insert-char-then-newline
 .................................................................
 
 Key for end of line, `auto-indent-eol-char', then newline.
@@ -1540,7 +1628,7 @@ that pairs delimiters like `autopair-mode'.
 
 File: auto-indent-mode.info,  Node: auto-indent-key-for-end-of-line-then-newline,  Next: auto-indent-kill-line-at-eol,  Prev: auto-indent-key-for-end-of-line-insert-char-then-newline,  Up: Internal Variables
 
-1.6.1.30 auto-indent-key-for-end-of-line-then-newline
+1.7.1.30 auto-indent-key-for-end-of-line-then-newline
 .....................................................
 
 Key for end of line, then newline.
@@ -1553,7 +1641,7 @@ something that pairs delimiters like `autopair-mode'.
 
 File: auto-indent-mode.info,  Node: auto-indent-kill-line-at-eol,  Next: auto-indent-kill-line-kill-region-when-active,  Prev: auto-indent-key-for-end-of-line-then-newline,  Up: Internal Variables
 
-1.6.1.31 auto-indent-kill-line-at-eol
+1.7.1.31 auto-indent-kill-line-at-eol
 .....................................
 
 Determines how a kill at the end of line behaves.
@@ -1577,7 +1665,7 @@ You should also set the function `kill-whole-line' to do what you want.
 
 File: auto-indent-mode.info,  Node: auto-indent-kill-line-kill-region-when-active,  Next: auto-indent-kill-remove-extra-spaces,  Prev: auto-indent-kill-line-at-eol,  Up: Internal Variables
 
-1.6.1.32 auto-indent-kill-line-kill-region-when-active
+1.7.1.32 auto-indent-kill-line-kill-region-when-active
 ......................................................
 
    * When killing lines, if region is active, kill region instead.
@@ -1585,7 +1673,7 @@ File: auto-indent-mode.info,  Node: auto-indent-kill-line-kill-region-when-activ
 
 File: auto-indent-mode.info,  Node: auto-indent-kill-remove-extra-spaces,  Next: auto-indent-known-indent-level-variables,  Prev: auto-indent-kill-line-kill-region-when-active,  Up: Internal Variables
 
-1.6.1.33 auto-indent-kill-remove-extra-spaces
+1.7.1.33 auto-indent-kill-remove-extra-spaces
 .............................................
 
    * Remove indentation before killing the line or region.
@@ -1593,7 +1681,7 @@ File: auto-indent-mode.info,  Node: auto-indent-kill-remove-extra-spaces,  Next:
 
 File: auto-indent-mode.info,  Node: auto-indent-known-indent-level-variables,  Next: auto-indent-known-text-modes,  Prev: auto-indent-kill-remove-extra-spaces,  Up: Internal Variables
 
-1.6.1.34 auto-indent-known-indent-level-variables
+1.7.1.34 auto-indent-known-indent-level-variables
 .................................................
 
 Known indent-level-variables for major modes. Set locally when
@@ -1602,7 +1690,7 @@ auto-indent-mode initializes.
 
 File: auto-indent-mode.info,  Node: auto-indent-known-text-modes,  Next: auto-indent-minor-mode-symbol,  Prev: auto-indent-known-indent-level-variables,  Up: Internal Variables
 
-1.6.1.35 auto-indent-known-text-modes
+1.7.1.35 auto-indent-known-text-modes
 .....................................
 
    * List of auto-indent's known text-modes.
@@ -1610,7 +1698,7 @@ File: auto-indent-mode.info,  Node: auto-indent-known-text-modes,  Next: auto-in
 
 File: auto-indent-mode.info,  Node: auto-indent-minor-mode-symbol,  Next: auto-indent-mode-untabify-on-yank-or-paste,  Prev: auto-indent-known-text-modes,  Up: Internal Variables
 
-1.6.1.36 auto-indent-minor-mode-symbol
+1.7.1.36 auto-indent-minor-mode-symbol
 ......................................
 
    * When true, Auto Indent puts AI on the mode line.
@@ -1618,7 +1706,7 @@ File: auto-indent-mode.info,  Node: auto-indent-minor-mode-symbol,  Next: auto-i
 
 File: auto-indent-mode.info,  Node: auto-indent-mode-untabify-on-yank-or-paste,  Next: auto-indent-newline-function,  Prev: auto-indent-minor-mode-symbol,  Up: Internal Variables
 
-1.6.1.37 auto-indent-mode-untabify-on-yank-or-paste
+1.7.1.37 auto-indent-mode-untabify-on-yank-or-paste
 ...................................................
 
    * Untabify pasted or yanked region.
@@ -1626,15 +1714,15 @@ File: auto-indent-mode.info,  Node: auto-indent-mode-untabify-on-yank-or-paste, 
 
 File: auto-indent-mode.info,  Node: auto-indent-newline-function,  Next: auto-indent-next-pair,  Prev: auto-indent-mode-untabify-on-yank-or-paste,  Up: Internal Variables
 
-1.6.1.38 auto-indent-newline-function
+1.7.1.38 auto-indent-newline-function
 .....................................
 
    * Auto indentation function for the return key.
 
 
-File: auto-indent-mode.info,  Node: auto-indent-next-pair,  Next: auto-indent-next-pair-timer-geo-mean,  Prev: auto-indent-newline-function,  Up: Internal Variables
+File: auto-indent-mode.info,  Node: auto-indent-next-pair,  Next: auto-indent-next-pair-throttle,  Prev: auto-indent-newline-function,  Up: Internal Variables
 
-1.6.1.39 auto-indent-next-pair
+1.7.1.39 auto-indent-next-pair
 ..............................
 
 Automatically indent the next parenthetical statement. For example in R:
@@ -1652,9 +1740,18 @@ needs.
 It is useful when using this option to have some sort of autopairing on.
 
 
-File: auto-indent-mode.info,  Node: auto-indent-next-pair-timer-geo-mean,  Next: auto-indent-on-save-file,  Prev: auto-indent-next-pair,  Up: Internal Variables
+File: auto-indent-mode.info,  Node: auto-indent-next-pair-throttle,  Next: auto-indent-next-pair-timer-geo-mean,  Prev: auto-indent-next-pair,  Up: Internal Variables
 
-1.6.1.40 auto-indent-next-pair-timer-geo-mean
+1.7.1.40 auto-indent-next-pair-throttle
+.......................................
+
+Throttle the max time for indent to this number. If nil, no throttling
+occurs?
+
+
+File: auto-indent-mode.info,  Node: auto-indent-next-pair-timer-geo-mean,  Next: auto-indent-on-save-file,  Prev: auto-indent-next-pair-throttle,  Up: Internal Variables
+
+1.7.1.41 auto-indent-next-pair-timer-geo-mean
 .............................................
 
 Number of seconds before the observed parenthetical statement is
@@ -1666,7 +1763,7 @@ of rate to indent a single line.
 
 File: auto-indent-mode.info,  Node: auto-indent-on-save-file,  Next: auto-indent-on-visit-file,  Prev: auto-indent-next-pair-timer-geo-mean,  Up: Internal Variables
 
-1.6.1.41 auto-indent-on-save-file
+1.7.1.42 auto-indent-on-save-file
 .................................
 
    * Auto Indent on visit file.
@@ -1674,7 +1771,7 @@ File: auto-indent-mode.info,  Node: auto-indent-on-save-file,  Next: auto-indent
 
 File: auto-indent-mode.info,  Node: auto-indent-on-visit-file,  Next: auto-indent-on-visit-pretend-nothing-changed,  Prev: auto-indent-on-save-file,  Up: Internal Variables
 
-1.6.1.42 auto-indent-on-visit-file
+1.7.1.43 auto-indent-on-visit-file
 ..................................
 
    * Auto Indent file upon visit.
@@ -1682,23 +1779,31 @@ File: auto-indent-mode.info,  Node: auto-indent-on-visit-file,  Next: auto-inden
 
 File: auto-indent-mode.info,  Node: auto-indent-on-visit-pretend-nothing-changed,  Next: auto-indent-on-yank-or-paste,  Prev: auto-indent-on-visit-file,  Up: Internal Variables
 
-1.6.1.43 auto-indent-on-visit-pretend-nothing-changed
+1.7.1.44 auto-indent-on-visit-pretend-nothing-changed
 .....................................................
 
    * When modifying the file on visit, pretend nothing changed.
 
 
-File: auto-indent-mode.info,  Node: auto-indent-on-yank-or-paste,  Next: auto-indent-start-org-indent,  Prev: auto-indent-on-visit-pretend-nothing-changed,  Up: Internal Variables
+File: auto-indent-mode.info,  Node: auto-indent-on-yank-or-paste,  Next: auto-indent-save-next-pair,  Prev: auto-indent-on-visit-pretend-nothing-changed,  Up: Internal Variables
 
-1.6.1.44 auto-indent-on-yank-or-paste
+1.7.1.45 auto-indent-on-yank-or-paste
 .....................................
 
    * Indent pasted or yanked region.
 
 
-File: auto-indent-mode.info,  Node: auto-indent-start-org-indent,  Next: auto-indent-untabify-on-save-file,  Prev: auto-indent-on-yank-or-paste,  Up: Internal Variables
+File: auto-indent-mode.info,  Node: auto-indent-save-next-pair,  Next: auto-indent-start-org-indent,  Prev: auto-indent-on-yank-or-paste,  Up: Internal Variables
 
-1.6.1.45 auto-indent-start-org-indent
+1.7.1.46 auto-indent-save-next-pair
+...................................
+
+Saves the knowledge of next-pair timings when emacs exits.
+
+
+File: auto-indent-mode.info,  Node: auto-indent-start-org-indent,  Next: auto-indent-untabify-on-save-file,  Prev: auto-indent-save-next-pair,  Up: Internal Variables
+
+1.7.1.47 auto-indent-start-org-indent
 .....................................
 
 Starts `org-indent-mode' when in org-mode.
@@ -1706,7 +1811,7 @@ Starts `org-indent-mode' when in org-mode.
 
 File: auto-indent-mode.info,  Node: auto-indent-untabify-on-save-file,  Next: auto-indent-untabify-on-visit-file,  Prev: auto-indent-start-org-indent,  Up: Internal Variables
 
-1.6.1.46 auto-indent-untabify-on-save-file
+1.7.1.48 auto-indent-untabify-on-save-file
 ..........................................
 
    * Change tabs to spaces on file-save.
@@ -1714,7 +1819,7 @@ File: auto-indent-mode.info,  Node: auto-indent-untabify-on-save-file,  Next: au
 
 File: auto-indent-mode.info,  Node: auto-indent-untabify-on-visit-file,  Next: auto-indent-use-text-boundaries,  Prev: auto-indent-untabify-on-save-file,  Up: Internal Variables
 
-1.6.1.47 auto-indent-untabify-on-visit-file
+1.7.1.49 auto-indent-untabify-on-visit-file
 ...........................................
 
    * Automatically convert tabs into spaces when visiting a file.
@@ -1722,7 +1827,7 @@ File: auto-indent-mode.info,  Node: auto-indent-untabify-on-visit-file,  Next: a
 
 File: auto-indent-mode.info,  Node: auto-indent-use-text-boundaries,  Prev: auto-indent-untabify-on-visit-file,  Up: Internal Variables
 
-1.6.1.48 auto-indent-use-text-boundaries
+1.7.1.50 auto-indent-use-text-boundaries
 ........................................
 
 Use text boundaries when killing lines.
@@ -1731,9 +1836,9 @@ When killing lines, if point is before any text, act as if point is at
 BOL. And if point is after text, act as if point is at EOL
 
 
-File: auto-indent-mode.info,  Node: Internal Variables,  Prev: Internal Variables,  Up: Auto-indent and org-mode
+File: auto-indent-mode.info,  Node: Internal Variables,  Prev: Internal Variables,  Up: Auto indentation on moving cursor to blank lines
 
-1.6.2 Internal Variables
+1.7.2 Internal Variables
 ------------------------
 
 * Menu:
@@ -1743,54 +1848,11 @@ File: auto-indent-mode.info,  Node: Internal Variables,  Prev: Internal Variable
 * auto-indent-minor-mode-map::
 * auto-indent-pairs-begin::
 * auto-indent-pairs-end::
-* auto-indent-current-pairs::
-* auto-indent-delete-line-char-add-extra-spaces::
-* auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs::
-* auto-indent-delete-line-char-add-extra-spaces-text-mode-regs::
-* auto-indent-delete-line-char-remove-extra-spaces::
-* auto-indent-delete-line-char-remove-last-space::
-* auto-indent-delete-line-char-remove-last-space-prog-mode-regs::
-* auto-indent-delete-line-char-remove-last-space-text-mode-regs::
-* auto-indent-delete-trailing-whitespace-on-save-file::
-* auto-indent-delete-trailing-whitespace-on-visit-file::
-* auto-indent-disabled-indent-functions::
-* auto-indent-disabled-modes-list::
-* auto-indent-disabled-modes-on-save::
-* auto-indent-engine::
-* auto-indent-eol-char::
-* auto-indent-fix-org-auto-fill::
-* auto-indent-fix-org-backspace::
-* auto-indent-fix-org-move-beginning-of-line::
-* auto-indent-fix-org-return::
-* auto-indent-fix-org-yank::
-* auto-indent-force-interactive-advices::
-* auto-indent-home-is-beginning-of-indent::
-* auto-indent-home-is-beginning-of-indent-when-spaces-follow::
-* auto-indent-key-for-end-of-line-insert-char-then-newline::
-* auto-indent-key-for-end-of-line-then-newline::
-* auto-indent-kill-line-at-eol::
-* auto-indent-kill-line-kill-region-when-active::
-* auto-indent-kill-remove-extra-spaces::
-* auto-indent-known-indent-level-variables::
-* auto-indent-known-text-modes::
-* auto-indent-minor-mode-symbol::
-* auto-indent-mode-untabify-on-yank-or-paste::
-* auto-indent-newline-function::
-* auto-indent-next-pair::
-* auto-indent-next-pair-timer-geo-mean::
-* auto-indent-on-save-file::
-* auto-indent-on-visit-file::
-* auto-indent-on-visit-pretend-nothing-changed::
-* auto-indent-on-yank-or-paste::
-* auto-indent-start-org-indent::
-* auto-indent-untabify-on-save-file::
-* auto-indent-untabify-on-visit-file::
-* auto-indent-use-text-boundaries::
 
 
 File: auto-indent-mode.info,  Node: auto-indent-eol-ret-save,  Next: auto-indent-eol-ret-semi-save,  Up: auto-indent-pairs-end
 
-1.6.2.1 auto-indent-eol-ret-save
+1.7.2.1 auto-indent-eol-ret-save
 ................................
 
 Saved variable for keyboard state.
@@ -1798,7 +1860,7 @@ Saved variable for keyboard state.
 
 File: auto-indent-mode.info,  Node: auto-indent-eol-ret-semi-save,  Next: auto-indent-minor-mode-map,  Prev: auto-indent-eol-ret-save,  Up: auto-indent-pairs-end
 
-1.6.2.2 auto-indent-eol-ret-semi-save
+1.7.2.2 auto-indent-eol-ret-semi-save
 .....................................
 
 Saved variable for keyboard state.
@@ -1806,7 +1868,7 @@ Saved variable for keyboard state.
 
 File: auto-indent-mode.info,  Node: auto-indent-minor-mode-map,  Next: auto-indent-pairs-begin,  Prev: auto-indent-eol-ret-semi-save,  Up: auto-indent-pairs-end
 
-1.6.2.3 auto-indent-minor-mode-map
+1.7.2.3 auto-indent-minor-mode-map
 ..................................
 
    * Auto Indent mode map.
@@ -1814,591 +1876,16 @@ File: auto-indent-mode.info,  Node: auto-indent-minor-mode-map,  Next: auto-inde
 
 File: auto-indent-mode.info,  Node: auto-indent-pairs-begin,  Next: auto-indent-pairs-end,  Prev: auto-indent-minor-mode-map,  Up: auto-indent-pairs-end
 
-1.6.2.4 auto-indent-pairs-begin
+1.7.2.4 auto-indent-pairs-begin
 ...............................
 
 Defines where the pair region begins.
 
 
-File: auto-indent-mode.info,  Node: auto-indent-pairs-end,  Next: auto-indent-current-pairs,  Prev: auto-indent-pairs-begin,  Up: auto-indent-pairs-end
+File: auto-indent-mode.info,  Node: auto-indent-pairs-end,  Prev: auto-indent-pairs-begin,  Up: auto-indent-pairs-end
 
-1.6.2.5 auto-indent-pairs-end
+1.7.2.5 auto-indent-pairs-end
 .............................
 
-Defines where the pair region ends. ## Auto indentation on moving
-cursor to blank lines.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-current-pairs,  Next: auto-indent-delete-line-char-add-extra-spaces,  Prev: auto-indent-pairs-end,  Up: auto-indent-pairs-end
-
-1.6.2.6 auto-indent-current-pairs
-.................................
-
-   * Automatically indent the current parenthetical statement.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-add-extra-spaces,  Next: auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs,  Prev: auto-indent-current-pairs,  Up: auto-indent-pairs-end
-
-1.6.2.7 auto-indent-delete-line-char-add-extra-spaces
-.....................................................
-
-   * When deleting a return, add a space (when appropriate) between the
-     newly joined lines.
-
-This takes care of the condition when deleting text
-
-Lorem ipsum dolor sit| amet, consectetur adipiscing elit. Morbi id
-
-Lorem ipsum dolor sit|amet, consectetur adipiscing elit. Morbi id
-
-Which ideally should be deleted to:
-
-Lorem ipsum dolor sit| amet, consectetur adipiscing elit. Morbi id
-
-This is controlled by the regular expressions in
-`auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs' and
-`auto-indent-delete-line-char-add-extra-spaces-text-mode-regs'
-
-
-File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs,  Next: auto-indent-delete-line-char-add-extra-spaces-text-mode-regs,  Prev: auto-indent-delete-line-char-add-extra-spaces,  Up: auto-indent-pairs-end
-
-1.6.2.8 auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs
-....................................................................
-
-   * Regular expressions for use with
-     `auto-indent-delete-line-char-add-extra-spaces'. This is used for
-     programming modes as determined by `auto-indent-is-prog-mode-p'.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-add-extra-spaces-text-mode-regs,  Next: auto-indent-delete-line-char-remove-extra-spaces,  Prev: auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs,  Up: auto-indent-pairs-end
-
-1.6.2.9 auto-indent-delete-line-char-add-extra-spaces-text-mode-regs
-....................................................................
-
-   * Regular expressions for use with
-     `auto-indent-delete-line-char-add-extra-spaces'. This is used for
-     programming modes as determined by `auto-indent-is-prog-mode-p'.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-remove-extra-spaces,  Next: auto-indent-delete-line-char-remove-last-space,  Prev: auto-indent-delete-line-char-add-extra-spaces-text-mode-regs,  Up: auto-indent-pairs-end
-
-1.6.2.10 auto-indent-delete-line-char-remove-extra-spaces
-.........................................................
-
-When deleting a return, delete any extra spaces between the newly
-joined lines.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-remove-last-space,  Next: auto-indent-delete-line-char-remove-last-space-prog-mode-regs,  Prev: auto-indent-delete-line-char-remove-extra-spaces,  Up: auto-indent-pairs-end
-
-1.6.2.11 auto-indent-delete-line-char-remove-last-space
-.......................................................
-
-Remove last space when deleting a line.
-
-When `auto-indent-delete-line-char-remove-extra-spaces' is enabled,
-expressions like lists can be removed in a less than optimal manner.
-For example, assuming ``|'' is the cursor:
-
-c("Vehicle QD TO",| "1 ug IVT","3 ug IVT",...
-
-would be deleted to the following
-
-c("Vehicle QD TO",| "1 ug IVT","3 ug IVT",...
-
-In this case it would be preferable to delete to:
-
-c("Vehicle QD TO",|"1 ug IVT","3 ug IVT",...
-
-However cases like sentences:
-
-Lorem ipsum dolor sit amet,| consectetur adipiscing elit. Morbi id
-
-Deletes to Lorem ipsum dolor sit amet,| consectetur adipiscing elit.
-Morbi id
-
-Which is a desired behavior.
-
-When this is enabled, auto-indent attempts to be smarter by deleting
-the extra space when characters before and after match expressions
-defined in
-`auto-indent-delete-line-char-remove-last-space-prog-mode-regs' and
-`auto-indent-delete-line-char-remove-last-space-text-mode-regs'.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-remove-last-space-prog-mode-regs,  Next: auto-indent-delete-line-char-remove-last-space-text-mode-regs,  Prev: auto-indent-delete-line-char-remove-last-space,  Up: auto-indent-pairs-end
-
-1.6.2.12 auto-indent-delete-line-char-remove-last-space-prog-mode-regs
-......................................................................
-
-   * Regular expressions for use with
-     `auto-indent-delete-line-char-remove-last-space'. This is used for
-     programming modes as determined by `auto-indent-is-prog-mode-p'.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-delete-line-char-remove-last-space-text-mode-regs,  Next: auto-indent-delete-trailing-whitespace-on-save-file,  Prev: auto-indent-delete-line-char-remove-last-space-prog-mode-regs,  Up: auto-indent-pairs-end
-
-1.6.2.13 auto-indent-delete-line-char-remove-last-space-text-mode-regs
-......................................................................
-
-Regular expressions for use with
-`auto-indent-delete-line-char-remove-last-space'. This is used for
-modes other than programming modes. This is determined by
-`auto-indent-is-prog-mode-p'.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-delete-trailing-whitespace-on-save-file,  Next: auto-indent-delete-trailing-whitespace-on-visit-file,  Prev: auto-indent-delete-line-char-remove-last-space-text-mode-regs,  Up: auto-indent-pairs-end
-
-1.6.2.14 auto-indent-delete-trailing-whitespace-on-save-file
-............................................................
-
-   * When saving file delete trailing whitespace.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-delete-trailing-whitespace-on-visit-file,  Next: auto-indent-disabled-indent-functions,  Prev: auto-indent-delete-trailing-whitespace-on-save-file,  Up: auto-indent-pairs-end
-
-1.6.2.15 auto-indent-delete-trailing-whitespace-on-visit-file
-.............................................................
-
-   * Automatically remove trailing whitespace when visiting file.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-disabled-indent-functions,  Next: auto-indent-disabled-modes-list,  Prev: auto-indent-delete-trailing-whitespace-on-visit-file,  Up: auto-indent-pairs-end
-
-1.6.2.16 auto-indent-disabled-indent-functions
-..............................................
-
-List of disabled indent functions.
-
-List of functions that auto-indent ignores the `indent-region' on paste
-and automated indent by pressing return. The default is
-`indent-relative' and `indent-relative-maybe'. If these are used the
-indentation is may not specified for the current mode.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-disabled-modes-list,  Next: auto-indent-disabled-modes-on-save,  Prev: auto-indent-disabled-indent-functions,  Up: auto-indent-pairs-end
-
-1.6.2.17 auto-indent-disabled-modes-list
-........................................
-
-List of modes disabled when global `auto-indent-mode' is on.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-disabled-modes-on-save,  Next: auto-indent-engine,  Prev: auto-indent-disabled-modes-list,  Up: auto-indent-pairs-end
-
-1.6.2.18 auto-indent-disabled-modes-on-save
-...........................................
-
-   * List of modes where `indent-region' of the whole file is ignored.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-engine,  Next: auto-indent-eol-char,  Prev: auto-indent-disabled-modes-on-save,  Up: auto-indent-pairs-end
-
-1.6.2.19 auto-indent-engine
-...........................
-
-Type of engine to use. The possibilities are:
-
-default: Use hooks and advices to implement auto-indent-mode
-
-keymap: Use key remappings to implement auto-indent-mode. This may work
-in some modes but may cause things such as `company-mode' or
-`auto-complete-mode' to function improperly
-
-
-File: auto-indent-mode.info,  Node: auto-indent-eol-char,  Next: auto-indent-fix-org-auto-fill,  Prev: auto-indent-engine,  Up: auto-indent-pairs-end
-
-1.6.2.20 auto-indent-eol-char
-.............................
-
-End of line/statement character, like C or matlab's semi-colon.
-
-Character inserted when
-`auto-indent-key-for-end-of-line-inser-char-then-newline' is defined.
-This is a buffer local variable, therefore if you have a mode that
-instead of using a semi-colon for an end of statement, you use a colon,
-this can be added to the mode as follows:
- (add-hook 'strange-mode-hook (lambda() (setq auto-indent-eol-char ":")))
-
-autoThis is similar to Textmate's behavior. This is useful when used in
-conjunction with something that pairs delimiters like `autopair-mode'.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-fix-org-auto-fill,  Next: auto-indent-fix-org-backspace,  Prev: auto-indent-eol-char,  Up: auto-indent-pairs-end
-
-1.6.2.21 auto-indent-fix-org-auto-fill
-......................................
-
-Fixes org-based auto-fill-function (i.e. `org-auto-fill-function') to
-only auto-fill for things outside of a source block.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-fix-org-backspace,  Next: auto-indent-fix-org-move-beginning-of-line,  Prev: auto-indent-fix-org-auto-fill,  Up: auto-indent-pairs-end
-
-1.6.2.22 auto-indent-fix-org-backspace
-......................................
-
-Fixes `org-backspace' to use
-`auto-indent-backward-delete-char-behavior' for `org-mode' buffers.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-fix-org-move-beginning-of-line,  Next: auto-indent-fix-org-return,  Prev: auto-indent-fix-org-backspace,  Up: auto-indent-pairs-end
-
-1.6.2.23 auto-indent-fix-org-move-beginning-of-line
-...................................................
-
-Fixes `move-beginning-of-line' in `org-mode' when in source blocks to
-follow `auto-indent-mode'.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-fix-org-return,  Next: auto-indent-fix-org-yank,  Prev: auto-indent-fix-org-move-beginning-of-line,  Up: auto-indent-pairs-end
-
-1.6.2.24 auto-indent-fix-org-return
-...................................
-
-Allows newline and indent behavior in source code blocks in org-mode.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-fix-org-yank,  Next: auto-indent-force-interactive-advices,  Prev: auto-indent-fix-org-return,  Up: auto-indent-pairs-end
-
-1.6.2.25 auto-indent-fix-org-yank
-.................................
-
-Allows org-mode yanks to be indented in source code blocks of org-mode.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-force-interactive-advices,  Next: auto-indent-home-is-beginning-of-indent,  Prev: auto-indent-fix-org-yank,  Up: auto-indent-pairs-end
-
-1.6.2.26 auto-indent-force-interactive-advices
-..............................................
-
-Forces interactive advices.
-
-This makes sure that this is called when this is an interactive call
-directly to the function. However, if someone defines something such as
-`org-delete-char' to delete a character, when `org-delete-char' is
-called interactively and then calls `delete-char' the advice is never
-activated (when it should be). If this is activated, `auto-indent-mode'
-tries to do the right thing by guessing what key should have been
-pressed to get this event. If it is the key that was pressed enable the
-advice.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-home-is-beginning-of-indent,  Next: auto-indent-home-is-beginning-of-indent-when-spaces-follow,  Prev: auto-indent-force-interactive-advices,  Up: auto-indent-pairs-end
-
-1.6.2.27 auto-indent-home-is-beginning-of-indent
-................................................
-
-The Home key, or rather the `move-beginning-of-line' function, will
-move to the beginning of the indentation when called interactively. If
-it is already at the beginning of the indent, move to the beginning of
-the line.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-home-is-beginning-of-indent-when-spaces-follow,  Next: auto-indent-key-for-end-of-line-insert-char-then-newline,  Prev: auto-indent-home-is-beginning-of-indent,  Up: auto-indent-pairs-end
-
-1.6.2.28 auto-indent-home-is-beginning-of-indent-when-spaces-follow
-...................................................................
-
-This is a customization for the home key.
-
-If `auto-indent-home-is-beginning-of-indent' is enabled, the Home key,
-or rather the `move-beginning-of-line' function, will move to the
-beginning of the indentation when called interactively.
-
-If it is already at the beginning of the indent,and move to the
-beginning of the line. When
-`auto-indent-home-is-beginning-of-indent-when-spaces-follow' is
-enabled, a home key press from
-(defadvice move-beginning-of-line (around auto-indent-minor-mode-advice)
-| (let (at-beginning)
-
-will change to
-(defadvice move-beginning-of-line (around auto-indent-minor-mode-advice)
-  |(let (at-beginning)
-
-Another home-key will chang to cursor
-(defadvice move-beginning-of-line (around auto-indent-minor-mode-advice)
-
-| (let (at-beginning)
-
-
-File: auto-indent-mode.info,  Node: auto-indent-key-for-end-of-line-insert-char-then-newline,  Next: auto-indent-key-for-end-of-line-then-newline,  Prev: auto-indent-home-is-beginning-of-indent-when-spaces-follow,  Up: auto-indent-pairs-end
-
-1.6.2.29 auto-indent-key-for-end-of-line-insert-char-then-newline
-.................................................................
-
-Key for end of line, `auto-indent-eol-char', then newline.
-
-By default the `auto-indent-eol-char' is the semicolon. TextMate uses
-shift-meta return, I believe (S-M-RET). If blank, no key is defined.
-The key should be in a format used for having keyboard macros (see
-`edmacro-mode'). This is useful when used in conjunction with something
-that pairs delimiters like `autopair-mode'.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-key-for-end-of-line-then-newline,  Next: auto-indent-kill-line-at-eol,  Prev: auto-indent-key-for-end-of-line-insert-char-then-newline,  Up: auto-indent-pairs-end
-
-1.6.2.30 auto-indent-key-for-end-of-line-then-newline
-.....................................................
-
-Key for end of line, then newline.
-
-TextMate uses meta return, I believe (M-RET). If blank, no key is
-defined. The key should be in a format used for saving keyboard macros
-(see `edmacro-mode'). This is useful when used in conjunction with
-something that pairs delimiters like `autopair-mode'.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-kill-line-at-eol,  Next: auto-indent-kill-line-kill-region-when-active,  Prev: auto-indent-key-for-end-of-line-then-newline,  Up: auto-indent-pairs-end
-
-1.6.2.31 auto-indent-kill-line-at-eol
-.....................................
-
-Determines how a kill at the end of line behaves.
-
-When killing lines, if at the end of a line,
-
-nil - join next line to the current line. Deletes white-space at join.
-[this essentially duplicated delete-char]
-     See also `auto-indent-kill-remove-extra-spaces`
-
-whole-line - kill next lines
-
-subsequent-whole-lines - merge lines on first call, subsequent kill
-whole lines
-
-blanks - kill all empty lines after the current line, and then any
-lines specified.
-
-You should also set the function `kill-whole-line' to do what you want.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-kill-line-kill-region-when-active,  Next: auto-indent-kill-remove-extra-spaces,  Prev: auto-indent-kill-line-at-eol,  Up: auto-indent-pairs-end
-
-1.6.2.32 auto-indent-kill-line-kill-region-when-active
-......................................................
-
-   * When killing lines, if region is active, kill region instead.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-kill-remove-extra-spaces,  Next: auto-indent-known-indent-level-variables,  Prev: auto-indent-kill-line-kill-region-when-active,  Up: auto-indent-pairs-end
-
-1.6.2.33 auto-indent-kill-remove-extra-spaces
-.............................................
-
-   * Remove indentation before killing the line or region.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-known-indent-level-variables,  Next: auto-indent-known-text-modes,  Prev: auto-indent-kill-remove-extra-spaces,  Up: auto-indent-pairs-end
-
-1.6.2.34 auto-indent-known-indent-level-variables
-.................................................
-
-Known indent-level-variables for major modes. Set locally when
-auto-indent-mode initializes.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-known-text-modes,  Next: auto-indent-minor-mode-symbol,  Prev: auto-indent-known-indent-level-variables,  Up: auto-indent-pairs-end
-
-1.6.2.35 auto-indent-known-text-modes
-.....................................
-
-   * List of auto-indent's known text-modes.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-minor-mode-symbol,  Next: auto-indent-mode-untabify-on-yank-or-paste,  Prev: auto-indent-known-text-modes,  Up: auto-indent-pairs-end
-
-1.6.2.36 auto-indent-minor-mode-symbol
-......................................
-
-   * When true, Auto Indent puts AI on the mode line.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-mode-untabify-on-yank-or-paste,  Next: auto-indent-newline-function,  Prev: auto-indent-minor-mode-symbol,  Up: auto-indent-pairs-end
-
-1.6.2.37 auto-indent-mode-untabify-on-yank-or-paste
-...................................................
-
-   * Untabify pasted or yanked region.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-newline-function,  Next: auto-indent-next-pair,  Prev: auto-indent-mode-untabify-on-yank-or-paste,  Up: auto-indent-pairs-end
-
-1.6.2.38 auto-indent-newline-function
-.....................................
-
-   * Auto indentation function for the return key.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-next-pair,  Next: auto-indent-next-pair-timer-geo-mean,  Prev: auto-indent-newline-function,  Up: auto-indent-pairs-end
-
-1.6.2.39 auto-indent-next-pair
-..............................
-
-Automatically indent the next parenthetical statement. For example in R:
-
-d| <- read.csv("dat.csv", na.strings=c(".","NA"))
-
-When typing .old, the indentation will be updated as follows:
-
-d.old <- read.csv("dat.csv", na.strings=c(".","NA"))
-
-This will slow down your computation, so if you use it make sure that
-the `auto-indent-next-pair-timer-interval' is appropriate for your
-needs.
-
-It is useful when using this option to have some sort of autopairing on.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-next-pair-timer-geo-mean,  Next: auto-indent-on-save-file,  Prev: auto-indent-next-pair,  Up: auto-indent-pairs-end
-
-1.6.2.40 auto-indent-next-pair-timer-geo-mean
-.............................................
-
-Number of seconds before the observed parenthetical statement is
-indented. The faster the value, the slower Emacs responsiveness but the
-faster Emacs indents the region. The slower the value, the faster Emacs
-responds. This should be changed dynamically by to the geometric mean
-of rate to indent a single line.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-on-save-file,  Next: auto-indent-on-visit-file,  Prev: auto-indent-next-pair-timer-geo-mean,  Up: auto-indent-pairs-end
-
-1.6.2.41 auto-indent-on-save-file
-.................................
-
-   * Auto Indent on visit file.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-on-visit-file,  Next: auto-indent-on-visit-pretend-nothing-changed,  Prev: auto-indent-on-save-file,  Up: auto-indent-pairs-end
-
-1.6.2.42 auto-indent-on-visit-file
-..................................
-
-   * Auto Indent file upon visit.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-on-visit-pretend-nothing-changed,  Next: auto-indent-on-yank-or-paste,  Prev: auto-indent-on-visit-file,  Up: auto-indent-pairs-end
-
-1.6.2.43 auto-indent-on-visit-pretend-nothing-changed
-.....................................................
-
-   * When modifying the file on visit, pretend nothing changed.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-on-yank-or-paste,  Next: auto-indent-start-org-indent,  Prev: auto-indent-on-visit-pretend-nothing-changed,  Up: auto-indent-pairs-end
-
-1.6.2.44 auto-indent-on-yank-or-paste
-.....................................
-
-   * Indent pasted or yanked region.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-start-org-indent,  Next: auto-indent-untabify-on-save-file,  Prev: auto-indent-on-yank-or-paste,  Up: auto-indent-pairs-end
-
-1.6.2.45 auto-indent-start-org-indent
-.....................................
-
-Starts `org-indent-mode' when in org-mode.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-untabify-on-save-file,  Next: auto-indent-untabify-on-visit-file,  Prev: auto-indent-start-org-indent,  Up: auto-indent-pairs-end
-
-1.6.2.46 auto-indent-untabify-on-save-file
-..........................................
-
-   * Change tabs to spaces on file-save.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-untabify-on-visit-file,  Next: auto-indent-use-text-boundaries,  Prev: auto-indent-untabify-on-save-file,  Up: auto-indent-pairs-end
-
-1.6.2.47 auto-indent-untabify-on-visit-file
-...........................................
-
-   * Automatically convert tabs into spaces when visiting a file.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-use-text-boundaries,  Prev: auto-indent-untabify-on-visit-file,  Up: auto-indent-pairs-end
-
-1.6.2.48 auto-indent-use-text-boundaries
-........................................
-
-Use text boundaries when killing lines.
-
-When killing lines, if point is before any text, act as if point is at
-BOL. And if point is after text, act as if point is at EOL
-
-
-File: auto-indent-mode.info,  Node: Internal Variables,  Prev: Internal Variables,  Up: Auto-indent and org-mode
-
-1.6.3 Internal Variables
-------------------------
-
-* Menu:
-
-* auto-indent-eol-ret-save::
-* auto-indent-eol-ret-semi-save::
-* auto-indent-minor-mode-map::
-* auto-indent-pairs-begin::
-* auto-indent-pairs-end::
-* auto-indent-current-pairs::
-* auto-indent-delete-line-char-add-extra-spaces::
-* auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs::
-* auto-indent-delete-line-char-add-extra-spaces-text-mode-regs::
-* auto-indent-delete-line-char-remove-extra-spaces::
-* auto-indent-delete-line-char-remove-last-space::
-* auto-indent-delete-line-char-remove-last-space-prog-mode-regs::
-* auto-indent-delete-line-char-remove-last-space-text-mode-regs::
-* auto-indent-delete-trailing-whitespace-on-save-file::
-* auto-indent-delete-trailing-whitespace-on-visit-file::
-* auto-indent-disabled-indent-functions::
-* auto-indent-disabled-modes-list::
-* auto-indent-disabled-modes-on-save::
-* auto-indent-engine::
-* auto-indent-eol-char::
-* auto-indent-fix-org-auto-fill::
-* auto-indent-fix-org-backspace::
-* auto-indent-fix-org-move-beginning-of-line::
-* auto-indent-fix-org-return::
-* auto-indent-fix-org-yank::
-* auto-indent-force-interactive-advices::
-* auto-indent-home-is-beginning-of-indent::
-* auto-indent-home-is-beginning-of-indent-when-spaces-follow::
-* auto-indent-key-for-end-of-line-insert-char-then-newline::
-* auto-indent-key-for-end-of-line-then-newline::
-* auto-indent-kill-line-at-eol::
-* auto-indent-kill-line-kill-region-when-active::
-* auto-indent-kill-remove-extra-spaces::
-* auto-indent-known-indent-level-variables::
-* auto-indent-known-text-modes::
-* auto-indent-minor-mode-symbol::
-* auto-indent-mode-untabify-on-yank-or-paste::
-* auto-indent-newline-function::
-* auto-indent-next-pair::
-* auto-indent-next-pair-timer-geo-mean::
-* auto-indent-on-save-file::
-* auto-indent-on-visit-file::
-* auto-indent-on-visit-pretend-nothing-changed::
-* auto-indent-on-yank-or-paste::
-* auto-indent-start-org-indent::
-* auto-indent-untabify-on-save-file::
-* auto-indent-untabify-on-visit-file::
-* auto-indent-use-text-boundaries::
-
-
-File: auto-indent-mode.info,  Node: auto-indent-eol-ret-save,  Next: auto-indent-eol-ret-semi-save,  Prev: auto-indent-use-text-boundaries,  Up: auto-indent-pairs-end
-
-1.6.3.1 auto-indent-eol-ret-save
-................................
-
-Saved variable for keyboard state.
-
-
-File: auto-indent-mode.info,  Node: auto-indent-eol-ret-semi-save,  Next: auto-indent-minor-mode-map,  Prev: auto-indent-eol-ret-save,  Up: auto-indent-pairs-end
-
-1.6.3.2 auto-indent-eol-ret-semi-save
-.....................................
-
-Saved variable for keyboard state.
+Defines where the pair region ends.
 
