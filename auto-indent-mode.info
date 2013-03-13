@@ -290,6 +290,8 @@ See:
    * In Emacs how can I change tab sizes?
      (http:__kb.iu.edu_data_abde.html) ## History
 
+   * *13-Mar-2013* - Attempt to fix issue #11 (Matthew L. Fidler)
+
    * *05-Dec-2012* - Added support for new ergoemacs-mode. Also
      provided updated bug-fix for indent-region (Matthew L. Fidler)
 
@@ -620,8 +622,6 @@ Fidler)*Auto indentation on moving cursor to blank lines.
 
 * Menu:
 
-* Internal Variables::
-* Internal Variables::
 * Internal Variables::
 * Internal Variables::
 * Internal Variables::
