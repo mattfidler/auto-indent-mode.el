@@ -5,7 +5,7 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.93
+;; Version: 0.94
 ;; Last-Updated: Tue Aug 21 13:08:42 2012 (-0500)
 ;;           By: Matthew L. Fidler
 ;;     Update #: 1467
@@ -258,6 +258,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 13-Mar-2013    Matthew L. Fidler  
+;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
+;;    Remove all starred comments.
 ;; 13-Mar-2013    Matthew L. Fidler  
 ;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
 ;;    Fixed Github Issue #11.  Org-readme doesn't like the starred variable names
@@ -731,7 +734,7 @@
 (defvar auto-indent-mode nil)
 
 (defgroup auto-indent nil
-  "* Auto Indent Mode Customizations"
+  "Auto Indent Mode Customizations"
   :group 'editing)
 
 (defcustom auto-indent-home-is-beginning-of-indent t
@@ -767,7 +770,7 @@ Another home-key will chang to cursor
   :group 'auto-indent)
 
 (defcustom auto-indent-current-pairs t
-  "* Automatically indent the current parenthetical statement."
+  "Automatically indent the current parenthetical statement."
   :type 'boolean
   :group 'auto-indent)
 
@@ -902,53 +905,53 @@ The test for presence of the car of ELT-CONS is done with `equal'."
     (symbol-value 'i)))
 
 (defcustom auto-indent-on-yank-or-paste 't
-  "* Indent pasted or yanked region."
+  "Indent pasted or yanked region."
   :type 'boolean
   :group 'auto-indent)
 
 (defcustom auto-indent-mode-untabify-on-yank-or-paste 't
-  "* Untabify pasted or yanked region."
+  "Untabify pasted or yanked region."
   :type 'boolean
   :group 'auto-indent)
 
 (defcustom auto-indent-on-visit-file nil
-  "* Auto Indent file upon visit."
+  "Auto Indent file upon visit."
   :type 'boolean
   :group 'auto-indent)
 
 (defcustom auto-indent-on-save-file nil
-  "* Auto Indent on visit file."
+  "Auto Indent on visit file."
   :type 'boolean
   :group 'auto-indent)                  
 
 (defcustom auto-indent-untabify-on-visit-file nil
-  "* Automatically convert tabs into spaces when visiting a file."
+  "Automatically convert tabs into spaces when visiting a file."
   :type 'boolean
   :group 'auto-indent)
 
 (defcustom auto-indent-delete-trailing-whitespace-on-visit-file nil
-  "* Automatically remove trailing whitespace when visiting  file."
+  "Automatically remove trailing whitespace when visiting  file."
   :type 'boolean
   :group 'auto-indent)
 
 (defcustom auto-indent-untabify-on-save-file t
-  "* Change tabs to spaces on file-save."
+  "Change tabs to spaces on file-save."
   :type 'boolean
   :group 'auto-indent)
 
 (defcustom auto-indent-delete-trailing-whitespace-on-save-file nil
-  "* When saving file delete trailing whitespace."
+  "When saving file delete trailing whitespace."
   :type 'boolean
   :group 'auto-indent)
 
 (defcustom auto-indent-on-visit-pretend-nothing-changed t
-  "* When modifying the file on visit, pretend nothing changed."
+  "When modifying the file on visit, pretend nothing changed."
   :type 'boolean
   :group 'auto-indent)
 
 
 (defcustom auto-indent-delete-line-char-add-extra-spaces t
-  "* When deleting a return, add a space (when appropriate)
+  "When deleting a return, add a space (when appropriate)
 between the newly joined lines.
 
 This takes care of the condition when deleting text
@@ -971,7 +974,7 @@ and
 
 (defcustom auto-indent-delete-line-char-add-extra-spaces-prog-mode-regs
   '(("\\(\\s.\\|\\sw\\)" "\\(\\sw\\|\\s.\\)"))
-  "* Regular expressions for use with `auto-indent-delete-line-char-add-extra-spaces'.  This is used for programming modes as determined by `auto-indent-is-prog-mode-p'."
+  "Regular expressions for use with `auto-indent-delete-line-char-add-extra-spaces'.  This is used for programming modes as determined by `auto-indent-is-prog-mode-p'."
   :type '(repeat
           (list (regexp :tag "Characters Before Match")
                 (regexp :tag "Characters After Match")))
@@ -979,7 +982,7 @@ and
 
 (defcustom auto-indent-delete-line-char-add-extra-spaces-text-mode-regs
   '(("\\(\\s.\\|\\sw\\)" "\\(\\sw\\|\\s.\\)"))
-  "* Regular expressions for use with `auto-indent-delete-line-char-add-extra-spaces'.  This is used for programming modes as determined by `auto-indent-is-prog-mode-p'."
+  "Regular expressions for use with `auto-indent-delete-line-char-add-extra-spaces'.  This is used for programming modes as determined by `auto-indent-is-prog-mode-p'."
   :type '(repeat
           (list (regexp :tag "Characters Before Match")
                 (regexp :tag "Characters After Match")))
@@ -1030,7 +1033,7 @@ expressions defined in
   '(("\\(\\s.\\|\\s-\\)" "\\(\\s\"\\|\\sw\\)")
     ("\\s(" "\\(\\s(\\|\\s_\\|\\sw\\)")
     ("\\s)" "\\s)"))
-  "* Regular expressions for use with `auto-indent-delete-line-char-remove-last-space'.  This is used for programming modes as determined by `auto-indent-is-prog-mode-p'."
+  "Regular expressions for use with `auto-indent-delete-line-char-remove-last-space'.  This is used for programming modes as determined by `auto-indent-is-prog-mode-p'."
   :type '(repeat
           (list (regexp :tag "Characters Before Match")
                 (regexp :tag "Characters After Match")))
@@ -1045,7 +1048,7 @@ expressions defined in
 
 
 (defcustom auto-indent-kill-remove-extra-spaces nil
-  "* Remove indentation before killing the line or region."
+  "Remove indentation before killing the line or region."
   :type 'boolean
   :group 'auto-indent)
 
@@ -1075,7 +1078,7 @@ want."
   :group 'auto-indent)
 
 (defcustom auto-indent-kill-line-kill-region-when-active t
-  "* When killing lines, if region is active, kill region instead."
+  "When killing lines, if region is active, kill region instead."
   :type 'boolean
   :group 'auto-indent)
 
@@ -1089,12 +1092,12 @@ point is at BOL.  And if point is after text, act as if point
   :group 'auto-indent)
 
 (defcustom auto-indent-minor-mode-symbol t
-  "* When true, Auto Indent puts AI on the mode line."
+  "When true, Auto Indent puts AI on the mode line."
   :type 'boolean
   :group 'auto-indent)
 
 (defcustom auto-indent-disabled-modes-on-save '(ahk-mode)
-  "* List of modes where `indent-region' of the whole file is ignored."
+  "List of modes where `indent-region' of the whole file is ignored."
   :type '(repeat (sexp :tag "Major mode"))
   :tag " Major modes where linum is disabled: "
   :group 'auto-indent)
@@ -1133,7 +1136,7 @@ indentation is may not specified for the current mode."
   :group 'auto-indent)
 
 (defcustom auto-indent-newline-function 'reindent-then-newline-and-indent
-  "* Auto indentation function for the return key."
+  "Auto indentation function for the return key."
   :type '(choice
           (const :tag "Reindent the current line, insert the newline then indent the current line."
                  reindent-then-newline-and-indent)
@@ -1270,7 +1273,7 @@ work in some modes but may cause things such as `company-mode' or
   '(text-mode message-mode fundamental-mode texinfo-mode conf-windows-mode
               LaTeX-mode latex-mode TeX-mode tex-mode outline-mode
               nroww-mode)
-  "* List of auto-indent's known text-modes."
+  "List of auto-indent's known text-modes."
   :type '(repeat (sexp :tag "Major mode"))
   :tag "Auto-indent known text modes"
   :group 'auto-indent)
@@ -1305,7 +1308,7 @@ If the major mode has `major-mode-indent-level', `major-indent-level', `major-mo
 
 
 (defvar auto-indent-minor-mode-map nil
-  "* Auto Indent mode map.")
+  "Auto Indent mode map.")
 
 (defun auto-indent-is-prog-mode-p ()
   "Determines if this mode is a programming mode."
@@ -1325,7 +1328,7 @@ If the major mode has `major-mode-indent-level', `major-indent-level', `major-mo
 ;; appropriate command.
 
 (defun auto-indent-setup-map ()
-  "* Set up minor mode map."
+  "Set up minor mode map."
   (setq auto-indent-minor-mode-map (make-sparse-keymap))
   (unless (string-match "^[ \t]*$" auto-indent-key-for-end-of-line-then-newline)
     (define-key auto-indent-minor-mode-map (read-kbd-macro auto-indent-key-for-end-of-line-then-newline) 'auto-indent-eol-newline))
