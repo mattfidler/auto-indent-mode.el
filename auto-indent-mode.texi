@@ -32,7 +32,7 @@ Matthew L. Fidler ## Library Information @emph{auto-indent-mode.el} --- Auto ind
 @item
 @strong{Created} -- Sat Nov 6 11:02:07 2010 (-0500)
 @item
-@strong{Version} -- 0.94
+@strong{Version} -- 0.95
 @item
 @strong{Last-Updated} -- Tue Aug 21 13:08:42 2012 (-0500)
 @item
@@ -222,6 +222,8 @@ See:
 @node History
 @section History
 @itemize
+@item
+@strong{13-Mar-2013} -- Push again after merging minibuffer fix (Matthew L. Fidler)
 @item
 @strong{13-Mar-2013} -- Remove all starred comments. (Matthew L. Fidler)
 @item
