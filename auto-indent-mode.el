@@ -2326,6 +2326,10 @@ around and the whitespace was deleted from the line."
               (indent-according-to-mode))))))
     (error (message "[Auto-Indent-Mode]: Ignored indentation error in `auto-indent-mode-post-command-hook' %s" (error-message-string err)))))
 
+(defun auto-indent-minibuffer-hook ()
+  (setq auto-indent-last-pre-command-hook-minibufferp t))
+(add-hook 'minibuffer-setup-hook #'auto-indent-minibuffer-hook)
+
 (defvar auto-indent-was-on nil)
 
 (provide 'auto-indent-mode)
