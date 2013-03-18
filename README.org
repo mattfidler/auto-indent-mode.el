@@ -8,7 +8,7 @@
  - Author :: Matthew L. Fidler, Le Wang & Others
  - Maintainer :: Matthew L. Fidler
  - Created :: Sat Nov  6 11:02:07 2010 (-0500)
- - Version :: 0.95
+ - Version :: 0.96
  - Last-Updated :: Tue Aug 21 13:08:42 2012 (-0500)
  -           By :: Matthew L. Fidler
  -     Update # :: 1467
@@ -264,6 +264,7 @@ See:
 ** Internal Variables
 * History
 
+ - 18-Mar-2013 ::  Add bug fix for Issue #13 (Matthew L. Fidler)
  - 13-Mar-2013 ::  Push again after merging minibuffer fix (Matthew L. Fidler)
  - 13-Mar-2013 ::  Remove all starred comments. (Matthew L. Fidler)
  - 13-Mar-2013 ::  Fixed Github Issue #11. Org-readme doesn't like the starred variable names (Matthew L. Fidler)

@@ -5,7 +5,7 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.95
+;; Version: 0.96
 ;; Last-Updated: Tue Aug 21 13:08:42 2012 (-0500)
 ;;           By: Matthew L. Fidler
 ;;     Update #: 1467
@@ -258,6 +258,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 18-Mar-2013    Matthew L. Fidler  
+;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
+;;    Add bug fix for Issue #13
 ;; 13-Mar-2013    Matthew L. Fidler  
 ;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
 ;;    Push again after merging minibuffer fix
@@ -837,7 +840,9 @@ The test for presence of the car of ELT-CONS is done with `equal'."
 (defun auto-indent-save-par-region-interval ()
   "Saves `auto-indent-next-pair-timer-geo-mean'."
   (when auto-indent-save-next-pair
-    (customize-save-variable 'auto-indent-next-pair-timer-geo-mean auto-indent-next-pair-timer-geo-mean)))
+    (condition-case err
+        (customize-save-variable 'auto-indent-next-pair-timer-geo-mean auto-indent-next-pair-timer-geo-mean)
+      (error nil))))
 
 (add-hook 'kill-emacs-hook 'auto-indent-save-par-region-interval)
 
