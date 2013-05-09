@@ -5,7 +5,7 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.97
+;; Version: 0.98
 ;; Last-Updated: Tue Aug 21 13:08:42 2012 (-0500)
 ;;           By: Matthew L. Fidler
 ;;     Update #: 1467
@@ -258,6 +258,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 9-May-2013    Matthew L. Fidler  
+;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
+;;    Changed the AI indicator to be used at all times.  That way it doesn't
+;;    interfere with the diminish package.  I believe that is the standard
+;;    way to take off mode lines.
 ;; 18-Mar-2013    Matthew L. Fidler  
 ;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
 ;;    Should fix issue #14
@@ -1102,11 +1107,6 @@ point is at BOL.  And if point is after text, act as if point
   :type 'boolean
   :group 'auto-indent)
 
-(defcustom auto-indent-minor-mode-symbol t
-  "When true, Auto Indent puts AI on the mode line."
-  :type 'boolean
-  :group 'auto-indent)
-
 (defcustom auto-indent-disabled-modes-on-save '(ahk-mode)
   "List of modes where `indent-region' of the whole file is ignored."
   :type '(repeat (sexp :tag "Major mode"))
@@ -1398,9 +1398,7 @@ http://www.emacswiki.org/emacs/AutoIndentation
   ;; The initial value.
   nil
   ;; The indicator for the mode line.  Nothing.
-  (if auto-indent-minor-mode-symbol
-      " AI"
-    "")
+  " AI"
   :group 'auto-indent
   (auto-indent-setup-map)
   (cond (auto-indent-minor-mode
@@ -1605,8 +1603,12 @@ mode."
           (save-excursion
             (when (mark t)
               (save-restriction
-                (narrow-to-region (progn (goto-char (mark t)) (point-at-bol))
-                                  (progn (goto-char pt) (point-at-eol)))
+                (condition-case err
+                    (progn
+                      (narrow-to-region (progn (goto-char (mark t)) (point-at-bol))
+                                        (progn (goto-char pt) (point-at-eol))))
+                  (error
+                   (message "[Auto-Indent Mode] Ignoring error when narrowing region to run `auto-indent-after-yank-hook'")))
                 (condition-case err
                     (run-hook-with-args 'auto-indent-after-yank-hook (point-min) (point-max))
                   (error
