@@ -8,7 +8,7 @@
  - Author :: Matthew L. Fidler, Le Wang & Others
  - Maintainer :: Matthew L. Fidler
  - Created :: Sat Nov  6 11:02:07 2010 (-0500)
- - Version :: 0.101
+ - Version :: 0.102
  - Last-Updated :: Tue Aug 21 13:08:42 2012 (-0500)
  -           By :: Matthew L. Fidler
  -     Update # :: 1467
@@ -371,6 +371,7 @@ to the major mode's conventions.
 ** Internal Variables
 * History
 
+ - 25-Jul-2013 ::  Push again. (Matthew L. Fidler)
  - 25-Jul-2013 ::  Fix issue #20. Add tabify region and buffer options. (Matthew L. Fidler)
  - 24-Jul-2013 ::  Updated FAQ for readme.org 6-Jul-2013 Matthew L. Fidler Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler) Updated documentation for a better description of assigning the indent level across modes. (Matthew L. Fidler)
  - 15-May-2013 ::  Made the indentation selective. Should fix Issue #15. 9-May-2013 Matthew L. Fidler Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler) Changed the AI indicator to be used at all times. That way it doesn't interfere with the diminish package. I believe that is the standard way to take off mode lines. (Matthew L. Fidler)

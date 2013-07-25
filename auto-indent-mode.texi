@@ -32,7 +32,7 @@ Matthew L. Fidler ## Library Information @emph{auto-indent-mode.el} --- Auto ind
 @item
 @strong{Created} -- Sat Nov 6 11:02:07 2010 (-0500)
 @item
-@strong{Version} -- 0.101
+@strong{Version} -- 0.102
 @item
 @strong{Last-Updated} -- Tue Aug 21 13:08:42 2012 (-0500)
 @item
@@ -293,6 +293,8 @@ This will insert a newline and then indent. Not reindent according to the major 
 @node History
 @section History
 @itemize
+@item
+@strong{25-Jul-2013} -- Push again. (Matthew L. Fidler)
 @item
 @strong{25-Jul-2013} -- Fix issue #20. Add tabify region and buffer options. (Matthew L. Fidler)
 @item
