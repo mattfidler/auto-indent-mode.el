@@ -5,7 +5,7 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.103
+;; Version: 0.104
 ;; Last-Updated: Tue Aug 21 13:08:42 2012 (-0500)
 ;;           By: Matthew L. Fidler
 ;;     Update #: 1467
@@ -364,6 +364,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 15-Aug-2013    Matthew L. Fidler  
+;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
+;;    Added unindent block close.  Its based on each's mode's syntax table
+;;    (hopefully they are correct).  Should also address Issue #24.
 ;; 29-Jul-2013    Matthew L. Fidler  
 ;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
 ;;    Should fix Issue #21.
@@ -1490,6 +1494,15 @@ If the major mode has `major-mode-indent-level', `major-indent-level', `major-mo
   :type '(repeat (symbol :tag "Variable"))
   :group 'auto-indent)
 
+(defcustom auto-indent-block-close t
+  "If a block is closed, unindent that line.
+int main(void) {
+    /* ... */
+    } // <- unindent this line when I type it.
+"
+  :type 'boolean
+  :group 'auto-indent)
+
 (make-variable-buffer-local 'auto-indent-eol-char)
 
 (defvar auto-indent-eol-ret-save ""
@@ -2498,6 +2511,11 @@ around and the whitespace was deleted from the line."
           (add-hook 'pre-command-hook 'auto-indent-mode-pre-command-hook nil t))
         (when auto-indent-minor-mode
           (cond
+           ((and auto-indent-block-close
+                 (save-match-data
+                   (looking-back "\\s)")
+                   (string= (match-string 0) (key-description (this-command-keys)))))
+            (indent-according-to-mode))
            ((and last-command-event (memq last-command-event '(10 13 return)))
             (when (or (not (or (fboundp 'yas--snippets-at-point)
                                (fboundp 'yas/snippets-at-point)))
