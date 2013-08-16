@@ -32,7 +32,7 @@ Matthew L. Fidler ## Library Information @emph{auto-indent-mode.el} --- Auto ind
 @item
 @strong{Created} -- Sat Nov 6 11:02:07 2010 (-0500)
 @item
-@strong{Version} -- 0.105
+@strong{Version} -- 0.106
 @item
 @strong{Last-Updated} -- Tue Aug 21 13:08:42 2012 (-0500)
 @item
@@ -289,6 +289,8 @@ This will insert a newline and then indent. Not reindent according to the major 
 @node History
 @section History
 @itemize
+@item
+@strong{16-Aug-2013} -- Changed last-command to this-command. Now the new yank engine actually runs. (Issue #6 and Issue #23) (Matthew L. Fidler)
 @item
 @strong{16-Aug-2013} -- Changed auto-indent's yank engine to be in the post-command-hook. May fix Issue #24 and Issue #6 (Matthew L. Fidler)
 @item
