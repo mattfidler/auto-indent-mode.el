@@ -2073,7 +2073,7 @@ If at end of line, obey `auto-indent-kill-line-at-eol'
                     (setq can-do-it nil))
                 (when bolp
                   (move-beginning-of-line 1))
-                (when eolp
+                (when (and eolp (not bolp) (save-match-data (not (looking-back "^[ \t]+"))))
                   (cond
                    ((eq auto-indent-kill-line-at-eol nil)
                     (when (> (prefix-numeric-value current-prefix-arg) 0)
