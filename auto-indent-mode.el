@@ -5,7 +5,7 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.109
+;; Version: 0.110
 ;; Last-Updated: Tue Aug 21 13:08:42 2012 (-0500)
 ;;           By: Matthew L. Fidler
 ;;     Update #: 1467
@@ -359,6 +359,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 26-Oct-2013    Matthew L. Fidler  
+;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
+;;    Fix how auto-indent-mode changes backspace and other behaviors outside
+;;    of auto-indent-mode.  Should Address Issue #28.
 ;; 26-Oct-2013    Matthew L. Fidler  
 ;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
 ;;    Fixed documentation.  See Issue #28
@@ -1276,7 +1280,16 @@ nil - join next line to the current line.  Deletes white-space at
 
 whole-line - kill next lines
 
-subsequent-whole-lines - merge lines on first call, subsequent kill whole lines
+subsequent-whole-lines - merge lines on first call, subsequent kill whole lines.  
+
+When at the end of the line
+
+aaaa|
+bbbb
+
+Killing the region changes the text to
+
+aaaa|
 
 blanks - kill all empty lines after the current line, and then
             any lines specified.
@@ -2066,10 +2079,10 @@ If at end of line, obey `auto-indent-kill-line-at-eol'
                 (prog-mode (auto-indent-is-prog-mode-p))
                 (eolp (auto-indent-eolp))
                 (bolp (auto-indent-bolp)))
-            (if (and auto-indent-mode
-                     (not (minibufferp)))
-                (when auto-indent-par-region-timer
-                  (cancel-timer auto-indent-par-region-timer))
+            (when (and auto-indent-mode
+                       (not (minibufferp)))
+              (when auto-indent-par-region-timer
+                (cancel-timer auto-indent-par-region-timer))
               (if (and auto-indent-kill-line-kill-region-when-active
                        (use-region-p))
                   (progn
