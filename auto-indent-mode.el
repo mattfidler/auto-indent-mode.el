@@ -5,7 +5,7 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.108
+;; Version: 0.109
 ;; Last-Updated: Tue Aug 21 13:08:42 2012 (-0500)
 ;;           By: Matthew L. Fidler
 ;;     Update #: 1467
@@ -73,12 +73,12 @@
 ;; ~/.emacs
 ;; 
 ;; 
-;;   (add-hook 'emacs-lisp-mode-hook 'auto-indent-minor-mode)
+;;   (add-hook 'emacs-lisp-mode-hook 'auto-indent-mode)
 ;; 
 ;; 
 ;; 
 ;; You could always turn on the minor mode with the command
-;; `auto-indent-minor-mode'
+;; `auto-indent-mode'
 ;; * Auto-indent and repositories
 ;; auto-indent-mode will now be more conservative when it determines
 ;; that you are in a repository.  It will only indent the local area you
@@ -359,6 +359,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 26-Oct-2013    Matthew L. Fidler  
+;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
+;;    Fixed documentation.  See Issue #28
 ;; 03-Oct-2013    Matthew L. Fidler  
 ;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
 ;;    Set the indent variables globally (should fix Issue #27). Also makes
