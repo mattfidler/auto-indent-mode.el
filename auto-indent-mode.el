@@ -5,7 +5,7 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.110
+;; Version: 0.111
 ;; Last-Updated: Tue Aug 21 13:08:42 2012 (-0500)
 ;;           By: Matthew L. Fidler
 ;;     Update #: 1467
@@ -359,6 +359,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 28-Oct-2013    Matthew L. Fidler  
+;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
+;;    Added bugfix for Issue #28.  Should have different behavior if
+;;    auto-indent-mode is off or on.
 ;; 26-Oct-2013    Matthew L. Fidler  
 ;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
 ;;    Fix how auto-indent-mode changes backspace and other behaviors outside
@@ -889,9 +893,6 @@
 
 (eval-when-compile
   (require 'cl))
-
-
-(defvar auto-indent-mode nil)
 
 (defgroup auto-indent nil
   "Auto Indent Mode Customizations"
@@ -1916,14 +1917,19 @@ When FUNCTION is non-nil, define an alternate function instead of an advice."
                                  (or (not auto-indent-force-interactive-advices)
                                      (called-interactively-p 'any)
                                      (auto-indent-is-bs-key-p))))) ,do-it
-        (let ((backward-delete-char-untabify-method auto-indent-backward-delete-char-behavior))
+        (let ((backward-delete-char-untabify-method
+               (if auto-indent-mode
+                   auto-indent-backward-delete-char-behavior
+                 backward-delete-char-untabify-method)))
+          (message "delete-char method: %s; %s" auto-indent-mode backward-delete-char-untabify-method)
           (when auto-indent-par-region-timer
             (cancel-timer auto-indent-par-region-timer))
           (setq this-command 'auto-indent-delete-backward-char) ;; No recursive calls, please.
           ,(if (eq command 'backward-delete-char-untabify)
                do-it
              `(backward-delete-char-untabify
-               ,@(if function '(n (if (called-interactively-p 'any) t killflag))
+               ,@(if function
+                     '(n (if (called-interactively-p 'any) t killflag))
                    '((ad-get-arg 0) t)))))))))
 
 (auto-indent-def-del-char backward-delete-char-untabify)
