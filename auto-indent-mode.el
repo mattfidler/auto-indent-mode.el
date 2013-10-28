@@ -5,7 +5,7 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.113
+;; Version: 0.114
 ;; Last-Updated: Tue Aug 21 13:08:42 2012 (-0500)
 ;;           By: Matthew L. Fidler
 ;;     Update #: 1467
@@ -359,6 +359,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 28-Oct-2013    Matthew L. Fidler  
+;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
+;;    Removed stray debugging message.
 ;; 28-Oct-2013    Matthew L. Fidler  
 ;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
 ;;    Made keywords case insensitive and added esac. Issue #26.
@@ -1942,7 +1945,6 @@ When FUNCTION is non-nil, define an alternate function instead of an advice."
                (if auto-indent-mode
                    auto-indent-backward-delete-char-behavior
                  backward-delete-char-untabify-method)))
-          (message "delete-char method: %s; %s" auto-indent-mode backward-delete-char-untabify-method)
           (when auto-indent-par-region-timer
             (cancel-timer auto-indent-par-region-timer))
           (setq this-command 'auto-indent-delete-backward-char) ;; No recursive calls, please.
