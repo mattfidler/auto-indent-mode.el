@@ -5,7 +5,7 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.112
+;; Version: 0.113
 ;; Last-Updated: Tue Aug 21 13:08:42 2012 (-0500)
 ;;           By: Matthew L. Fidler
 ;;     Update #: 1467
@@ -359,6 +359,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 28-Oct-2013    Matthew L. Fidler  
+;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
+;;    Made keywords case insensitive and added esac. Issue #26.
 ;; 28-Oct-2013    Matthew L. Fidler  
 ;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
 ;;    Should take care of Issue #26.
@@ -1531,7 +1534,8 @@ int main(void) {
   :type 'boolean
   :group 'auto-indent)
 
-(defcustom auto-indent-block-close-keywords '("fi" "end" "EndIf" "next" "Next" "done")
+(defcustom auto-indent-block-close-keywords
+  '("fi" "end" "endif" "next" "done" "esac")
   "Keywords to try to unindent a line.
 For example in ruby:
 
@@ -2482,9 +2486,10 @@ around and the whitespace was deleted from the line."
                    (error nil)))
             (indent-according-to-mode))
            ((and auto-indent-block-close
-                 (condition-case err
-                     (looking-back (regexp-opt auto-indent-block-close-keywords t))
-                   (error nil)))
+                 (let ((case-fold-search t))
+                   (condition-case err
+                       (looking-back (regexp-opt auto-indent-block-close-keywords t))
+                     (error nil))))
             (indent-according-to-mode))
            ((and last-command-event (memq last-command-event '(10 13 return)))
             (when (or (not (or (fboundp 'yas--snippets-at-point)
