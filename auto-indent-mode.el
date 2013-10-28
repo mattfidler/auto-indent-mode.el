@@ -5,7 +5,7 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.111
+;; Version: 0.112
 ;; Last-Updated: Tue Aug 21 13:08:42 2012 (-0500)
 ;;           By: Matthew L. Fidler
 ;;     Update #: 1467
@@ -359,6 +359,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 28-Oct-2013    Matthew L. Fidler  
+;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
+;;    Should take care of Issue #26.
 ;; 28-Oct-2013    Matthew L. Fidler  
 ;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
 ;;    Added bugfix for Issue #28.  Should have different behavior if
@@ -1528,6 +1531,20 @@ int main(void) {
   :type 'boolean
   :group 'auto-indent)
 
+(defcustom auto-indent-block-close-keywords '("fi" "end" "EndIf" "next" "Next" "done")
+  "Keywords to try to unindent a line.
+For example in ruby:
+
+# In an object instance variable (denoted with '@'), remember a block.
+def remember(&a_block)
+  @block = a_block
+  end # <- unindent this line when I type it.
+
+This will check any of the keywords and try to unindent the line.
+"
+  :type '(repeat (string :tag "Keyword to unindent"))
+  :group 'auto-indent-mode)
+
 (make-variable-buffer-local 'auto-indent-eol-char)
 
 (defvar auto-indent-eol-ret-save ""
@@ -2446,7 +2463,8 @@ auto-indenting)"
 Allows auto-indent-mode to go to the right place when moving
 around and the whitespace was deleted from the line."
   (condition-case err
-      (when (and (not auto-indent-last-pre-command-hook-minibufferp) (not (minibufferp))
+      (when (and (not auto-indent-last-pre-command-hook-minibufferp)
+                 (not (minibufferp))
                  (not (memq indent-line-function auto-indent-disabled-indent-functions)))
         
         (unless (memq 'auto-indent-mode-pre-command-hook pre-command-hook)
@@ -2461,6 +2479,11 @@ around and the whitespace was deleted from the line."
                      (save-match-data
                        (looking-back "\\s)")
                        (string= (match-string 0) (key-description (this-command-keys))))
+                   (error nil)))
+            (indent-according-to-mode))
+           ((and auto-indent-block-close
+                 (condition-case err
+                     (looking-back (regexp-opt auto-indent-block-close-keywords t))
                    (error nil)))
             (indent-according-to-mode))
            ((and last-command-event (memq last-command-event '(10 13 return)))

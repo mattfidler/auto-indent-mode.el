@@ -8,7 +8,7 @@
  - Author :: Matthew L. Fidler, Le Wang & Others
  - Maintainer :: Matthew L. Fidler
  - Created :: Sat Nov  6 11:02:07 2010 (-0500)
- - Version :: 0.111
+ - Version :: 0.112
  - Last-Updated :: Tue Aug 21 13:08:42 2012 (-0500)
  -           By :: Matthew L. Fidler
  -     Update # :: 1467
@@ -366,6 +366,7 @@ to the major mode's conventions.
 ** Internal Variables
 * History
 
+ - 28-Oct-2013 ::  Should take care of Issue #26. (Matthew L. Fidler)
  - 28-Oct-2013 ::  Added bugfix for Issue #28. Should have different behavior if auto-indent-mode is off or on. (Matthew L. Fidler)
  - 26-Oct-2013 ::  Fix how auto-indent-mode changes backspace and other behaviors outside of auto-indent-mode. Should Address Issue #28. (Matthew L. Fidler)
  - 26-Oct-2013 ::  Fixed documentation. See Issue #28 (Matthew L. Fidler)
