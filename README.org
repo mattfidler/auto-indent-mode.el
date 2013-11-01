@@ -8,7 +8,7 @@
  - Author :: Matthew L. Fidler, Le Wang & Others
  - Maintainer :: Matthew L. Fidler
  - Created :: Sat Nov  6 11:02:07 2010 (-0500)
- - Version :: 0.114
+ - Version :: 0.115
  - Last-Updated :: Tue Aug 21 13:08:42 2012 (-0500)
  -           By :: Matthew L. Fidler
  -     Update # :: 1467
@@ -366,6 +366,10 @@ to the major mode's conventions.
 ** Internal Variables
 * History
 
+1-Nov-2013    Matthew L. Fidler  
+   Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
+   Take out subsequent whole lines.  I'm not sure what the point of this
+   option is... See Issue #28.
  - 28-Oct-2013 ::  Removed stray debugging message. (Matthew L. Fidler)
  - 28-Oct-2013 ::  Made keywords case insensitive and added esac. Issue #26. (Matthew L. Fidler)
  - 28-Oct-2013 ::  Should take care of Issue #26. (Matthew L. Fidler)
