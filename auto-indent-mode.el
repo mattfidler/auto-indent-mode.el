@@ -1348,11 +1348,22 @@ point is at BOL.  And if point is after text, act as if point
     texinfo-mode
     text-mode
     wl-summary-mode
-    yaml-mode
     ,(if (boundp 'mmm-mode) 'mmm-mode))
   "List of modes disabled when global `auto-indent-mode' is on."
   :type '(repeat (sexp :tag "Major mode"))
   :tag " Major modes where auto-indent is disabled: "
+  :group 'auto-indent)
+
+(defcustom auto-indent-multiple-indent-modes
+  '(python-mode
+    coffee-mode
+    haskell-mode
+    haml-mode
+    yaml-mode
+    scss-mode)
+  "List of modes with multiple indent."
+  :type '(repeat (symbol :tag "Major mode"))
+  :tag " Major modes where tab changes the indent-level intelligently."
   :group 'auto-indent)
 
 (defcustom auto-indent-disabled-indent-functions
@@ -1805,7 +1816,8 @@ mode."
             (run-hook-with-args 'auto-indent-after-yank-hook (point-min) (point-max))
           (error
            (message "[Auto-Indent Mode] Ignoring error when running hook `auto-indent-after-yank-hook': %s" (error-message-string err)))))
-      (if auto-indent-on-yank-or-paste
+      (if (and auto-indent-on-yank-or-paste
+               (not (memq major-mode auto-indent-multiple-indent-modes)))
           (indent-region p1 p2))
       (save-restriction
         (narrow-to-region p1 p2)
@@ -1814,6 +1826,34 @@ mode."
           (tabify (point-min) (point-max)))
          (auto-indent-mode-untabify-on-yank-or-paste
           (untabify (point-min) (point-max))))))))
+
+(defun auto-indent-according-to-mode ()
+  "Indent according to mode."
+  (cond
+   ((memq major-mode auto-indent-multiple-indent-modes)
+    (let ((indent-list '())
+          (first-indent (buffer-substring (point-at-bol) (point-at-eol)))
+          (call-mm major-mode)
+          (indent-trial-1
+           (buffer-substring (point-at-bol 0) (point)))
+          (indent-trial-2
+           (buffer-substring (point) (point-at-eol 2)))
+          tmp
+          (new-pt (- (point) (point-at-bol 0)))
+          (should-indent-p t))
+      (with-temp-buffer
+        (call-interactively call-mm)
+        (insert indent-trial-1)
+        (save-excursion
+          (insert indent-trial-2))
+        (save-excursion
+          (while (not (member (point) indent-list))
+            (push (point) indent-list)
+            (indent-according-to-mode)))
+        (setq should-indent-p (not (member (point) indent-list))))
+      (when should-indent-p
+        (indent-according-to-mode))))
+   (t (indent-according-to-mode))))
 
 
 (defadvice move-beginning-of-line (around auto-indent-mode-advice)
@@ -1832,7 +1872,7 @@ mode."
              (org-babel-where-is-src-block-head))
         (progn
           (org-babel-do-in-edit-buffer
-           (indent-according-to-mode))
+           (auto-indent-according-to-mode))
           (when (not (looking-back "^[ \t]*"))
             (beginning-of-line)
             (skip-chars-forward " \t"))))
@@ -1846,7 +1886,7 @@ mode."
                (not current-prefix-arg))
       (if (auto-indent-aggressive-p)
           (progn
-            (indent-according-to-mode)
+            (auto-indent-according-to-mode)
             (when (not (looking-back "^[ \t]*"))
               (beginning-of-line))))
       (skip-chars-forward " \t"))))
@@ -1866,10 +1906,11 @@ buffer."
              (and save auto-indent-delete-trailing-whitespace-on-save-file)
              (and (not save) auto-indent-delete-trailing-whitespace-on-visit-file))
         (delete-trailing-whitespace))
-      (when (or
-             (and save auto-indent-on-save-file)
-             (and (not save) auto-indent-on-visit-file))
-        (indent-region (point-min) (point-max) nil))
+      (unless (memq major-mode auto-indent-multiple-indent-modes)
+        (when (or
+               (and save auto-indent-on-save-file)
+               (and (not save) auto-indent-on-visit-file))
+          (indent-region (point-min) (point-max) nil)))
       (cond
        ((or (and (not save) (eq auto-indent-untabify-on-visit-file 'tabify))
             (and save (eq auto-indent-untabify-on-save-file 'tabify)))
@@ -2143,7 +2184,7 @@ If at end of line, obey `auto-indent-kill-line-at-eol'
                            auto-indent-kill-line-at-eol))))))
             (when can-do-it
               ,do-it)
-            (indent-according-to-mode )
+            (auto-indent-according-to-mode )
             (when (and eolp (eq auto-indent-kill-line-at-eol nil))
               (when (and eolp
                          auto-indent-mode (not (minibufferp))
@@ -2379,6 +2420,7 @@ Allows the kill ring save to delete the beginning white-space if desired."
       (let ((mark-active mark-active))
         (when (and (not (minibufferp))
                    (not (looking-at "[^ \t]"))
+                   (not (memq major-mode auto-indent-multiple-indent-modes))
                    (not (looking-back "^[ \t]+")))
           (let ((start-time (float-time)))
             (indent-region auto-indent-pairs-begin auto-indent-pairs-end)
@@ -2479,13 +2521,13 @@ around and the whitespace was deleted from the line."
                        (looking-back "\\s)")
                        (string= (match-string 0) (key-description (this-command-keys))))
                    (error nil)))
-            (indent-according-to-mode))
+            (auto-indent-according-to-mode))
            ((and auto-indent-block-close
                  (let ((case-fold-search t))
                    (condition-case err
                        (looking-back (regexp-opt auto-indent-block-close-keywords t))
                      (error nil))))
-            (indent-according-to-mode))
+            (auto-indent-according-to-mode))
            ((and last-command-event (memq last-command-event '(10 13 return)))
             (when (or (not (or (fboundp 'yas--snippets-at-point)
                                (fboundp 'yas/snippets-at-point)))
@@ -2500,7 +2542,7 @@ around and the whitespace was deleted from the line."
                 (when (and auto-indent-last-pre-command-hook-point
                            (eq auto-indent-newline-function 'reindent-then-newline-and-indent))
                   (goto-char auto-indent-last-pre-command-hook-point)
-                  (indent-according-to-mode))
+                  (auto-indent-according-to-mode))
                 (when auto-indent-last-pre-command-hook-point
                   (goto-char auto-indent-last-pre-command-hook-point)
                   ;; Remove the trailing white-space after indentation because
@@ -2508,13 +2550,13 @@ around and the whitespace was deleted from the line."
                   (save-restriction
                     (narrow-to-region (point-at-bol) (point-at-eol))
                     (delete-trailing-whitespace))))
-              (indent-according-to-mode)))
+              (auto-indent-according-to-mode)))
            ((and auto-indent-blank-lines-on-move (auto-indent-aggressive-p)
                  auto-indent-mode-pre-command-hook-line
                  (not (= (line-number-at-pos)
                          auto-indent-mode-pre-command-hook-line)))
             (when (and (looking-back "^[ \t]*") (looking-at "[ \t]*$"))
-              (indent-according-to-mode))))))
+              (auto-indent-according-to-mode))))))
     (error (message "[Auto-Indent-Mode]: Ignored indentation error in `auto-indent-mode-post-command-hook' %s" (error-message-string err)))))
 
 (defun auto-indent-minibuffer-hook ()
