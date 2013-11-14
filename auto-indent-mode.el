@@ -1839,10 +1839,14 @@ languages are defined in `auto-indent-multiple-indent-modes.'"
     (let ((indent-list '())
           (first-indent (buffer-substring (point-at-bol) (point-at-eol)))
           (call-mm major-mode)
+          ;; (indent-trial-1
+          ;;  (buffer-substring (point-at-bol 0) (point)))
           (indent-trial-1
-           (buffer-substring (point-at-bol 0) (point)))
+           (buffer-substring (point-min) (point)))
+          ;; (indent-trial-2
+          ;;  (buffer-substring (point) (point-at-eol 2)))
           (indent-trial-2
-           (buffer-substring (point) (point-at-eol 2)))
+           (buffer-substring (point) (point-max)))
           tmp
           (new-pt (- (point) (point-at-bol 0)))
           (should-indent-p t))
@@ -2521,22 +2525,18 @@ around and the whitespace was deleted from the line."
            ((eq this-command 'yank)
             (auto-indent-yank-post-command))
            ((and auto-indent-block-close
-                 ;; Do not change indentation for multiple indent modes
-                 (not (memq major-mode auto-indent-multiple-indent-modes))
                  (condition-case err
                      (save-match-data
                        (looking-back "\\s)")
                        (string= (match-string 0) (key-description (this-command-keys))))
                    (error nil)))
-            (indent-according-to-mode))
+            (auto-indent-according-to-mode))
            ((and auto-indent-block-close
-                 ;; Do not change indentation for multiple indent modes
-                 (not (memq major-mode auto-indent-multiple-indent-modes))
                  (let ((case-fold-search t))
                    (condition-case err
                        (looking-back (regexp-opt auto-indent-block-close-keywords t))
                      (error nil))))
-            (indent-according-to-mode))
+            (auto-indent-according-to-mode))
            ((and last-command-event (memq last-command-event '(10 13 return)))
             (when (or (not (or (fboundp 'yas--snippets-at-point)
                                (fboundp 'yas/snippets-at-point)))
@@ -2554,15 +2554,29 @@ around and the whitespace was deleted from the line."
                   ;; Use more conservative indent for prior line
                   (auto-indent-according-to-mode))
                 (when auto-indent-last-pre-command-hook-point
-                  (goto-char auto-indent-last-pre-command-hook-point)
-                  ;; Remove the trailing white-space after indentation because
-                  ;; indentation may introduce the whitespace.
-                  (save-restriction
-                    (narrow-to-region (point-at-bol) (point-at-eol))
-                    (delete-trailing-whitespace))))
+                  ;; Don't remove trailing whitespace it will mess
+                  ;; with intended indentation.
+                  (unless (memq major-mode auto-indent-multiple-indent-modes)
+                    (goto-char auto-indent-last-pre-command-hook-point)
+                    ;; Remove the trailing white-space after indentation because
+                    ;; indentation may introduce the whitespace.
+                    (save-restriction
+                      (narrow-to-region (point-at-bol) (point-at-eol))
+                      (delete-trailing-whitespace)))))
               ;; Use mode's smart indent on a first line.
-              (indent-according-to-mode)))
-           ((and auto-indent-blank-lines-on-move (auto-indent-aggressive-p)
+              (cond
+               ((and (memq major-mode auto-indent-multiple-indent-modes)
+                     (string-match
+                      "^[ \t]*$"
+                      (buffer-substring (point-at-bol 0) (point-at-eol 0))))
+                (let ((last-indent (buffer-substring (point-at-bol 0) (point-at-eol 0))))
+                  (with-temp-buffer
+                    (insert last-indent)
+                    (setq last-indent (current-indentation)))
+                  (indent-line-to last-indent)))
+               (t (indent-according-to-mode)))))
+           ((and auto-indent-blank-lines-on-move
+                 (auto-indent-aggressive-p)
                  auto-indent-mode-pre-command-hook-line
                  (not (= (line-number-at-pos)
                          auto-indent-mode-pre-command-hook-line)))
