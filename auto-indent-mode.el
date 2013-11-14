@@ -1816,9 +1816,9 @@ mode."
             (run-hook-with-args 'auto-indent-after-yank-hook (point-min) (point-max))
           (error
            (message "[Auto-Indent Mode] Ignoring error when running hook `auto-indent-after-yank-hook': %s" (error-message-string err)))))
-      (if (and auto-indent-on-yank-or-paste
-               (not (memq major-mode auto-indent-multiple-indent-modes)))
-          (indent-region p1 p2))
+      (cond
+       (auto-indent-on-yank-or-paste
+        (indent-region p1 p2)))
       (save-restriction
         (narrow-to-region p1 p2)
         (cond
@@ -1828,7 +1828,9 @@ mode."
           (untabify (point-min) (point-max))))))))
 
 (defun auto-indent-according-to-mode ()
-  "Indent according to mode."
+  "Indent according to mode.
+Respect modes with language-based multiple indentations.  These
+languages are defined in `auto-indent-multiple-indent-modes.'"
   (cond
    ((memq major-mode auto-indent-multiple-indent-modes)
     (let ((indent-list '())
