@@ -2516,18 +2516,22 @@ around and the whitespace was deleted from the line."
            ((eq this-command 'yank)
             (auto-indent-yank-post-command))
            ((and auto-indent-block-close
+                 ;; Do not change indentation for multiple indent modes
+                 (not (memq major-mode auto-indent-multiple-indent-modes))
                  (condition-case err
                      (save-match-data
                        (looking-back "\\s)")
                        (string= (match-string 0) (key-description (this-command-keys))))
                    (error nil)))
-            (auto-indent-according-to-mode))
+            (indent-according-to-mode))
            ((and auto-indent-block-close
+                 ;; Do not change indentation for multiple indent modes
+                 (not (memq major-mode auto-indent-multiple-indent-modes))
                  (let ((case-fold-search t))
                    (condition-case err
                        (looking-back (regexp-opt auto-indent-block-close-keywords t))
                      (error nil))))
-            (auto-indent-according-to-mode))
+            (indent-according-to-mode))
            ((and last-command-event (memq last-command-event '(10 13 return)))
             (when (or (not (or (fboundp 'yas--snippets-at-point)
                                (fboundp 'yas/snippets-at-point)))
@@ -2542,6 +2546,7 @@ around and the whitespace was deleted from the line."
                 (when (and auto-indent-last-pre-command-hook-point
                            (eq auto-indent-newline-function 'reindent-then-newline-and-indent))
                   (goto-char auto-indent-last-pre-command-hook-point)
+                  ;; Use more conservative indent for prior line
                   (auto-indent-according-to-mode))
                 (when auto-indent-last-pre-command-hook-point
                   (goto-char auto-indent-last-pre-command-hook-point)
@@ -2550,12 +2555,14 @@ around and the whitespace was deleted from the line."
                   (save-restriction
                     (narrow-to-region (point-at-bol) (point-at-eol))
                     (delete-trailing-whitespace))))
-              (auto-indent-according-to-mode)))
+              ;; Use mode's smart indent on a first line.
+              (indent-according-to-mode)))
            ((and auto-indent-blank-lines-on-move (auto-indent-aggressive-p)
                  auto-indent-mode-pre-command-hook-line
                  (not (= (line-number-at-pos)
                          auto-indent-mode-pre-command-hook-line)))
             (when (and (looking-back "^[ \t]*") (looking-at "[ \t]*$"))
+              ;; Should be conservative here.
               (auto-indent-according-to-mode))))))
     (error (message "[Auto-Indent-Mode]: Ignored indentation error in `auto-indent-mode-post-command-hook' %s" (error-message-string err)))))
 
