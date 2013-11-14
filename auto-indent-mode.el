@@ -2576,6 +2576,7 @@ around and the whitespace was deleted from the line."
                   (indent-line-to last-indent)))
                (t (indent-according-to-mode)))))
            ((and auto-indent-blank-lines-on-move
+                 (not (memq major-mode auto-indent-multiple-indent-modes))
                  (auto-indent-aggressive-p)
                  auto-indent-mode-pre-command-hook-line
                  (not (= (line-number-at-pos)
