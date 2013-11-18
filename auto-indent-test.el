@@ -88,6 +88,26 @@ HISTFILESIZE=2000")
     (message (buffer-string))
     (should (looking-at "HISTFILESIZE=2000"))))
 
+(ert-deftest auto-indent-test-kill-line-extra-space ()
+  "Test Issue #31.
+When reach (point-min) or (point-max), invoke kill-line command, will add some whitespace before line beginning after indent.
+
+reproduce:
+
+Create a null file named 1.el.
+add some text.
+
+\(abcd\)|
+press C-k. will result
+
+ (abcd)I"
+  (with-temp-buffer
+    (emacs-lisp-mode)
+    (insert "(abcd)")
+    (call-interactively 'kill-line)
+    (goto-char (point-min))
+    (should (looking-at "(abcd)"))))
+
 (provide 'auto-indent-test)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; auto-indent-test.el ends here
