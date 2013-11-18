@@ -2345,9 +2345,10 @@ Allows the kill ring save to delete the beginning white-space if desired."
 
 (defun auto-indent-eolp ()
   "Return t if point is at eol respecting `auto-indent-use-text-boundaries'."
-  (if auto-indent-use-text-boundaries
-      (looking-at-p "[ \t]*$")
-    (eolp)))
+  (and (if auto-indent-use-text-boundaries
+           (looking-at-p "[ \t]*$")
+         (eolp))
+       (not (eobp))))
 
 (defun auto-indent-bolp ()
   "Return t if point is at bol respecting `auto-indent-use-text-boundaries'."
