@@ -1,0 +1,4 @@
+(auto-indent-test
+ :repo "mlf176f2/auto-indent-mode.el"
+ :fetcher github
+ :files ("auto-indent-test.el" "dir" "auto-indent-test.info"))
