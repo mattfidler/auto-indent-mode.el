@@ -5,7 +5,7 @@
 ;; Author: Matthew L. Fidler, Le Wang & Others
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Sat Nov  6 11:02:07 2010 (-0500)
-;; Version: 0.116
+;; Version: 0.117
 ;; Last-Updated: Tue Aug 21 13:08:42 2012 (-0500)
 ;;           By: Matthew L. Fidler
 ;;     Update #: 1467
@@ -359,6 +359,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 20-Nov-2013    Matthew L. Fidler  
+;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
+;;    Further expansion of bug fix for issue #31
 ;; 14-Nov-2013    Matthew L. Fidler  
 ;;    Last-Updated: Tue Aug 21 13:08:42 2012 (-0500) #1467 (Matthew L. Fidler)
 ;;    Version bump.
@@ -1600,10 +1603,12 @@ This will check any of the keywords and try to unindent the line.
   "Set up minor mode map."
   (setq auto-indent-mode-map (make-sparse-keymap))
   (unless (string-match "^[ \t]*$" auto-indent-key-for-end-of-line-then-newline)
-    (define-key auto-indent-mode-map (read-kbd-macro auto-indent-key-for-end-of-line-then-newline) 'auto-indent-eol-newline))
+    (define-key auto-indent-mode-map
+      (read-kbd-macro auto-indent-key-for-end-of-line-then-newline)
+      'auto-indent-eol-newline))
   (unless (string-match "^[ \t]*$" auto-indent-key-for-end-of-line-insert-char-then-newline)
     (define-key auto-indent-mode-map (read-kbd-macro auto-indent-key-for-end-of-line-insert-char-then-newline) 'auto-indent-eol-char-newline))
-  (setq  auto-indent-eol-ret-save auto-indent-key-for-end-of-line-then-newline)
+  (setq auto-indent-eol-ret-save auto-indent-key-for-end-of-line-then-newline)
   (setq auto-indent-eol-ret-semi-save auto-indent-key-for-end-of-line-insert-char-then-newline))
 
 (auto-indent-setup-map)
@@ -2348,7 +2353,9 @@ Allows the kill ring save to delete the beginning white-space if desired."
   (and (if auto-indent-use-text-boundaries
            (looking-at-p "[ \t]*$")
          (eolp))
-       (not (eobp))))
+       (not (save-excursion
+              (skip-chars-forward " \t\n")
+              (eobp)))))
 
 (defun auto-indent-bolp ()
   "Return t if point is at bol respecting `auto-indent-use-text-boundaries'."
