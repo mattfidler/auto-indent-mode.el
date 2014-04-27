@@ -1961,7 +1961,8 @@ buffer."
         (tabify (point-min) (point-max)))
        ((or (and (not save) auto-indent-untabify-on-visit-file)
             (and save auto-indent-untabify-on-save-file))
-        (untabify (point-min) (point-max)))))))
+        (untabify (point-min) (point-max))))
+      nil)))
 
 (defun auto-indent-file-when-save ()
   "Auto-indent file when save."
