@@ -3,4 +3,4 @@
 
 
 I have stopped developing and using auto-indent mode.  I have started
-using [[https://github.com/Malabarba/aggressive-indent-mode][aggressive-intent-mode]]. The files here are for historic curiosity
+using [[https://github.com/Malabarba/aggressive-indent-mode][aggressive-intent-mode]].
