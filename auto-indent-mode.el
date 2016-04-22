@@ -2446,7 +2446,11 @@ Allows the kill ring save to delete the beginning white-space if desired."
                           (condition-case err
                               (forward-list)
                             (error nil))
-                          (point))))))))
+                          (point)))))
+	    ;; Not sure why this doesn't delete.  See Issue #45
+	    (when (and (member (this-command-keys) '([127] [backspace])) (region-active-p ))
+	      (delete-region (region-beginning) (region-end))
+	      (setq this-command nil)))))
     (error
      (message "[Auto-Indent Mode] Ignoring Error in `auto-indent-mode-pre-command-hook': %s" (error-message-string error)))))
 
