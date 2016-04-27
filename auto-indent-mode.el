@@ -2020,7 +2020,7 @@ function is being constructed.
 When FUNCTION is non-nil, define an alternate function instead of an advice."
   (let ((do-it (if function
                    `(if (called-interactively-p 'any)
-                        (,command  n (if n t nil))
+                        (,command n (if n t nil))
                       (,command n killflag))
                  'ad-do-it)))
     `(,(if function 'defun 'defadvice)
@@ -2030,7 +2030,8 @@ When FUNCTION is non-nil, define an alternate function instead of an advice."
       ,(if function '(interactive "p") nil)
       (if (not ,(if function t '(and
                                  (not (auto-indent-remove-advice-p))
-                                 (or (not auto-indent-force-interactive-advices)
+				 (not (region-active-p))
+				 (or (not auto-indent-force-interactive-advices)
                                      (called-interactively-p 'any)
                                      (auto-indent-is-bs-key-p))))) ,do-it
         (let ((backward-delete-char-untabify-method
@@ -2040,7 +2041,7 @@ When FUNCTION is non-nil, define an alternate function instead of an advice."
           (when auto-indent-par-region-timer
             (cancel-timer auto-indent-par-region-timer))
           (setq this-command 'auto-indent-delete-backward-char) ;; No recursive calls, please.
-          ,(if (eq command 'backward-delete-char-untabify)
+          ,(if (or (eq command 'backward-delete-char-untabify))
                do-it
              `(backward-delete-char-untabify
                ,@(if function
@@ -2234,7 +2235,7 @@ If at end of line, obey `auto-indent-kill-line-at-eol'
                            auto-indent-kill-line-at-eol))))))
             (when can-do-it
               ,do-it)
-            (auto-indent-according-to-mode )
+            (auto-indent-according-to-mode)
             (when (and eolp (eq auto-indent-kill-line-at-eol nil))
               (when (and eolp
                          auto-indent-mode (not (minibufferp))
@@ -2446,11 +2447,7 @@ Allows the kill ring save to delete the beginning white-space if desired."
                           (condition-case err
                               (forward-list)
                             (error nil))
-                          (point)))))
-	    ;; Not sure why this doesn't delete.  See Issue #45
-	    (when (and (member (this-command-keys) '([127] [backspace])) (region-active-p ))
-	      (delete-region (region-beginning) (region-end))
-	      (setq this-command nil)))))
+                          (point))))))))
     (error
      (message "[Auto-Indent Mode] Ignoring Error in `auto-indent-mode-pre-command-hook': %s" (error-message-string error)))))
 
@@ -2564,7 +2561,6 @@ around and the whitespace was deleted from the line."
       (when (and (not auto-indent-last-pre-command-hook-minibufferp)
                  (not (minibufferp))
                  (not (memq indent-line-function auto-indent-disabled-indent-functions)))
-        
         (unless (memq 'auto-indent-mode-pre-command-hook pre-command-hook)
           (setq auto-indent-mode-pre-command-hook-line -1)
           (add-hook 'pre-command-hook 'auto-indent-mode-pre-command-hook nil t))
@@ -2591,15 +2587,7 @@ around and the whitespace was deleted from the line."
                              (looking-back (regexp-opt auto-indent-block-close-keywords 'words))
                              t))))
              (auto-indent-according-to-mode))
-            (when (or (not (or (fboundp 'yas--snippets-at-point)
-                               (fboundp 'yas/snippets-at-point)))
-                      (or (and (boundp 'yas/minor-mode) (not yas/minor-mode))
-                          (and (boundp 'yas-minor-mode) (not yas-minor-mode)))
-                      (and (or yas/minor-mode yas-minor-mode)
-                           (let ((yap (if (fboundp 'yas/snippets-at-point)
-                                          (yas/snippets-at-point 'all-snippets)
-                                        (yas--snippets-at-point 'all-snippets))))
-                             (or (not yap) (and yap (= 0 (length yap)))))))
+            (when (auto-indent-par-region)
               (save-excursion
                 (when (and auto-indent-last-pre-command-hook-point
                            (or (eq auto-indent-newline-function 'reindent-then-newline-and-indent)
