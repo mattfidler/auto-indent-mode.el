@@ -1671,7 +1671,7 @@ This is used so that you can be more conservative in indentation by using:
   "Auto-indent function for `end-of-line', insert `auto-indent-eol-char', and then newline."
   (interactive)
   (end-of-line)
-  (unless (looking-back "; *")
+  (unless (looking-back "; *" (beginning-of-line))
     (insert (format "%s" auto-indent-eol-char)))
   (if auto-indent-alternate-return-function-for-end-of-line-then-newline
       (call-interactively auto-indent-alternate-return-function-for-end-of-line-then-newline)
@@ -1908,7 +1908,7 @@ languages are defined in `auto-indent-multiple-indent-modes.'"
 (defadvice move-beginning-of-line (around auto-indent-mode-advice)
   "`auto-indent-mode' advice for moving to the beginning of the line."
   (let (at-beginning)
-    (setq at-beginning (looking-back "^[ \t]*"))
+    (setq at-beginning (looking-back "^[ \t]*" (beginning-of-line)))
     (when (and at-beginning
                auto-indent-home-is-beginning-of-indent-when-spaces-follow
                (not (looking-at "[ \t]*$"))
@@ -1922,7 +1922,7 @@ languages are defined in `auto-indent-multiple-indent-modes.'"
         (progn
           (org-babel-do-in-edit-buffer
            (auto-indent-according-to-mode))
-          (when (not (looking-back "^[ \t]*"))
+          (when (not (looking-back "^[ \t]*" (beginning-of-line)))
             (beginning-of-line)
             (skip-chars-forward " \t"))))
     (when (and auto-indent-home-is-beginning-of-indent
@@ -1936,7 +1936,7 @@ languages are defined in `auto-indent-multiple-indent-modes.'"
       (if (auto-indent-aggressive-p)
           (progn
             (auto-indent-according-to-mode)
-            (when (not (looking-back "^[ \t]*"))
+            (when (not (looking-back "^[ \t]*" (beginning-of-line)))
               (beginning-of-line))))
       (skip-chars-forward " \t"))))
 
@@ -2088,8 +2088,8 @@ LST is the list of regular expressions to consider.
 ADD lets `auto-indent-mode' know that it should add a space instead."
   (save-match-data
     (if (or (not add)
-            (and add (looking-back "\\S-")
-                 (looking-at "\\S-")))
+            (and add (looking-back "\\S-" (beginning-of-line))
+                 (looking-at "\\S-" (beginning-of-line))))
         (let (done)
           (unless add
             (save-excursion
@@ -2100,7 +2100,7 @@ ADD lets `auto-indent-mode' know that it should add a space instead."
             (when lst
               (setq done nil)
               (mapc (lambda(i)
-                      (when (and (not done) (looking-back (nth 0 i))
+                      (when (and (not done) (looking-back (nth 0 i) (beginning-of-line))
                                  (looking-at (concat (if add "" " ") (nth 1 i))))
                         (if add
                             (save-excursion
@@ -2212,7 +2212,7 @@ If at end of line, obey `auto-indent-kill-line-at-eol'
                     (setq can-do-it nil))
                 (when bolp
                   (move-beginning-of-line 1))
-                (when (and eolp (not bolp) (save-match-data (not (looking-back "^[ \t]+"))))
+                (when (and eolp (not bolp) (save-match-data (not (looking-back "^[ \t]+" (beginning-of-line)))))
                   (cond
                    ((eq auto-indent-kill-line-at-eol nil)
                     (when (> (prefix-numeric-value current-prefix-arg) 0)
@@ -2397,7 +2397,7 @@ Allows the kill ring save to delete the beginning white-space if desired."
 (defun auto-indent-bolp ()
   "Return t if point is at bol respecting `auto-indent-use-text-boundaries'."
   (if auto-indent-use-text-boundaries
-      (looking-back "^[ \t]*")
+      (looking-back "^[ \t]*" (beginning-of-line))
     (bolp)))
 
 (defvar auto-indent-pairs-begin nil
@@ -2475,7 +2475,7 @@ Allows the kill ring save to delete the beginning white-space if desired."
         (when (and (not (minibufferp))
                    (not (looking-at "[^ \t]"))
                    (not (memq major-mode auto-indent-multiple-indent-modes))
-                   (not (looking-back "^[ \t]+")))
+                   (not (looking-back "^[ \t]+" (beginning-of-line))))
           (let ((start-time (float-time)))
             (indent-region auto-indent-pairs-begin auto-indent-pairs-end)
             (auto-indent-par-region-interval-update (- (float-time) start-time)))
@@ -2571,7 +2571,7 @@ around and the whitespace was deleted from the line."
            ((and auto-indent-block-close
                  (condition-case err
                      (save-match-data
-                       (looking-back "\\s)")
+                       (looking-back "\\s)" (beginning-of-line))
                        (string= (match-string 0) (key-description (this-command-keys))))
                    (error nil)))
             (auto-indent-according-to-mode))
@@ -2584,7 +2584,7 @@ around and the whitespace was deleted from the line."
                                      (error nil))))
                            (when cs
                              (skip-chars-backward " \t")
-                             (looking-back (regexp-opt auto-indent-block-close-keywords 'words))
+                             (looking-back (regexp-opt auto-indent-block-close-keywords 'words) (beginning-of-line))
                              t))))
              (auto-indent-according-to-mode))
             (when (auto-indent-par-region)
@@ -2623,7 +2623,7 @@ around and the whitespace was deleted from the line."
                  auto-indent-mode-pre-command-hook-line
                  (not (= (line-number-at-pos)
                          auto-indent-mode-pre-command-hook-line)))
-            (when (and (looking-back "^[ \t]*") (looking-at "[ \t]*$"))
+            (when (and (looking-back "^[ \t]*" (beginning-of-line)) (looking-at "[ \t]*$" (beginning-of-line)))
               ;; Should be conservative here.
               (auto-indent-according-to-mode))))))
     (error (message "[Auto-Indent-Mode]: Ignored indentation error in `auto-indent-mode-post-command-hook' %s" (error-message-string err)))))
