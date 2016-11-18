@@ -2088,8 +2088,8 @@ LST is the list of regular expressions to consider.
 ADD lets `auto-indent-mode' know that it should add a space instead."
   (save-match-data
     (if (or (not add)
-            (and add (looking-back "\\S-" nil)
-                 (looking-at "\\S-" nil)))
+            (and add (looking-back "\\S-")
+                 (looking-at "\\S-")))
         (let (done)
           (unless add
             (save-excursion
