@@ -289,7 +289,7 @@ you do not want this to happen you can turn it off by
 #+END_SRC
 
 ** Why is auto-indent-mode changing tabs to spaces
-I prefer tabs instead of spaces.  You may prefer the other way.  The
+I prefer spaces instead of tabs.  You may prefer the other way.  The
 options to change this are:
 
 #+BEGIN_SRC emacs-lisp

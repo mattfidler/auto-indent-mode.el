@@ -2623,7 +2623,7 @@ around and the whitespace was deleted from the line."
                  auto-indent-mode-pre-command-hook-line
                  (not (= (line-number-at-pos)
                          auto-indent-mode-pre-command-hook-line)))
-            (when (and (looking-back "^[ \t]*" nil) (looking-at "[ \t]*$" nil))
+            (when (and (looking-back "^[ \t]*" nil) (looking-at "[ \t]*$"))
               ;; Should be conservative here.
               (auto-indent-according-to-mode))))))
     (error (message "[Auto-Indent-Mode]: Ignored indentation error in `auto-indent-mode-post-command-hook' %s" (error-message-string err)))))
