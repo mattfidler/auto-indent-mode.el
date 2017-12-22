@@ -1704,6 +1704,7 @@ http://www.emacswiki.org/emacs/AutoIndentation
   (cond (auto-indent-mode
          ;;
          (when (and auto-indent-assign-indent-level-variables
+                    auto-indent-assign-indent-level
 		    (not (eq major-mode 'python-mode)))
            (let* ((mm (symbol-name major-mode))
                   (mm2 mm))
