@@ -1573,7 +1573,8 @@ If the major mode has `major-mode-indent-level', `major-indent-level', `major-mo
 (defcustom auto-indent-known-indent-level-variables
   '( c-basic-offset lisp-body-indent
                     sgml-basic-offset
-                    python-indent)
+                    python-indent
+		    python-indent-offset)
   "Known indent-level-variables for major modes.  Set locally when auto-indent-mode initializes."
   :type '(repeat (symbol :tag "Variable"))
   :group 'auto-indent)
@@ -1702,7 +1703,8 @@ http://www.emacswiki.org/emacs/AutoIndentation
   (auto-indent-setup-map)
   (cond (auto-indent-mode
          ;;
-         (when auto-indent-assign-indent-level-variables
+         (when (and auto-indent-assign-indent-level-variables
+		    (not (eq major-mode 'python-mode)))
            (let* ((mm (symbol-name major-mode))
                   (mm2 mm))
              (when (string-match "-mode" mm2)
@@ -2632,6 +2634,14 @@ around and the whitespace was deleted from the line."
   (setq auto-indent-last-pre-command-hook-minibufferp t))
 
 (add-hook 'minibuffer-setup-hook #'auto-indent-minibuffer-hook)
+
+(defun auto-indent-disable-electric ()
+  "Disable electric mode when `auto-indent-mode' is on."
+  (set (make-local-variable 'electric-indent-inhibit) auto-indent-mode)
+  (when auto-indent-mode
+    (electric-indent-local-mode 0)))
+
+(add-hook 'after-change-major-mode-hook 'auto-indent-disable-electric)
 
 (defvar auto-indent-was-on nil)
 
