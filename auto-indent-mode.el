@@ -1755,8 +1755,7 @@ http://www.emacswiki.org/emacs/AutoIndentation
               (ad-activate ad))
             '(delete-char kill-line kill-region kill-ring-save cua-copy-region
                           backward-delete-char-untabify backward-delete-char
-                          delete-backward-char move-beginning-of-line
-			  beginning-of-visual-line)))))
+                          delete-backward-char move-beginning-of-line)))))
         (t
          ;; Kill
          (cond
@@ -2644,6 +2643,8 @@ around and the whitespace was deleted from the line."
     (electric-indent-local-mode 0)))
 
 (add-hook 'after-change-major-mode-hook 'auto-indent-disable-electric)
+
+(advice-add 'beginning-of-visual-line :around #'ad-Advice-move-beginning-of-line)
 
 (defvar auto-indent-was-on nil)
 
