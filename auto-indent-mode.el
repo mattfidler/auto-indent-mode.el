@@ -2588,8 +2588,8 @@ around and the whitespace was deleted from the line."
                            (when cs
                              (skip-chars-backward " \t")
                              (looking-back (regexp-opt auto-indent-block-close-keywords 'words) nil)
-                             t))))
-             (auto-indent-according-to-mode))
+                             t))
+			 (auto-indent-according-to-mode))))
             (when (auto-indent-par-region)
               (save-excursion
                 (when (and auto-indent-last-pre-command-hook-point
@@ -2619,7 +2619,8 @@ around and the whitespace was deleted from the line."
                     (insert last-indent)
                     (setq last-indent (current-indentation)))
                   (indent-line-to last-indent)))
-               (t (indent-according-to-mode)))))
+               (t (indent-according-to-mode))))
+	    (auto-indent-according-to-mode))
            ((and auto-indent-blank-lines-on-move
                  (not (memq major-mode auto-indent-multiple-indent-modes))
                  (auto-indent-aggressive-p)
@@ -2642,7 +2643,8 @@ around and the whitespace was deleted from the line."
   (when auto-indent-mode
     (electric-indent-local-mode 0)))
 
-(add-hook 'after-change-major-mode-hook 'auto-indent-disable-electric)
+(add-hook 'after-change-
+	  major-mode-hook 'auto-indent-disable-electric)
 
 (advice-add 'beginning-of-visual-line :around #'ad-Advice-move-beginning-of-line)
 
