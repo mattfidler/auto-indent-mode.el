@@ -1696,9 +1696,9 @@ http://www.emacswiki.org/emacs/AutoIndentation
 
 "
   ;; The initial value.
-  nil
+  :init-value nil
   ;; The indicator for the mode line.  Nothing.
-  " AI"
+  :lighter " AI"
   :group 'auto-indent
   (auto-indent-setup-map)
   (cond (auto-indent-mode
