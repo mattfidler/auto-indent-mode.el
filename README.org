@@ -1,6 +1,13 @@
 #+TITLE: Auto-Indent-Mode
 #+AUTHOR: Matthew L. Fidler
 * Library Information
+
+This is provided for historical reasons.  This package is no longer maintianed.  
+
+I suggest trying snap-indent 
+
+https://github.com/jeffvalk/snap-indent
+
  /auto-indent-mode.el/ --- Auto indent Minor mode
 
  - Filename :: [[file:auto-indent-mode.el][auto-indent-mode.el]]
